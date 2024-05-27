@@ -1,5 +1,10 @@
-#include "context.hpp"
-#include <stdexcept>
+/**
+ * @file context.cpp
+ * @brief Implementation of the context class.
+ */
+
+#include "context.hpp"  // Include the context header file
+#include <stdexcept>    // For std::runtime_error
 
 FContext::FContext()
 {

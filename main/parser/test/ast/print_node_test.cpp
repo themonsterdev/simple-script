@@ -8,9 +8,9 @@
 #include "ast/expression/string_node.hpp"
 
 // Statement
-#include "ast/statement/print_statement_node.hpp"
+#include "ast/statement/print_node.hpp"
 
-class FPrintStatementNodeTest : public ::testing::Test
+class FPrintNodeTest : public ::testing::Test
 {
 protected:
 
@@ -30,32 +30,32 @@ protected:
 };
 
 // Tests the creation of a print statement node with a valid expression
-TEST_F(FPrintStatementNodeTest, ConstructorValidExpression)
+TEST_F(FPrintNodeTest, ConstructorValidExpression)
 {
-    ASyntaxNodePtr expression = std::make_unique<FNumberNode>(42);
-    FPrintStatementNode printStatement(expression.release());
+    ExpressionPtr expression = std::make_unique<FNumberNode>(42);
+    FPrintNode printStatement(std::move(expression));
 
     ASSERT_NE(printStatement.GetExpression(), nullptr);
 }
 
 // Tests the creation of a print statement node with a null expression
-TEST_F(FPrintStatementNodeTest, ConstructorNullExpression)
+TEST_F(FPrintNodeTest, ConstructorNullExpression)
 {
-    ASyntaxNodePtr expression = nullptr;
-    ASSERT_THROW(FPrintStatementNode(expression.release()), std::runtime_error);
+    ExpressionPtr expression = nullptr;
+    ASSERT_THROW(FPrintNode(std::move(expression)), std::runtime_error);
 }
 
 // Tests the evaluation of a print statement node with a number expression
-TEST_F(FPrintStatementNodeTest, EvaluateNumberExpression)
+TEST_F(FPrintNodeTest, EvaluateNumberExpression)
 {
-    ASyntaxNodePtr expression = std::make_unique<FNumberNode>(42);
-    FPrintStatementNode printStatement(expression.release());
+    ExpressionPtr expression = std::make_unique<FNumberNode>(42);
+    FPrintNode printStatement(std::move(expression));
 
     // Capture standard output
     testing::internal::CaptureStdout();
 
     // Evaluate the print statement
-    EXPECT_NO_THROW(printStatement.Evaluate(context));
+    EXPECT_NO_THROW(printStatement.Execute(context));
 
     // Retrieve the captured output
     std::string output = testing::internal::GetCapturedStdout();
@@ -65,16 +65,16 @@ TEST_F(FPrintStatementNodeTest, EvaluateNumberExpression)
 }
 
 // Tests the evaluation of a print statement node with a string expression
-TEST_F(FPrintStatementNodeTest, EvaluateStringExpression)
+TEST_F(FPrintNodeTest, EvaluateStringExpression)
 {
-    ASyntaxNodePtr expression = std::make_unique<FStringNode>("Hello, World!");
-    FPrintStatementNode printStatement(expression.release());
+    ExpressionPtr expression = std::make_unique<FStringNode>("Hello, World!");
+    FPrintNode printStatement(std::move(expression));
 
     // Capture standard output
     testing::internal::CaptureStdout();
 
     // Evaluate the print statement
-    EXPECT_NO_THROW(printStatement.Evaluate(context));
+    EXPECT_NO_THROW(printStatement.Execute(context));
 
     // Retrieve the captured output
     std::string output = testing::internal::GetCapturedStdout();
@@ -84,10 +84,10 @@ TEST_F(FPrintStatementNodeTest, EvaluateStringExpression)
 }
 
 // Tests the evaluation of a print statement node with an identifier expression
-TEST_F(FPrintStatementNodeTest, EvaluateIdentifierExpression)
+TEST_F(FPrintNodeTest, EvaluateIdentifierExpression)
 {
-    ASyntaxNodePtr expression = std::make_unique<FIdentifierNode>("x");
-    FPrintStatementNode printStatement(expression.release());
+    ExpressionPtr expression = std::make_unique<FIdentifierNode>("x");
+    FPrintNode printStatement(std::move(expression));
 
     // Set the value of the identifier in the context
     context.SetVariable("x", Value("OpenAI"));
@@ -96,7 +96,7 @@ TEST_F(FPrintStatementNodeTest, EvaluateIdentifierExpression)
     testing::internal::CaptureStdout();
 
     // Evaluate the print statement
-    EXPECT_NO_THROW(printStatement.Evaluate(context));
+    EXPECT_NO_THROW(printStatement.Execute(context));
 
     // Retrieve the captured output
     std::string output = testing::internal::GetCapturedStdout();

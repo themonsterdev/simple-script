@@ -1,12 +1,22 @@
+/**
+ * @file scope.hpp
+ * @brief Declaration of the FScope class.
+ */
+
 #pragma once
 
-#include <variant>
-#include <unordered_map>
-#include <string>
+#include <variant>          // Include for std::variant
+#include <unordered_map>    // Include for std::unordered_map
+#include <string>           // Include for std::string
 
 // Define a variant type to represent different possible values
 using Value = std::variant<int, std::string>;
 
+/**
+ * @brief Represents a scope for storing variables and their values.
+ *
+ * This class manages variables within a scope and provides methods to add, retrieve, and remove variables.
+ */
 class FScope final
 {
     // Map to store variable names and their corresponding values
@@ -58,6 +68,13 @@ public:
     bool IsVariableOfType(const std::string& name) const;
 };
 
+/**
+ * @brief Checks if a variable with the given name exists in the scope and is of the specified type.
+ *
+ * @tparam T The type to check against.
+ * @param name The name of the variable to check.
+ * @return true if the variable exists and is of the specified type, false otherwise.
+ */
 template<typename T>
 bool FScope::IsVariableOfType(const std::string& name) const
 {

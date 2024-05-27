@@ -1,19 +1,23 @@
+/**
+ * @file var_declaration_node.cpp
+ * @brief Implementation of the variable declaration node class.
+ */
+
+// Include the declaration of the variable declaration node class
 #include "ast/statement/var_declaration_node.hpp"
 
-FVarDeclarationNode::FVarDeclarationNode(const std::string& identifier, ASyntaxNode* expression)
+// For std::invalid_argument
+#include <stdexcept>
+
+FVarDeclarationNode::FVarDeclarationNode(const std::string& identifier, ExpressionPtr expression)
 	: m_identifier(identifier)
-	, m_expression(expression)
+	// Move the expression into the member variable
+	, m_expression(std::move(expression))
 {
 	if (m_identifier.empty())
 	{
 		throw std::invalid_argument("Identifier cannot be empty");
 	}
-}
-
-eSyntaxNodeType FVarDeclarationNode::GetType() const
-{
-	// Return the type of this node as VariableDeclaration
-	return eSyntaxNodeType::VariableDeclaration;
 }
 
 std::string FVarDeclarationNode::GetIdentifier() const
@@ -22,13 +26,13 @@ std::string FVarDeclarationNode::GetIdentifier() const
 	return m_identifier;
 }
 
-ASyntaxNode* FVarDeclarationNode::GetExpression() const
+const ExpressionPtr& FVarDeclarationNode::GetExpression() const
 {
 	// Return the expression associated with this variable declaration
 	return m_expression;
 }
 
-Value FVarDeclarationNode::Evaluate(const FContext& context) const
+void FVarDeclarationNode::Execute(const FContext& context) const
 {
 	// Check if an expression is provided
 	if (m_expression)
@@ -40,7 +44,4 @@ Value FVarDeclarationNode::Evaluate(const FContext& context) const
 	{
 		context.DeclareVariable(m_identifier);
 	}
-
-	// Return an empty value
-	return {};
 }

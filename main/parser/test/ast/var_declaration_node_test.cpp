@@ -15,7 +15,7 @@ class FVarDeclarationNodeTest : public ::testing::Test
 protected:
 
     std::string identifier;
-    ASyntaxNodePtr expression = nullptr;
+    ExpressionPtr expression = nullptr;
     FContext context;
 
     // Setup method to initialize the test fixture
@@ -37,29 +37,20 @@ protected:
 TEST_F(FVarDeclarationNodeTest, ConstructorValidInput)
 {
     // Construct VarDeclarationNode
-    ASSERT_NO_THROW(FVarDeclarationNode(identifier, expression.release()));
+    ASSERT_NO_THROW(FVarDeclarationNode(identifier, std::move(expression)));
 }
 
 // Test constructor with empty identifier
 TEST_F(FVarDeclarationNodeTest, ConstructorEmptyIdentifier)
 {
     // Construct VarDeclarationNode with empty identifier
-    ASSERT_THROW(FVarDeclarationNode("", expression.release()), std::invalid_argument);
-}
-
-// Test GetType method
-TEST_F(FVarDeclarationNodeTest, GetType)
-{
-    FVarDeclarationNode varDeclaration(identifier, expression.release());
-
-    // Check the type of the node
-    ASSERT_EQ(varDeclaration.GetType(), eSyntaxNodeType::VariableDeclaration);
+    ASSERT_THROW(FVarDeclarationNode("", std::move(expression)), std::invalid_argument);
 }
 
 // Test GetIdentifier method
 TEST_F(FVarDeclarationNodeTest, GetIdentifier)
 {
-    FVarDeclarationNode varDeclaration(identifier, expression.release());
+    FVarDeclarationNode varDeclaration(identifier, std::move(expression));
 
     // Check the identifier of the node
     ASSERT_EQ(varDeclaration.GetIdentifier(), identifier);
@@ -68,24 +59,26 @@ TEST_F(FVarDeclarationNodeTest, GetIdentifier)
 // Test GetExpression method
 TEST_F(FVarDeclarationNodeTest, GetExpression)
 {
-    FVarDeclarationNode varDeclaration(identifier, expression.get());
+    auto* rawExpressionPtr = expression.get(); // Conserver un pointeur brut pour la comparaison
+
+    FVarDeclarationNode varDeclaration(identifier, std::move(expression));
 
     // Check the expression of the node
-    ASSERT_EQ(varDeclaration.GetExpression(), expression.release());
+    ASSERT_EQ(varDeclaration.GetExpression().get(), rawExpressionPtr);
 }
 
 // Test Evaluate method with expression
 TEST_F(FVarDeclarationNodeTest, EvaluateWithExpression)
 {
-    FVarDeclarationNode varDeclaration(identifier, expression.release());
+    FVarDeclarationNode varDeclaration(identifier, std::move(expression));
 
     // Evaluate the node
-    ASSERT_NO_THROW(varDeclaration.Evaluate(context));
+    ASSERT_NO_THROW(varDeclaration.Execute(context));
 
     // Check if the variable is declared
     ASSERT_TRUE(context.IsVariableDeclared(identifier));
 
-    ASyntaxNode* expr = varDeclaration.GetExpression();
+    const ExpressionPtr& expr = varDeclaration.GetExpression();
     ASSERT_NE(expr, nullptr);
 
     // Check if the variable value is set correctly
@@ -98,7 +91,7 @@ TEST_F(FVarDeclarationNodeTest, EvaluateWithoutExpression)
     FVarDeclarationNode varDeclaration(identifier, nullptr);
 
     // Evaluate the node
-    ASSERT_NO_THROW(varDeclaration.Evaluate(context));
+    ASSERT_NO_THROW(varDeclaration.Execute(context));
 
     // Check if the variable is declared
     ASSERT_TRUE(context.IsVariableDeclared(identifier));

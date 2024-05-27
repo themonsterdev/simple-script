@@ -6,9 +6,7 @@
 #include "ast/expression/identifier_node.hpp"
 #include "ast/expression/number_node.hpp"
 #include "ast/expression/string_node.hpp"
-
-// Statement
-#include "ast/statement/string_operator_node.hpp"
+#include "ast/expression/string_operator_node.hpp"
 
 class FStringOperatorNodeTest : public ::testing::Test
 {
@@ -32,31 +30,31 @@ protected:
 // Test the creation of a string operator node with valid string concatenation
 TEST_F(FStringOperatorNodeTest, ConstructorValidConcatenation)
 {
-    ASyntaxNodePtr left = std::make_unique<FStringNode>("Hello, ");
-    ASyntaxNodePtr right = std::make_unique<FStringNode>("World!");
-    FStringOperatorNode stringOp("+", left.release(), right.release());
+    ExpressionPtr left = std::make_unique<FStringNode>("Hello, ");
+    ExpressionPtr right = std::make_unique<FStringNode>("World!");
+    FStringOperatorNode stringOp("+", std::move(left), std::move(right));
 
-    ASSERT_NE(stringOp.GetChild(0), nullptr);
-    ASSERT_NE(stringOp.GetChild(1), nullptr);
+    ASSERT_NE(stringOp.GetLeft(), nullptr);
+    ASSERT_NE(stringOp.GetRight(), nullptr);
 }
 
 // Test the creation of a string operator node with valid string repetition
 TEST_F(FStringOperatorNodeTest, ConstructorValidRepetition)
 {
-    ASyntaxNodePtr left = std::make_unique<FNumberNode>(3);
-    ASyntaxNodePtr right = std::make_unique<FStringNode>("Repeat");
-    FStringOperatorNode stringOp("*", left.release(), right.release());
+    ExpressionPtr left = std::make_unique<FNumberNode>(3);
+    ExpressionPtr right = std::make_unique<FStringNode>("Repeat");
+    FStringOperatorNode stringOp("*", std::move(left), std::move(right));
 
-    ASSERT_NE(stringOp.GetChild(0), nullptr);
-    ASSERT_NE(stringOp.GetChild(1), nullptr);
+    ASSERT_NE(stringOp.GetLeft(), nullptr);
+    ASSERT_NE(stringOp.GetRight(), nullptr);
 }
 
 // Test the evaluation of a string concatenation operation
 TEST_F(FStringOperatorNodeTest, EvaluateConcatenation)
 {
-    ASyntaxNodePtr left = std::make_unique<FStringNode>("Hello, ");
-    ASyntaxNodePtr right = std::make_unique<FStringNode>("World!");
-    FStringOperatorNode stringOp("+", left.release(), right.release());
+    ExpressionPtr left = std::make_unique<FStringNode>("Hello, ");
+    ExpressionPtr right = std::make_unique<FStringNode>("World!");
+    FStringOperatorNode stringOp("+", std::move(left), std::move(right));
 
     Value result = stringOp.Evaluate(context);
     ASSERT_TRUE(std::holds_alternative<std::string>(result));
@@ -66,9 +64,9 @@ TEST_F(FStringOperatorNodeTest, EvaluateConcatenation)
 // Test the evaluation of a string repetition operation
 TEST_F(FStringOperatorNodeTest, EvaluateRepetition)
 {
-    ASyntaxNodePtr left = std::make_unique<FNumberNode>(3);
-    ASyntaxNodePtr right = std::make_unique<FStringNode>("Repeat");
-    FStringOperatorNode stringOp("*", left.release(), right.release());
+    ExpressionPtr left = std::make_unique<FNumberNode>(3);
+    ExpressionPtr right = std::make_unique<FStringNode>("Repeat");
+    FStringOperatorNode stringOp("*", std::move(left), std::move(right));
 
     Value result = stringOp.Evaluate(context);
     ASSERT_TRUE(std::holds_alternative<std::string>(result));
@@ -78,9 +76,9 @@ TEST_F(FStringOperatorNodeTest, EvaluateRepetition)
 // Test the evaluation with an unsupported operator
 TEST_F(FStringOperatorNodeTest, EvaluateUnsupportedOperator)
 {
-    ASyntaxNodePtr left = std::make_unique<FStringNode>("Hello");
-    ASyntaxNodePtr right = std::make_unique<FStringNode>("World");
-    FStringOperatorNode stringOp("-", left.release(), right.release());
+    ExpressionPtr left = std::make_unique<FStringNode>("Hello");
+    ExpressionPtr right = std::make_unique<FStringNode>("World");
+    FStringOperatorNode stringOp("-", std::move(left), std::move(right));
 
     ASSERT_THROW(stringOp.Evaluate(context), std::runtime_error);
 }
@@ -88,9 +86,9 @@ TEST_F(FStringOperatorNodeTest, EvaluateUnsupportedOperator)
 // Test the evaluation with invalid operand types for concatenation
 TEST_F(FStringOperatorNodeTest, EvaluateInvalidOperandTypesForConcatenation)
 {
-    ASyntaxNodePtr left = std::make_unique<FNumberNode>(42);
-    ASyntaxNodePtr right = std::make_unique<FStringNode>("World");
-    FStringOperatorNode stringOp("+", left.release(), right.release());
+    ExpressionPtr left = std::make_unique<FNumberNode>(42);
+    ExpressionPtr right = std::make_unique<FStringNode>("World");
+    FStringOperatorNode stringOp("+", std::move(left), std::move(right));
 
     ASSERT_THROW(stringOp.Evaluate(context), std::runtime_error);
 }
@@ -98,9 +96,9 @@ TEST_F(FStringOperatorNodeTest, EvaluateInvalidOperandTypesForConcatenation)
 // Test the evaluation with invalid operand types for repetition
 TEST_F(FStringOperatorNodeTest, EvaluateInvalidOperandTypesForRepetition)
 {
-    ASyntaxNodePtr left = std::make_unique<FStringNode>("Hello");
-    ASyntaxNodePtr right = std::make_unique<FStringNode>("World");
-    FStringOperatorNode stringOp("*", left.release(), right.release());
+    ExpressionPtr left = std::make_unique<FStringNode>("Hello");
+    ExpressionPtr right = std::make_unique<FStringNode>("World");
+    FStringOperatorNode stringOp("*", std::move(left), std::move(right));
 
     ASSERT_THROW(stringOp.Evaluate(context), std::runtime_error);
 }
@@ -108,8 +106,8 @@ TEST_F(FStringOperatorNodeTest, EvaluateInvalidOperandTypesForRepetition)
 // Test the creation of a string operator node with null children
 TEST_F(FStringOperatorNodeTest, ConstructorNullChildren)
 {
-    ASyntaxNodePtr left = nullptr;
-    ASyntaxNodePtr right = nullptr;
+    ExpressionPtr left = nullptr;
+    ExpressionPtr right = nullptr;
 
-    ASSERT_THROW(FStringOperatorNode stringOp("+", left.release(), right.release()), std::runtime_error);
+    ASSERT_THROW(FStringOperatorNode stringOp("+", std::move(left), std::move(right)), std::runtime_error);
 }

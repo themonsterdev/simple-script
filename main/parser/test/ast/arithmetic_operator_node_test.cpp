@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 
 #include "context.hpp"
+#include "ast/expression/arithmetic_operator_node.hpp"
 #include "ast/expression/number_node.hpp"
 #include "ast/expression/string_node.hpp"
-#include "ast/statement/arithmetic_operator_node.hpp"
 
 class FArithmeticOperatorNodeTest : public ::testing::Test
 {
@@ -25,9 +25,9 @@ protected:
 TEST_F(FArithmeticOperatorNodeTest, Addition)
 {
     // Arrange
-    ASyntaxNodePtr leftNode = std::make_unique<FNumberNode>(2);
-    ASyntaxNodePtr rightNode = std::make_unique<FNumberNode>(3);
-    FArithmeticOperatorNode addition("+", leftNode.release(), rightNode.release());
+    ExpressionPtr leftNode = std::make_unique<FNumberNode>(2);
+    ExpressionPtr rightNode = std::make_unique<FNumberNode>(3);
+    FArithmeticOperatorNode addition("+", std::move(leftNode), std::move(rightNode));
 
     // Act
     Value result = addition.Evaluate(context);
@@ -39,9 +39,9 @@ TEST_F(FArithmeticOperatorNodeTest, Addition)
 TEST_F(FArithmeticOperatorNodeTest, Subtraction)
 {
     // Arrange
-    ASyntaxNodePtr leftNode = std::make_unique<FNumberNode>(5);
-    ASyntaxNodePtr rightNode = std::make_unique<FNumberNode>(3);
-    FArithmeticOperatorNode subtraction("-", leftNode.release(), rightNode.release());
+    ExpressionPtr leftNode = std::make_unique<FNumberNode>(5);
+    ExpressionPtr rightNode = std::make_unique<FNumberNode>(3);
+    FArithmeticOperatorNode subtraction("-", std::move(leftNode), std::move(rightNode));
 
     // Act
     Value result = subtraction.Evaluate(context);
@@ -53,9 +53,9 @@ TEST_F(FArithmeticOperatorNodeTest, Subtraction)
 TEST_F(FArithmeticOperatorNodeTest, Multiplication)
 {
     // Arrange
-    ASyntaxNodePtr leftNode = std::make_unique<FNumberNode>(4);
-    ASyntaxNodePtr rightNode = std::make_unique<FNumberNode>(5);
-    FArithmeticOperatorNode multiplication("*", leftNode.release(), rightNode.release());
+    ExpressionPtr leftNode = std::make_unique<FNumberNode>(4);
+    ExpressionPtr rightNode = std::make_unique<FNumberNode>(5);
+    FArithmeticOperatorNode multiplication("*", std::move(leftNode), std::move(rightNode));
 
     // Act
     Value result = multiplication.Evaluate(context);
@@ -67,9 +67,9 @@ TEST_F(FArithmeticOperatorNodeTest, Multiplication)
 TEST_F(FArithmeticOperatorNodeTest, Division)
 {
     // Arrange
-    ASyntaxNodePtr leftNode = std::make_unique<FNumberNode>(10);
-    ASyntaxNodePtr rightNode = std::make_unique<FNumberNode>(2);
-    FArithmeticOperatorNode division("/", leftNode.release(), rightNode.release());
+    ExpressionPtr leftNode = std::make_unique<FNumberNode>(10);
+    ExpressionPtr rightNode = std::make_unique<FNumberNode>(2);
+    FArithmeticOperatorNode division("/", std::move(leftNode), std::move(rightNode));
 
     // Act
     Value result = division.Evaluate(context);
@@ -81,9 +81,9 @@ TEST_F(FArithmeticOperatorNodeTest, Division)
 TEST_F(FArithmeticOperatorNodeTest, Modulo)
 {
     // Arrange
-    ASyntaxNodePtr leftNode = std::make_unique<FNumberNode>(10);
-    ASyntaxNodePtr rightNode = std::make_unique<FNumberNode>(3);
-    FArithmeticOperatorNode modulo("%", leftNode.release(), rightNode.release());
+    ExpressionPtr leftNode = std::make_unique<FNumberNode>(10);
+    ExpressionPtr rightNode = std::make_unique<FNumberNode>(3);
+    FArithmeticOperatorNode modulo("%", std::move(leftNode), std::move(rightNode));
 
     // Act
     Value result = modulo.Evaluate(context);
@@ -95,9 +95,9 @@ TEST_F(FArithmeticOperatorNodeTest, Modulo)
 TEST_F(FArithmeticOperatorNodeTest, InvalidOperands)
 {
     // Arrange
-    ASyntaxNodePtr leftNode = std::make_unique<FNumberNode>(10);
-    ASyntaxNodePtr rightNode = std::make_unique<FStringNode>("invalid");
-    FArithmeticOperatorNode addition("+", leftNode.release(), rightNode.release());
+    ExpressionPtr leftNode = std::make_unique<FNumberNode>(10);
+    ExpressionPtr rightNode = std::make_unique<FStringNode>("invalid");
+    FArithmeticOperatorNode addition("+", std::move(leftNode), std::move(rightNode));
 
     // Act & Assert
     EXPECT_THROW({

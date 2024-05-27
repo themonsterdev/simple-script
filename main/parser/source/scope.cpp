@@ -1,5 +1,10 @@
-#include "scope.hpp"
-#include <stdexcept>
+/**
+ * @file scope.cpp
+ * @brief Implementation of the FScope class.
+ */
+
+#include "scope.hpp"    // Include for the FScope class declaration
+#include <stdexcept>    // Include for std::runtime_error
 
 void FScope::AddVariable(const std::string& name)
 {
@@ -10,7 +15,7 @@ void FScope::AddVariable(const std::string& name)
 void FScope::SetVariable(const std::string& name, Value value)
 {
     // Set the value of the variable
-	m_variables[name] = value;
+    m_variables[name] = value;
 }
 
 Value FScope::GetVariable(const std::string& name) const

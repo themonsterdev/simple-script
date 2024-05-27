@@ -1,19 +1,25 @@
+/**
+ * @file assignment_node.cpp
+ * @brief Implementation of the assignment node class.
+ */
+
+ // Include the declaration of the assignment node class
 #include "ast/statement/assignment_node.hpp"
 
-FAssignmentNode::FAssignmentNode(const std::string& identifier, ASyntaxNode* expression)
-	: m_identifier(identifier)  // Initialize m_identifier with the given identifier
-	, m_expression(expression)  // Initialize m_expression with the given expression
+// For runtime_error
+#include <stdexcept>
+
+FAssignmentNode::FAssignmentNode(const std::string& identifier, ExpressionPtr expression)
+    // Initialize m_identifier with the given identifier
+    : m_identifier(identifier)
+    // Initialize m_expression with the given expression
+	, m_expression(std::move(expression))
 {
+    // Check if the expression pointer is null
     if (!m_expression)
     {
         throw std::runtime_error("Assignment expression is null");
     }
-}
-
-eSyntaxNodeType FAssignmentNode::GetType() const
-{
-    // Return the type of this node as AssignmentStatement
-	return eSyntaxNodeType::AssignmentStatement;
 }
 
 std::string FAssignmentNode::GetIdentifier() const
@@ -22,13 +28,13 @@ std::string FAssignmentNode::GetIdentifier() const
 	return m_identifier;
 }
 
-ASyntaxNode* FAssignmentNode::GetExpression() const
+const ExpressionPtr& FAssignmentNode::GetExpression() const
 {
-    // Return the expression associated with this assignment
+    // Return a constant reference to the expression associated with this assignment
 	return m_expression;
 }
 
-Value FAssignmentNode::Evaluate(const FContext& context) const
+void FAssignmentNode::Execute(const FContext& context) const
 {
     // Check if the assignment expression is valid
     if (!m_expression)
@@ -38,7 +44,4 @@ Value FAssignmentNode::Evaluate(const FContext& context) const
 
     // Assign the evaluated expression value to the variable in the context
     context.AssignVariable(m_identifier, m_expression->Evaluate(context));
-
-    // Return an empty Value as assignments do not produce a value
-    return {};
 }

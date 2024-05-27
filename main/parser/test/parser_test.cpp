@@ -4,85 +4,85 @@
 #include "context.hpp"
 
 // Statement
-#include "ast/statement/arithmetic_operator_node.hpp"
 #include "ast/statement/assignment_node.hpp"
-#include "ast/statement/print_statement_node.hpp"
+#include "ast/statement/print_node.hpp"
 #include "ast/statement/var_declaration_node.hpp"
 
 // Expression
+#include "ast/expression/arithmetic_operator_node.hpp"
 #include "ast/expression/identifier_node.hpp"
 #include "ast/expression/number_node.hpp"
 
-// Test fixture pour les expressions
+// Test fixture for expressions
 class FParserTest : public ::testing::Test
 {
 protected:
 
     FContext context;
 
-    // Fonction SetUp() sera appelée avant chaque test
+    // SetUp() function will be called before each test
     void SetUp() override
     {
-        // Initialiser le contexte avec les variables nécessaires pour les tests
+        // Initialize the context with necessary variables for the tests
         context.SetVariable("x", 10);
         context.SetVariable("y", 5);
     }
 
-    // Fonction TearDown() sera appelée après chaque test
+    // TearDown() function will be called after each test
     void TearDown() override
     {
-        
+        // Clean up after tests if necessary
     }
 };
 
 TEST_F(FParserTest, EvaluateAssignmentNodeTest)
 {
-    ASyntaxNodePtr number = std::make_unique<FNumberNode>(10);
+    ExpressionPtr number = std::make_unique<FNumberNode>(10);
 
-    // Créer un nœud de déclaration de variable
-    ASyntaxNodePtr assignmentNode = std::make_unique<FAssignmentNode>("x", number.release());
+    // Create an assignment node
+    StatementPtr assignmentNode = std::make_unique<FAssignmentNode>("x", std::move(number));
 
-    // Évaluer le nœud de déclaration de variable
-    assignmentNode->Evaluate(context);
+    // Execute the assignment node
+    assignmentNode->Execute(context);
 
-    // Assurez-vous que Value est correctement initialisé avec une valeur de 10
+    // Ensure the value is correctly initialized to 10
     Value expectedValue = Value(10);
 
-    // Vérifier si la variable a été correctement définie dans le contexte
+    // Verify if the variable has been correctly set in the context
     ASSERT_EQ(context.GetVariable("x"), expectedValue);
 }
 
 TEST_F(FParserTest, EvaluateVarDeclarationNodeTest)
 {
-    ASyntaxNodePtr number = std::make_unique<FNumberNode>(20);
+    ExpressionPtr number = std::make_unique<FNumberNode>(20);
 
-    // Créer un nœud de déclaration de variable
-    ASyntaxNodePtr varDeclarationNode = std::make_unique<FVarDeclarationNode>("z", number.release());
+    // Create a variable declaration node
+    StatementPtr varDeclarationNode = std::make_unique<FVarDeclarationNode>("z", std::move(number));
 
-    // Évaluer le nœud de déclaration de variable
-    varDeclarationNode->Evaluate(context);
+    // Execute the variable declaration node
+    varDeclarationNode->Execute(context);
 
-    // Assurez-vous que Value est correctement initialisé avec une valeur de 20
+    // Ensure the value is correctly initialized to 20
     Value expectedValue = Value(20);
 
-    // Vérifier si la variable a été correctement déclarée dans le contexte
+    // Verify if the variable has been correctly declared in the context
     ASSERT_EQ(context.GetVariable("z"), expectedValue);
 }
 
 TEST_F(FParserTest, EvaluatePrintStatementNodeTest)
 {
-    ASyntaxNodePtr identifier = std::make_unique<FIdentifierNode>("x");
+    ExpressionPtr identifier = std::make_unique<FIdentifierNode>("x");
 
-    // Créer un nœud d'instruction d'impression
-    ASyntaxNodePtr printNode = std::make_unique<FPrintStatementNode>(identifier.release());
+    // Create a print statement node
+    StatementPtr printNode = std::make_unique<FPrintNode>(std::move(identifier));
 
-    // Capturer la sortie standard pour vérifier l'impression
+    // Capture the standard output to verify the print statement
     testing::internal::CaptureStdout();
 
-    // Évaluer le nœud d'instruction d'impression
-    Value value = printNode->Evaluate(context);
+    // Execute the print statement node
+    printNode->Execute(context);
 
-    // Vérifier si la sortie standard contient la valeur de la variable
+    // Verify if the standard output contains the value of the variable
     std::string output = testing::internal::GetCapturedStdout();
     ASSERT_EQ(output, "10\n");
 }
@@ -98,59 +98,45 @@ TEST_F(FParserTest, ParseTest)
     FTokenizer tokenizer(input, keywords);
     FParser parser(tokenizer);
 
-    std::unique_ptr<FSyntaxTree> tree = parser.Parse();
-    ASSERT_NE(tree, nullptr);
+    StatementList statements = parser.Parse();
+    ASSERT_EQ(statements.size(), 2);
 
-    const ASyntaxNode* root = tree->GetRoot();
-    ASSERT_NE(root, nullptr);
-    ASSERT_EQ(root->GetType(), eSyntaxNodeType::None);
+    ASSERT_NE(statements.front(), nullptr);
+    auto varDecl = dynamic_cast<FVarDeclarationNode*>(statements.front().get());
+    ASSERT_NE(varDecl, nullptr);
+    ASSERT_EQ(varDecl->GetIdentifier(), "n");
 
-    std::vector<ASyntaxNode*> children = root->GetChildren();
-    ASSERT_EQ(children.size(), 2);
-
-    ASSERT_NE(children[0], nullptr);
-    ASSERT_EQ(children[0]->GetType(), eSyntaxNodeType::VariableDeclaration);
-
-    FVarDeclarationNode* varDeclNode = reinterpret_cast<FVarDeclarationNode*>(children[0]);
-    ASSERT_EQ(varDeclNode->GetChildren().size(), 0);
-    ASSERT_EQ(varDeclNode->GetIdentifier(), "n");
-
-    const auto arithNode = reinterpret_cast<FArithmeticOperatorNode*>(varDeclNode->GetExpression());
+    const auto arithNode = dynamic_cast<FArithmeticOperatorNode*>(varDecl->GetExpression().get());
     ASSERT_NE(arithNode, nullptr);
-    ASSERT_EQ(arithNode->GetType(), eSyntaxNodeType::ArithmeticOperator);
     ASSERT_EQ(arithNode->GetOperator(), "+");
 
-    const auto leftExpr = reinterpret_cast<const FNumberNode*>(arithNode->GetChild(0));
+    const auto leftExpr = dynamic_cast<const FNumberNode*>(arithNode->GetLeft().get());
     ASSERT_NE(leftExpr, nullptr);
-    ASSERT_EQ(leftExpr->GetType(), eSyntaxNodeType::Number);
 
-    const auto rightExpr = reinterpret_cast<const FArithmeticOperatorNode*>(arithNode->GetChild(1));
+    const auto rightExpr = dynamic_cast<const FArithmeticOperatorNode*>(arithNode->GetRight().get());
     ASSERT_NE(rightExpr, nullptr);
-    ASSERT_EQ(rightExpr->GetType(), eSyntaxNodeType::ArithmeticOperator);
 
-    ASSERT_NE(rightExpr->GetChild(0), nullptr);
-    ASSERT_EQ(rightExpr->GetChild(0)->GetType(), eSyntaxNodeType::Number);
+    ASSERT_NE(rightExpr->GetLeft(), nullptr);
+    ASSERT_NE(dynamic_cast<FNumberNode*>(rightExpr->GetRight().get()), nullptr);
 
-    ASSERT_NE(rightExpr->GetChild(1), nullptr);
-    ASSERT_EQ(rightExpr->GetChild(1)->GetType(), eSyntaxNodeType::Number);
-
-    const auto printStat = reinterpret_cast<FPrintStatementNode*>(children[1]);
+    ASSERT_NE(statements.back(), nullptr);
+    auto printStat = dynamic_cast<FPrintNode*>(statements.back().get());
     ASSERT_NE(printStat, nullptr);
-    ASSERT_EQ(printStat->GetType(), eSyntaxNodeType::PrintStatement);
+    ASSERT_NE(printStat->GetExpression(), nullptr);
 
-    const auto idExpr = reinterpret_cast<FIdentifierNode*>(printStat->GetExpression());
+    const auto idExpr = dynamic_cast<FIdentifierNode*>(printStat->GetExpression().get());
     ASSERT_NE(idExpr, nullptr);
-    ASSERT_EQ(idExpr->GetType(), eSyntaxNodeType::Identifier);
 
-    // Capturer la sortie standard pour vérifier l'impression
+    // Capture the standard output to verify the print statement
     testing::internal::CaptureStdout();
 
-    // Évaluer le nœud d'instruction d'impression
-    // varDeclNode->Evaluate(context);  // Ensure variables are initialized
-    // printStat->Evaluate(context);    // Evaluate the print statement
-    root->Evaluate(context);
+    // Execute the statements
+    for (const auto& statement : statements)
+    {
+        statement->Execute(context);
+    }
 
-    // Vérifier si la sortie standard contient la valeur de la variable
+    // Verify if the standard output contains the value of the variable
     std::string output = testing::internal::GetCapturedStdout();
     ASSERT_EQ(output, "7\n");
 }

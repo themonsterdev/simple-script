@@ -1,8 +1,13 @@
+/**
+ * @file context.hpp
+ * @brief Declaration of the context class.
+ */
+
 #pragma once
 
-#include <deque>
-#include <memory>
-#include "scope.hpp"
+#include <deque>        // For std::deque
+#include <memory>       // For std::shared_ptr
+#include "scope.hpp"    // Include declarations for scope objects
 
 /**
  * @brief Represents the context for variable declarations and assignments.

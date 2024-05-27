@@ -1,7 +1,13 @@
-#include "ast/statement/print_statement_node.hpp"
+/**
+ * @file print_node.cpp
+ * @brief Implementation of the print node class.
+ */
 
-#include <iostream>
-#include <sstream>
+// Include the declaration of the FPrintNode class
+#include "ast/statement/print_node.hpp"
+
+#include <iostream> // For standard input/output operations
+#include <sstream>	// For string stream operations
 
 /**
  * @brief Converts a Value variant to a string.
@@ -22,9 +28,9 @@ static std::string ToString(const Value& value)
 	return ss.str();
 }
 
-FPrintStatementNode::FPrintStatementNode(ASyntaxNode* expression)
+FPrintNode::FPrintNode(ExpressionPtr expression)
 	// Initialize m_expression with the given expression
-	: m_expression(expression)
+	: m_expression(std::move(expression))
 {
 	// Check if the expression exists
 	if (!m_expression)
@@ -33,26 +39,17 @@ FPrintStatementNode::FPrintStatementNode(ASyntaxNode* expression)
 	}
 }
 
-eSyntaxNodeType FPrintStatementNode::GetType() const
-{
-	// Return the type of this node as PrintStatement
-	return eSyntaxNodeType::PrintStatement;
-}
-
-ASyntaxNode* FPrintStatementNode::GetExpression() const
+const ExpressionPtr& FPrintNode::GetExpression() const
 {
 	// Return the expression associated with this print statement
 	return m_expression;
 }
 
-Value FPrintStatementNode::Evaluate(const FContext& context) const
+void FPrintNode::Execute(const FContext& context) const
 {
 	// Evaluate the expression to be printed
 	Value value = m_expression->Evaluate(context);
 
 	// Print the string representation of the value
 	std::cout << ToString(value) << std::endl;
-
-	// Return an empty value, as print statements do not produce a value
-	return {};
 }

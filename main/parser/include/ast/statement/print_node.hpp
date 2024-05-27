@@ -1,17 +1,26 @@
+/**
+ * @file print_node.hpp
+ * @brief Declaration of the print statement node class.
+ */
+
 #pragma once
 
-#include "ast/syntax_node.hpp"
+// Include the interface for language statements
+#include "ast/statement/interface/statement.hpp"
+
+// Include the interface for expressions
+#include "ast/expression/interface/expression.hpp"
 
 /**
  * @brief Represents a print statement node in the abstract syntax tree.
  *
- * This class inherits from ASyntaxNode and represents a node that prints the result
+ * This class inherits from IStatement and represents a node that prints the result
  * of evaluating an expression.
  */
-class FPrintStatementNode final : public ASyntaxNode
+class FPrintNode final : public IStatement
 {
 	// Pointer to the expression node to be printed.
-	ASyntaxNode* m_expression;
+	ExpressionPtr m_expression;
 
 public:
 
@@ -19,24 +28,18 @@ public:
 	 * @brief Constructs a print statement node with the given expression.
 	 * @param expression Pointer to the expression node to be printed.
 	 */
-	FPrintStatementNode(ASyntaxNode* expression);
-
-	/**
-	 * @brief Gets the type of the syntax node.
-	 * @return The type of the syntax node.
-	 */
-	eSyntaxNodeType GetType() const override;
+	FPrintNode(ExpressionPtr expression);
 
 	/**
 	 * @brief Gets the expression node to be printed.
 	 * @return Pointer to the expression node.
 	 */
-	ASyntaxNode* GetExpression() const;
+	const ExpressionPtr& GetExpression() const;
 
 	/**
 	 * @brief Evaluates the print statement node.
 	 * @param context The context in which the evaluation occurs.
 	 * @return An empty value, as print statements do not produce a value.
 	 */
-	virtual Value Evaluate(const FContext& context) const override;
+	virtual void Execute(const FContext& context) const override;
 };

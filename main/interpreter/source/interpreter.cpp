@@ -5,8 +5,7 @@
 
 // Statement
 #include "ast/statement/assignment_node.hpp"
-#include "ast/statement/binary_operator_node.hpp"
-#include "ast/statement/print_statement_node.hpp"
+#include "ast/statement/print_node.hpp"
 #include "ast/statement/var_declaration_node.hpp"
 
 // Expression
@@ -92,19 +91,14 @@ void FInterpreter::InterpretText(const std::string& input)
 {
     FTokenizer tokenizer(input, m_keywords);
     FParser parser(tokenizer);
+    FContext context{};
 
     try {
-        std::unique_ptr<FSyntaxTree> tree = parser.Parse();
+        StatementList statements = parser.Parse();
 
-        if (tree)
+        for (const auto& statement : statements)
         {
-            const ASyntaxNode* root = tree->GetRoot();
-
-            if (root)
-            {
-                FContext context{};
-                root->Evaluate(context);
-            }
+            statement->Execute(context);
         }
     }
     catch (const std::exception& e)
