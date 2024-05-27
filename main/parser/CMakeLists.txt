@@ -1,16 +1,17 @@
-# Ajouter les fichiers d'en-tête à la bibliothèque
+# Add the header files to the library
 file(GLOB_RECURSE PARSER_SOURCES "source/*.cpp")
 
-# Créer une bibliothèque pour le parser
+# Create a library for the parser
 add_library(parser ${PARSER_SOURCES})
 
-# Inclure le dossier d'en-tête dans le projet principal
+# Include the header directory in the main project
 target_include_directories(parser PUBLIC "include")
 
-# Inclure le dossier d'en-tête dans le projet principal
+# Include the lexer header directory in the main project
 target_include_directories(parser PUBLIC "../lexer/include")
 
-# Lier avec les librairies
-target_link_libraries(lexer)
+# Link with the lexer library
+target_link_libraries(parser lexer)
 
+# Add the test directory
 add_subdirectory(test)

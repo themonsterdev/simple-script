@@ -1,5 +1,8 @@
 #include "interpreter.hpp"
 
+#include "tokenizer.hpp"
+#include "parser.hpp"
+
 // Statement
 #include "ast/statement/assignment_node.hpp"
 #include "ast/statement/binary_operator_node.hpp"
@@ -11,189 +14,101 @@
 #include "ast/expression/number_node.hpp"
 
 #include <iostream>
+#include <fstream>
 
-void FInterpreter::Interpret(const FSyntaxTree* syntaxTree)
+FInterpreter::FInterpreter(const int argc, const char* argv[], const std::vector<std::string>& keywords)
+    : m_argc(argc)
+    , m_argv(argv)
+    , m_keywords(keywords)
+{}
+
+void FInterpreter::PrintUsage() const
 {
-    const auto root = syntaxTree->GetRoot();
-    if (root)
+    std::cerr << "Interpreter (Version 1.0.0)" << std::endl;
+    std::cerr << "Licensed under the MIT License." << std::endl;
+    std::cerr << std::endl;
+
+    std::cerr << "Usage: interpreter [option]" << std::endl;
+
+    std::cerr << "Options:" << std::endl;
+    std::cerr << '\t' << "-t, --text <script_text>    Interpret the provided script text directly." << std::endl;
+    std::cerr << '\t' << "-f, --file <script_file>    Interpret the script from the provided file." << std::endl;
+    std::cerr << '\t' << "-h, --help                  Show this help message." << std::endl;
+}
+
+void FInterpreter::Interpret()
+{
+    if (m_argc != 3)
     {
-        for (const auto child : root->GetChildren())
+        PrintUsage();
+        return;
+    }
+
+    std::string arg = m_argv[1];
+    if (arg == "-h" || arg == "--help")
+    {
+        PrintUsage();
+    }
+    else if (arg == "-t" || arg == "--text")
+    {
+        if (m_argc != 3)
         {
-            EvaluateNode(child);
+            PrintUsage();
+            throw std::runtime_error("Invalid number of arguments for --text option.");
         }
+        std::string scriptText = m_argv[2];
+        InterpretText(scriptText);
+    }
+    else if (arg == "-f" || arg == "--file")
+    {
+        if (m_argc != 3)
+        {
+            PrintUsage();
+            throw std::runtime_error("Invalid number of arguments for --file option.");
+        }
+        std::string scriptFilename = m_argv[2];
+        InterpretFile(scriptFilename);
     }
     else
     {
-        std::cerr << "Error: AST root is null." << std::endl;
+        PrintUsage();
     }
 }
 
-void FInterpreter::EvaluateNode(const ASyntaxNode* node)
+void FInterpreter::InterpretFile(const std::string& filename)
 {
-    switch (node->GetType())
+    std::ifstream file(filename);
+    if (!file.is_open())
     {
-    case eSyntaxNodeType::VariableDeclaration:
-    {
-        const auto varDeclNode = dynamic_cast<const VarDeclarationNode*>(node);
-        if (varDeclNode)
-        {
-            const auto identifier = varDeclNode->GetIdentifier();
-            const auto expression = varDeclNode->GetExpression();
-
-            if (expression)
-            {
-                int value = EvaluateExpression(expression);
-                m_variables[identifier] = value;
-            }
-            else
-            {
-                std::cerr << "Error: Variable declaration missing expression." << std::endl;
-            }
-        }
-        else
-        {
-            std::cerr << "Error: Unable to cast node to VarDeclarationNode." << std::endl;
-        }
-        break;
-    }
-    case eSyntaxNodeType::PrintStatement:
-    {
-        const auto printStmtNode = dynamic_cast<const PrintStatementNode*>(node);
-        if (printStmtNode)
-        {
-            const auto expression = printStmtNode->GetExpression();
-            if (expression)
-            {
-                int value = EvaluateExpression(expression);
-                std::cout << value << std::endl;
-            }
-            else
-            {
-                std::cerr << "Error: Print statement missing expression." << std::endl;
-            }
-        }
-        else
-        {
-            std::cerr << "Error: Unable to cast node to PrintStatementNode." << std::endl;
-        }
-        break;
-    }
-    case eSyntaxNodeType::AssignmentStatement:
-    {
-        const auto assignmentNode = dynamic_cast<const AssignmentNode*>(node);
-        if (assignmentNode)
-        {
-            const auto identifier = assignmentNode->GetIdentifier();
-            const auto expression = assignmentNode->GetExpression();
-
-            if (expression)
-            {
-                int value = EvaluateExpression(expression);
-                m_variables[identifier] = value;
-            }
-            else
-            {
-                std::cerr << "Error: Assignment statement missing expression." << std::endl;
-            }
-        }
-        else
-        {
-            std::cerr << "Error: Unable to cast node to AssignmentNode." << std::endl;
-        }
-        break;
-    }
-    default:
-        std::cerr << "Error: Unknown node type." << std::endl;
-        break;
+        throw std::runtime_error("Error: Failed to open script file.");
     }
 
-    for (const auto child : node->GetChildren())
-    {
-        EvaluateNode(child);
-    }
+    std::string input((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+    file.close();
+    InterpretText(input);
 }
 
-int FInterpreter::EvaluateExpression(const ASyntaxNode* expression)
+void FInterpreter::InterpretText(const std::string& input)
 {
-    switch (expression->GetType())
-    {
-    case eSyntaxNodeType::ArithmeticExpression:
-    {
-        const auto node = dynamic_cast<const BinaryOperatorNode*>(expression);
-        if (node)
-        {
-            int leftValue = EvaluateExpression(node->GetLeft());
-            int rightValue = EvaluateExpression(node->GetRight());
+    FTokenizer tokenizer(input, m_keywords);
+    FParser parser(tokenizer);
 
-            if (node->GetOp() == "+")
-            {
-                return leftValue + rightValue;
-            }
-            else if (node->GetOp() == "-")
-            {
-                return leftValue - rightValue;
-            }
-            else if (node->GetOp() == "/")
-            {
-                return leftValue / rightValue;
-            }
-            else if (node->GetOp() == "%")
-            {
-                return leftValue % rightValue;
-            }
-            else if (node->GetOp() == "*")
-            {
-                return leftValue * rightValue;
-            }
-        }
-        break;
-    }
-    case eSyntaxNodeType::ComparisonExpression:
-    {
-        // Ajoutez la logique pour les expressions de comparaison si nécessaire
-        std::cout << "ComparisonExpression" << std::endl;
-        break;
-    }
-    case eSyntaxNodeType::Identifier:
-    {
-        const auto identifierNode = dynamic_cast<const IdentifierNode*>(expression);
-        if (identifierNode)
-        {
-            std::string identifier = identifierNode->GetName();
-            const auto it = m_variables.find(identifier);
-            if (it != m_variables.end())
-            {
-                return it->second;
-            }
-            else
-            {
-                std::cerr << "Error: Undefined variable '" << identifier << "'." << std::endl;
-                return 0;
-            }
-        }
-        else
-        {
-            std::cerr << "Error: Unable to cast expression to IdentifierNode." << std::endl;
-            return 0;
-        }
-    }
-    case eSyntaxNodeType::Number:
-    {
-        const auto numberNode = dynamic_cast<const NumberNode*>(expression);
-        if (numberNode)
-        {
-            return numberNode->GetValue();
-        }
-        else
-        {
-            std::cerr << "Error: Unable to cast expression to NumberNode." << std::endl;
-            return 0;
-        }
-    }
-    default:
-        std::cerr << "Error: Unknown expression type." << std::endl;
-        break;
-    }
+    try {
+        std::unique_ptr<FSyntaxTree> tree = parser.Parse();
 
-    return 0;
+        if (tree)
+        {
+            const ASyntaxNode* root = tree->GetRoot();
+
+            if (root)
+            {
+                FContext context{};
+                root->Evaluate(context);
+            }
+        }
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
 }

@@ -1,19 +1,22 @@
 #pragma once
 
-#include "ast/syntax_tree.hpp"
-#include <unordered_map>
+#include <vector>
+#include <string>
 
 class FInterpreter final
 {
-	// Structure de données pour stocker les valeurs des variables
-	std::unordered_map<std::string, int> m_variables;
+	int m_argc;
+	const char** m_argv;
+	std::vector<std::string> m_keywords;
 
 public:
 
-	void Interpret(const FSyntaxTree* syntaxTree);
+	FInterpreter(const int argc, const char* argv[], const std::vector<std::string>& keywords);
+	void Interpret();
 
 private:
 
-	void EvaluateNode(const ASyntaxNode* node);
-	int EvaluateExpression(const ASyntaxNode* expression);
+	void PrintUsage() const;
+	void InterpretFile(const std::string& filename);
+	void InterpretText(const std::string& input);
 };

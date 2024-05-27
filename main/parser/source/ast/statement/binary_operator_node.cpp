@@ -1,27 +1,37 @@
 #include "ast/statement/binary_operator_node.hpp"
 
-BinaryOperatorNode::BinaryOperatorNode(const std::string& op, ASyntaxNode* left, ASyntaxNode* right)
-	: m_op(op)
-	, m_left(left)
-	, m_right(right)
-{}
-
-eSyntaxNodeType BinaryOperatorNode::GetType() const
+ABinaryOperatorNode::ABinaryOperatorNode(const std::string& op, ASyntaxNode* left, ASyntaxNode* right)
+	: m_operator(op)
 {
-	return eSyntaxNodeType::ArithmeticExpression;
+	if (!left || !right)
+	{
+		throw std::invalid_argument("Operands cannot be null");
+	}
+
+	AddChild(left);
+	AddChild(right);
 }
 
-std::string BinaryOperatorNode::GetOp() const
+eSyntaxNodeType ABinaryOperatorNode::GetType() const
 {
-	return m_op;
+	// Return the type of this node as BinaryOperator
+	return eSyntaxNodeType::BinaryOperator;
 }
 
-ASyntaxNode* BinaryOperatorNode::GetLeft() const
+std::string ABinaryOperatorNode::GetOperator() const
 {
-	return m_left;
+	// Return the binary operator
+	return m_operator;
 }
 
-ASyntaxNode* BinaryOperatorNode::GetRight() const
+const ASyntaxNode* ABinaryOperatorNode::GetLeft() const
 {
-	return m_right;
+	// Return the left operand
+	return m_children.size() > 0 ? m_children[0] : nullptr;
+}
+
+const ASyntaxNode* ABinaryOperatorNode::GetRight() const
+{
+	// Return the right operand
+	return m_children.size() > 1 ? m_children[1] : nullptr;
 }

@@ -1,20 +1,25 @@
 #include "ast/expression/number_node.hpp"
 
-NumberNode::NumberNode(int value)
+FNumberNode::FNumberNode(int value)
 	: m_value(value)
 {}
 
-eSyntaxNodeType NumberNode::GetType() const
+eSyntaxNodeType FNumberNode::GetType() const
 {
 	return eSyntaxNodeType::Number;
 }
 
-int NumberNode::GetValue() const
+int FNumberNode::GetValue() const
 {
 	return m_value;
 }
 
-void NumberNode::SetValue(int value)
+void FNumberNode::SetValue(int value)
 {
 	m_value = value;
+}
+
+Value FNumberNode::Evaluate(const FContext& context) const
+{
+	return m_value;
 }

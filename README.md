@@ -19,25 +19,35 @@ of symbols and the rules for forming expressions and declarations in the languag
 
 ```ebnf
 Statement
-    ::= ( print | Identifier '=' ) ExpressionList
-    | var Identifier ( '=' ExpressionList )
+    ::= var Identifier ( '=' ExpressionList )
+    | Identifier '='  ExpressionList
+    | print ExpressionList
 
 ExpressionList
     ::= Identifier
+    | Number
+    | String
     | ArithmeticOperatorExpression
     | ComparisonOperatorExpression
+    | StringOperatorExpression
 
 ArithmeticOperatorExpression
     ::= ( Number | Identifier ) ( '*' | '+' | '-' | '/' | '%' ) ( Number | Identifier )
 
 ComparisonOperatorExpression
-    ::= ( Number | Identifier ) ( '==' | '>' | '>=' | '<' | '<=' | '!=' ) ( Number | Identifier )
+    ::= ( String | Number | Identifier ) ( '==' | '>' | '>=' | '<' | '<=' | '!=' ) ( String | Number | Identifier )
+
+StringOperatorExpression
+    ::= ( String | Identifier ) ( '+' | '*' ) ( String | Identifier )
 
 Identifier
     ::= [a-zA-Z_] [a-zA-Z0-9_]+
 
 Number
     ::= [0-9]+
+
+String
+    ::= '"' ( Letter | Digit | Symbol )* '"'
 ```
 
 ## Lexical Analysis (Lexer)
@@ -46,8 +56,21 @@ Lexical analysis involves converting a string of characters into a sequence of t
 In `Simple Script`, the lexer scans the source code to identify and categorize individual
 elements such as keywords, identifiers, numbers, and operators.
 
-> Note: Continue developing this class to handle all types of tokens defined in the Simple
-Script language grammar.
+### Example Output from Lexer
+
+For the code var n = 1 + 2 * 3, the lexer generates the following tokens :
+
+```
+SToken(Token::KEYWORD,     "var")
+SToken(Token::IDENTIFIER,  "n")
+SToken(Token::OPERATOR,    "=")
+SToken(Token::NUMBER,      "1")
+SToken(Token::OPERATOR,    "+")
+SToken(Token::NUMBER,      "2")
+SToken(Token::OPERATOR,    "*")
+SToken(Token::NUMBER,      "3")
+SToken(Token::END,         "")
+```
 
 ## Syntax Analysis (Parser)
 
@@ -57,19 +80,25 @@ syntax. The parser constructs a syntax tree representing the grammatical structu
 
 ### Example AST
 
-For the following code:
+For the following code :
 
 ```
-var n = 0
+var n = 1 + 2 * 3
 print n
 ```
 
-The generated syntax tree would be:
+The generated syntax tree would be :
 
 ```
-  =   print
- / \    |
-n   0   n
+     root
+    /    \ 
+ var     print
+ / \       |
+n   +      n
+   / \
+  1   *
+     / \
+    2   3
 ```
 
 ## Interpretation or Code Generation
@@ -94,22 +123,32 @@ To run a script with `Simple Script`, follow these steps :
 1. Create a script file, for example, script.txt, with the following content :
 
 ```c
-var n = 1 + 2 * 3
-print n
-
-var i = 2
-var j = 1 + i
-print j
+print "Hello, world"
 ```
 
-2. Compile and run the program :
+2. Compile the program :
+
+Choose your preferred method :
+
+- If using Visual Studio :
+    - Open the solution in Visual Studio.
+    - Build the solution using the appropriate build configuration.
+- If using CMake :
 
 ```bash
 mkdir build
 cd build
 cmake ..
 make
-./interpreter.exe script.txt
+```
+
+3. Run the program :
+
+```bash
+cd out\build\x64-Debug\main\interpreter
+or
+cd build\main\interpreter\Debug
+.\interpreter.exe -f ../../../../../examples/test.txt
 ```
 
 The program will read the script.txt file, parse the code, build the syntax tree,

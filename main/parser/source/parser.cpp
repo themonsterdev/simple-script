@@ -2,14 +2,17 @@
 #include "tokenizer.hpp"
 
 // Statement
+#include "ast/statement/arithmetic_operator_node.hpp"
 #include "ast/statement/assignment_node.hpp"
 #include "ast/statement/binary_operator_node.hpp"
 #include "ast/statement/print_statement_node.hpp"
+#include "ast/statement/string_operator_node.hpp"
 #include "ast/statement/var_declaration_node.hpp"
 
 // Expression
 #include "ast/expression/identifier_node.hpp"
 #include "ast/expression/number_node.hpp"
+#include "ast/expression/string_node.hpp"
 
 #include <stdexcept>
 
@@ -19,10 +22,17 @@ FParser::FParser(FTokenizer& tokenizer)
 
 std::unique_ptr<FSyntaxTree> FParser::Parse()
 {
-    std::unique_ptr<ASyntaxNode> root = std::make_unique<ASyntaxNode>();
+    ASyntaxNodePtr root = std::make_unique<ASyntaxNode>();
 
     while (m_tokenizer.HasNextToken())
     {
+        const SToken& token = m_tokenizer.PeekNextToken();
+
+        if (token.type == eTokenType::END)
+        {
+            break;
+        }
+
         auto statement = ParseStatement();
         if (statement)
         {
@@ -33,7 +43,7 @@ std::unique_ptr<FSyntaxTree> FParser::Parse()
     return std::make_unique<FSyntaxTree>(std::move(root));
 }
 
-std::unique_ptr<ASyntaxNode> FParser::ParseStatement()
+ASyntaxNodePtr FParser::ParseStatement()
 {
     SToken token = m_tokenizer.PeekNextToken();
     if (token.type == eTokenType::KEYWORD)
@@ -55,39 +65,27 @@ std::unique_ptr<ASyntaxNode> FParser::ParseStatement()
     throw std::runtime_error("Unexpected token: " + token.lexeme);
 }
 
-std::unique_ptr<ASyntaxNode> FParser::ParseExpression()
+ASyntaxNodePtr FParser::ParseExpression()
 {
-    std::unique_ptr<ASyntaxNode> left = ParseTerm();
+    ASyntaxNodePtr left = ParseTerm();
 
-    while (m_tokenizer.HasNextToken())
+    if (left->GetType() == eSyntaxNodeType::Number)
     {
-        const SToken& token = m_tokenizer.PeekNextToken();
-
-        if (token.type == eTokenType::OPERATOR && (token.lexeme == "+" || token.lexeme == "-"))
-        {
-            m_tokenizer.GetNextToken();
-
-            std::unique_ptr<ASyntaxNode> right = ParseTerm();
-
-            if (token.lexeme == "+")
-            {
-                left = std::make_unique<BinaryOperatorNode>("+", left.release(), right.release());
-            }
-            else if (token.lexeme == "-")
-            {
-                left = std::make_unique<BinaryOperatorNode>("-", left.release(), right.release());
-            }
-        }
-        else
-        {
-            break;
-        }
+        return ParseArithmeticOperatorExpression(std::move(left));
+    }
+    else if (left->GetType() == eSyntaxNodeType::String)
+    {
+        return ParseStringOperatorExpression(std::move(left));
+    }
+    else if (left->GetType() == eSyntaxNodeType::Identifier)
+    {
+        // return ParseIdentifierOperatorExpression(std::move(left));
     }
 
     return left;
 }
 
-std::unique_ptr<ASyntaxNode> FParser::ParseAssignmentStatement()
+ASyntaxNodePtr FParser::ParseAssignmentStatement()
 {
     SToken idToken = m_tokenizer.GetNextToken();
     if (idToken.type != eTokenType::IDENTIFIER)
@@ -104,10 +102,10 @@ std::unique_ptr<ASyntaxNode> FParser::ParseAssignmentStatement()
     }
 
     auto value = ParseExpression();
-    return std::make_unique<AssignmentNode>(identifier, value.release());
+    return std::make_unique<FAssignmentNode>(identifier, value.release());
 }
 
-std::unique_ptr<ASyntaxNode> FParser::ParseVarDeclarationStatement()
+ASyntaxNodePtr FParser::ParseVarDeclarationStatement()
 {
     SToken varToken = m_tokenizer.GetNextToken();
     if (varToken.type != eTokenType::KEYWORD)
@@ -130,10 +128,10 @@ std::unique_ptr<ASyntaxNode> FParser::ParseVarDeclarationStatement()
     }
 
     auto value = ParseExpression();
-    return std::make_unique<VarDeclarationNode>(identifier, value.release());
+    return std::make_unique<FVarDeclarationNode>(identifier, value.release());
 }
 
-std::unique_ptr<ASyntaxNode> FParser::ParsePrintStatement()
+ASyntaxNodePtr FParser::ParsePrintStatement()
 {
     SToken idToken = m_tokenizer.GetNextToken();
     if (idToken.type != eTokenType::KEYWORD)
@@ -142,83 +140,28 @@ std::unique_ptr<ASyntaxNode> FParser::ParsePrintStatement()
     }
 
     auto expression = ParseExpression();
-    return std::make_unique<PrintStatementNode>(expression.release());
+    return std::make_unique<FPrintStatementNode>(expression.release());
 }
 
-std::unique_ptr<ASyntaxNode> FParser::ParseArithmeticOperatorExpression(ASyntaxNode* left)
+ASyntaxNodePtr FParser::ParseArithmeticOperatorExpression(ASyntaxNodePtr left)
 {
-    SToken opToken = m_tokenizer.GetNextToken();
-    if (opToken.type != eTokenType::OPERATOR)
-    {
-        throw std::runtime_error("Expected arithmetic operator");
-    }
-
-    auto right = ParseTerm();
-
-    return std::make_unique<BinaryOperatorNode>(opToken.lexeme, left, right.release());
-}
-
-std::unique_ptr<ASyntaxNode> FParser::ParseComparisonOperatorExpression(ASyntaxNode* left)
-{
-    SToken opToken = m_tokenizer.GetNextToken();
-    if (opToken.type != eTokenType::COMPARISON)
-    {
-        throw std::runtime_error("Expected comparison operator");
-    }
-
-    auto right = ParseTerm();
-
-    return std::make_unique<BinaryOperatorNode>(opToken.lexeme, left, right.release());
-}
-
-std::unique_ptr<ASyntaxNode> FParser::ParseIdentifier()
-{
-    SToken token = m_tokenizer.GetNextToken();
-    if (token.type != eTokenType::IDENTIFIER)
-    {
-        throw std::runtime_error("Expected 'identifier'");
-    }
-
-    return std::make_unique<IdentifierNode>(token.lexeme);
-}
-
-std::unique_ptr<ASyntaxNode> FParser::ParseNumber()
-{
-    SToken token = m_tokenizer.GetNextToken();
-    if (token.type != eTokenType::NUMBER)
-    {
-        throw std::runtime_error("Expected 'number'");
-    }
-
-    int value = std::stoi(token.lexeme);
-    return std::make_unique<NumberNode>(value);
-}
-
-std::unique_ptr<ASyntaxNode> FParser::ParseTerm()
-{
-    std::unique_ptr<ASyntaxNode> left = ParseFactor();
-
     while (m_tokenizer.HasNextToken())
     {
         const SToken& token = m_tokenizer.PeekNextToken();
 
-        if (token.type == eTokenType::OPERATOR && (token.lexeme == "*" || token.lexeme == "/" || token.lexeme == "%"))
+        if (token.type == eTokenType::OPERATOR && (token.lexeme == "+" || token.lexeme == "-"))
         {
             m_tokenizer.GetNextToken();
 
-            std::unique_ptr<ASyntaxNode> right = ParseFactor();
+            ASyntaxNodePtr right = ParseTerm();
 
-            if (token.lexeme == "*")
+            if (token.lexeme == "+")
             {
-                left = std::make_unique<BinaryOperatorNode>("*", left.release(), right.release());
+                left = std::make_unique<FArithmeticOperatorNode>("+", left.release(), right.release());
             }
-            else if (token.lexeme == "/")
+            else if (token.lexeme == "-")
             {
-                left = std::make_unique<BinaryOperatorNode>("/", left.release(), right.release());
-            }
-            else if (token.lexeme == "%")
-            {
-                left = std::make_unique<BinaryOperatorNode>("%", left.release(), right.release());
+                left = std::make_unique<FArithmeticOperatorNode>("-", left.release(), right.release());
             }
         }
         else
@@ -230,13 +173,126 @@ std::unique_ptr<ASyntaxNode> FParser::ParseTerm()
     return left;
 }
 
-std::unique_ptr<ASyntaxNode> FParser::ParseFactor()
+ASyntaxNodePtr FParser::ParseStringOperatorExpression(ASyntaxNodePtr left)
+{
+    while (m_tokenizer.HasNextToken())
+    {
+        const SToken& token = m_tokenizer.PeekNextToken();
+
+        if (token.type == eTokenType::OPERATOR && (token.lexeme == "+" || token.lexeme == "-"))
+        {
+            m_tokenizer.GetNextToken();
+
+            ASyntaxNodePtr right = ParseTerm();
+
+            if (token.lexeme == "+")
+            {
+                left = std::make_unique<FStringOperatorNode>("+", left.release(), right.release());
+            }
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return left;
+}
+
+ASyntaxNodePtr FParser::ParseComparisonOperatorExpression(ASyntaxNodePtr left)
+{
+    SToken opToken = m_tokenizer.GetNextToken();
+    if (opToken.type != eTokenType::COMPARISON)
+    {
+        throw std::runtime_error("Expected comparison operator");
+    }
+
+    auto right = ParseTerm();
+
+    return std::make_unique<ABinaryOperatorNode>(opToken.lexeme, left.release(), right.release());
+}
+
+ASyntaxNodePtr FParser::ParseIdentifier()
+{
+    SToken token = m_tokenizer.GetNextToken();
+    if (token.type != eTokenType::IDENTIFIER)
+    {
+        throw std::runtime_error("Expected 'identifier'");
+    }
+
+    return std::make_unique<FIdentifierNode>(token.lexeme);
+}
+
+ASyntaxNodePtr FParser::ParseNumber()
+{
+    SToken token = m_tokenizer.GetNextToken();
+    if (token.type != eTokenType::NUMBER)
+    {
+        throw std::runtime_error("Expected 'number'");
+    }
+
+    int value = std::stoi(token.lexeme);
+    return std::make_unique<FNumberNode>(value);
+}
+
+ASyntaxNodePtr FParser::ParseString()
+{
+    SToken token = m_tokenizer.GetNextToken();
+    if (token.type != eTokenType::STRING)
+    {
+        throw std::runtime_error("Expected 'string'");
+    }
+
+    return std::make_unique<FStringNode>(token.lexeme);
+}
+
+ASyntaxNodePtr FParser::ParseTerm()
+{
+    ASyntaxNodePtr left = ParseFactor();
+
+    while (m_tokenizer.HasNextToken() && left->GetType() == eSyntaxNodeType::Number)
+    {
+        const SToken& token = m_tokenizer.PeekNextToken();
+
+        if (token.type == eTokenType::OPERATOR && (token.lexeme == "*" || token.lexeme == "/" || token.lexeme == "%"))
+        {
+            m_tokenizer.GetNextToken();
+
+            ASyntaxNodePtr right = ParseFactor();
+
+            if (token.lexeme == "*")
+            {
+                left = std::make_unique<FArithmeticOperatorNode>("*", left.release(), right.release());
+            }
+            else if (token.lexeme == "/")
+            {
+                left = std::make_unique<FArithmeticOperatorNode>("/", left.release(), right.release());
+            }
+            else if (token.lexeme == "%")
+            {
+                left = std::make_unique<FArithmeticOperatorNode>("%", left.release(), right.release());
+            }
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return left;
+}
+
+ASyntaxNodePtr FParser::ParseFactor()
 {
     const SToken& token = m_tokenizer.PeekNextToken();
 
     if (token.type == eTokenType::NUMBER)
     {
         return ParseNumber();
+    }
+    else if (token.type == eTokenType::STRING)
+    {
+        return ParseString();
     }
     else if (token.type == eTokenType::IDENTIFIER)
     {

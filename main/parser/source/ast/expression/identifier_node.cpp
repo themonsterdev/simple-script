@@ -1,20 +1,25 @@
 #include "ast/expression/identifier_node.hpp"
 
-IdentifierNode::IdentifierNode(const std::string& name)
+FIdentifierNode::FIdentifierNode(const std::string& name)
 	: m_name(name)
 {}
 
-eSyntaxNodeType IdentifierNode::GetType() const
+eSyntaxNodeType FIdentifierNode::GetType() const
 {
 	return eSyntaxNodeType::Identifier;
 }
 
-const std::string& IdentifierNode::GetName() const
+const std::string& FIdentifierNode::GetName() const
 {
 	return m_name;
 }
 
-void IdentifierNode::SetName(const std::string& name)
+void FIdentifierNode::SetName(const std::string& name)
 {
 	m_name = name;
+}
+
+Value FIdentifierNode::Evaluate(const FContext& context) const
+{
+	return context.GetVariable(m_name);
 }

@@ -2,15 +2,17 @@
 
 #include "ast/syntax_node.hpp"
 
-class NumberNode final : public ASyntaxNode
+class FNumberNode final : public ASyntaxNode
 {
 	int m_value;
 
 public:
 
-	NumberNode(int value);
+	FNumberNode(int value);
 	eSyntaxNodeType GetType() const override;
 
 	int GetValue() const;
 	void SetValue(int value);
+
+	virtual Value Evaluate(const FContext& context) const override;
 };

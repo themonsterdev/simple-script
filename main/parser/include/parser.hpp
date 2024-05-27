@@ -18,17 +18,19 @@ public:
 
 private:
 
-    std::unique_ptr<ASyntaxNode> ParseStatement();
-    std::unique_ptr<ASyntaxNode> ParseAssignmentStatement();
-    std::unique_ptr<ASyntaxNode> ParseVarDeclarationStatement();
-    std::unique_ptr<ASyntaxNode> ParsePrintStatement();
+    ASyntaxNodePtr ParseStatement();
+    ASyntaxNodePtr ParseAssignmentStatement();
+    ASyntaxNodePtr ParseVarDeclarationStatement();
+    ASyntaxNodePtr ParsePrintStatement();
 
-    std::unique_ptr<ASyntaxNode> ParseExpression();
-    std::unique_ptr<ASyntaxNode> ParseArithmeticOperatorExpression(ASyntaxNode* left);
-    std::unique_ptr<ASyntaxNode> ParseComparisonOperatorExpression(ASyntaxNode* left);
-    std::unique_ptr<ASyntaxNode> ParseIdentifier();
-    std::unique_ptr<ASyntaxNode> ParseNumber();
+    ASyntaxNodePtr ParseExpression();
+    ASyntaxNodePtr ParseArithmeticOperatorExpression(ASyntaxNodePtr left);
+    ASyntaxNodePtr ParseStringOperatorExpression(ASyntaxNodePtr left);
+    ASyntaxNodePtr ParseComparisonOperatorExpression(ASyntaxNodePtr left);
+    ASyntaxNodePtr ParseIdentifier();
+    ASyntaxNodePtr ParseNumber();
+    ASyntaxNodePtr ParseString();
 
-    std::unique_ptr<ASyntaxNode> ParseTerm();
-    std::unique_ptr<ASyntaxNode> ParseFactor();
+    ASyntaxNodePtr ParseTerm();
+    ASyntaxNodePtr ParseFactor();
 };

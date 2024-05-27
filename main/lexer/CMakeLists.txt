@@ -1,13 +1,13 @@
-# Configuration de la bibliothèque d'en-têtes lexer
+# Configuration of the lexer header library
 
-# Ajouter les fichiers d'en-tête à la bibliothèque
-file(GLOB LEXER_HEADERS "include/*.hpp")
+# Add header files to the library
 file(GLOB LEXER_SOURCES "source/*.cpp")
 
-# Créer une bibliothèque pour le lexer
-add_library(lexer ${LEXER_SOURCES} ${LEXER_HEADERS})
+# Create a library for the lexer
+add_library(lexer ${LEXER_SOURCES})
 
-# Inclure le dossier d'en-tête dans le projet principal
+# Include the header directory in the main project
 target_include_directories(lexer PUBLIC include)
 
+# Add the test subdirectory
 add_subdirectory(test)
