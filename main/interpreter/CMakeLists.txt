@@ -1,16 +1,16 @@
-# Ajouter les fichiers d'en-tête à la bibliothèque
+# Add header files to the library
 file(GLOB INTERPRETER_SOURCES "source/*.cpp")
 
-# Créer une bibliothèque pour le interpreter
+# Create an executable for the interpreter
 add_executable(interpreter ${INTERPRETER_SOURCES})
 
-# Inclure le dossier d'en-tête dans le projet principal
+# Include the header directory in the main project
 target_include_directories(interpreter
 PUBLIC
-	include
+	"include"
 	"../lexer/include"
 	"../parser/include"
 )
 
-# Lier avec les librairies
+# Link with the libraries
 target_link_libraries(interpreter lexer parser)
