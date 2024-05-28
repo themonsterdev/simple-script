@@ -34,13 +34,20 @@ static bool IsAlphanumeric(const char c)
 }
 
 /**
- * @brief Checks if a character is a delimiter.
+ * @brief Checks if a character is a whitespace.
  * @param c The character to check.
- * @return True if the character is a delimiter, false otherwise.
+ * @return True if the character is a whitespace, false otherwise.
  */
-static bool IsDelimiter(const char c)
+static bool IsWhitespace(const char c)
 {
-    return c == ' ' || c == '\r' || c == '\n';
+    switch (c)
+    {
+    case ' ':
+    case '\r':
+    case '\n':
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -75,6 +82,43 @@ static bool IsQuote(const char c)
     case '"':
     case '\'':
     case '`':
+        return true;
+    }
+    return false;
+}
+
+/**
+ * @brief Checks if a character is an punctuation.
+ * @param c The character to check.
+ * @return True if the character is an punctuation, false otherwise.
+ */
+static bool IsPunctuation(const char c)
+{
+    switch (c)
+    {
+    case ',':
+    case ';':
+    case '.':
+        return true;
+    }
+    return false;
+}
+
+/**
+ * @brief Checks if a character is a delimiter.
+ * @param c The character to check.
+ * @return True if the character is a delimiter, false otherwise.
+ */
+static bool IsDelimiter(const char c)
+{
+    switch (c)
+    {
+    case '{':
+    case '}':
+    case '[':
+    case ']':
+    case '(':
+    case ')':
         return true;
     }
     return false;
@@ -162,8 +206,15 @@ SToken FTokenizer::GetNextToken()
         return ParseOperator();
     }
 
-    // Throw an exception if the token cannot be parsed
-    throw std::exception("Failed to get next token");
+    if (IsPunctuation(m_input[m_offset]))
+    {
+        return ParsePunctuation();
+    }
+
+    // Throw an runtime_error if the token cannot be parsed
+    std::string lexeme;
+    lexeme += m_input[m_offset];
+    throw std::runtime_error("Failed to get next token: " + lexeme);
 }
 
 SToken FTokenizer::PeekNextToken()
@@ -181,7 +232,7 @@ void FTokenizer::SkipWhitespace()
     while (HasNextToken())
     {
         // If the current character is not a delimiter, exit the loop
-        if (!IsDelimiter(m_input[m_offset]))
+        if (!IsWhitespace(m_input[m_offset]))
         {
             break;
         }
@@ -281,6 +332,17 @@ SToken FTokenizer::ParseOperator()
     return {
         eTokenType::END,
         ""
+    };
+}
+
+SToken FTokenizer::ParsePunctuation()
+{
+    std::string punctuation(1, m_input[m_offset++]);
+
+    // Return an end token if there are no more tokens
+    return {
+        eTokenType::PUNCTUATION,
+        punctuation
     };
 }
 
@@ -385,22 +447,42 @@ std::string TokenTypeToString(const eTokenType& token)
 {
     switch (token)
     {
-    case eTokenType::NUMBER:
-        return "NUMBER";
-    case eTokenType::STRING:
-        return "STRING";
-    case eTokenType::OPERATOR:
-        return "OPERATOR";
-    case eTokenType::COMPARISON:
-        return "COMPARISON";
+    // Identifiers
     case eTokenType::IDENTIFIER:
         return "IDENTIFIER";
     case eTokenType::KEYWORD:
         return "KEYWORD";
+
+    // Operators
+    case eTokenType::OPERATOR:
+        return "OPERATOR";
+    case eTokenType::COMPARISON:
+        return "COMPARISON";
+
+    // Delimiters/Punctuators
+    case eTokenType::PUNCTUATION:
+        return "PUNCTUATION";
+    case eTokenType::DELIMITER:
+        return "DELIMITER";
+
+    // Literals
+    case eTokenType::NUMBER:
+        return "NUMBER";
+    case eTokenType::FLOAT:
+        return "FLOAT";
+    case eTokenType::STRING:
+        return "STRING";
+    case eTokenType::BOOLEAN:
+        return "BOOLEAN";
+
+    // Comments
     case eTokenType::COMMENT:
         return "COMMENT";
+
+    // Others
     case eTokenType::END:
         return "END";
     }
+
     return "Unknow";
 }

@@ -4,13 +4,13 @@
 #include "parser.hpp"
 
 // Statement
-#include "ast/statement/assignment_node.hpp"
-#include "ast/statement/print_node.hpp"
-#include "ast/statement/var_declaration_node.hpp"
+#include "statement/assignment_statement.hpp"
+#include "statement/print_statement.hpp"
+#include "statement/var_declaration_statement.hpp"
 
 // Expression
-#include "ast/expression/identifier_node.hpp"
-#include "ast/expression/number_node.hpp"
+#include "expression/identifier_node.hpp"
+#include "expression/number_node.hpp"
 
 #include <iostream>
 #include <fstream>

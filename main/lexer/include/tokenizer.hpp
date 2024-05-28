@@ -11,14 +11,29 @@
  */
 enum class eTokenType
 {
-	NUMBER,     // Number token
-	STRING,     // String token
-	OPERATOR,   // Operator token
-	COMPARISON, // Comparison operator token
-	IDENTIFIER, // Identifier token
-	KEYWORD,    // Keyword token
-	COMMENT,    // Comment token
-	END         // End of input token
+	// Identifiers
+	IDENTIFIER,  // Identifier token
+	KEYWORD,     // Keyword token
+
+	// Operators
+	OPERATOR,    // Operator token
+	COMPARISON,  // Comparison operator token
+
+	// Delimiters/Punctuators
+	PUNCTUATION, // Punctuation token
+	DELIMITER,   // Delimiter token
+
+	// Literals
+	NUMBER,      // Number literal token
+	FLOAT,       // Float literal token
+	STRING,      // String literal token
+	BOOLEAN,     // Boolean literal token
+
+	// Comments
+	COMMENT,     // Comment token
+
+	// Others
+	END			// End of input token
 };
 
 /**
@@ -101,6 +116,12 @@ private:
 	 * @return The parsed operator token.
 	 */
 	SToken ParseOperator();
+
+	/**
+	 * @brief Parses an punctuation token.
+	 * @return The parsed punctuation token.
+	 */
+	SToken ParsePunctuation();
 
 	/**
 	 * @brief Parses an identifier token.

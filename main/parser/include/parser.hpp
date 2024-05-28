@@ -6,10 +6,16 @@
 #pragma once
 
 // Include the interface for language statements
-#include "ast/statement/interface/statement.hpp"
+#include "statement/interface/statement.hpp"
 
 // Include the interface for expressions
-#include "ast/expression/interface/expression.hpp"
+#include "expression/interface/expression.hpp"
+
+// Include the expression parser header file
+#include "expression_parser.hpp"
+
+// Include the statement parser header file
+#include "statement_parser.hpp"
 
 // Forward declaration of FTokenizer class
 class FTokenizer;
@@ -23,7 +29,9 @@ class FTokenizer;
 class FParser final
 {
     // Reference to the tokenizer used by the parser.
-	FTokenizer& m_tokenizer;
+    FTokenizer& m_tokenizer;
+    FExpressionParser m_expressionParser;
+    FStatementParser m_statementParser;
 
 public:
 
@@ -38,22 +46,4 @@ public:
      * @return A list of parsed statements.
      */
     StatementList Parse();
-
-private:
-
-    // Statement parsing functions
-    StatementPtr ParseStatement();
-    StatementPtr ParseAssignmentStatement();
-    StatementPtr ParseVarDeclarationStatement();
-    StatementPtr ParsePrintStatement();
-
-    // Expression parsing functions
-    ExpressionPtr ParseExpression();
-    ExpressionPtr ParseArithmeticOperatorExpression(ExpressionPtr left);
-    ExpressionPtr ParseStringOperatorExpression(ExpressionPtr left);
-    ExpressionPtr ParseIdentifier();
-    ExpressionPtr ParseNumber();
-    ExpressionPtr ParseString();
-    ExpressionPtr ParseTerm();
-    ExpressionPtr ParseFactor();
 };
