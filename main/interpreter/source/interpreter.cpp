@@ -9,8 +9,8 @@
 #include "statement/var_declaration_statement.hpp"
 
 // Expression
-#include "expression/identifier_node.hpp"
-#include "expression/number_node.hpp"
+#include "expression/identifier_expression.hpp"
+#include "expression/literal/number_expression.hpp"
 
 #include <iostream>
 #include <fstream>

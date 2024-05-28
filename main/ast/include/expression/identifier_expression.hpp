@@ -1,6 +1,6 @@
 /**
- * @file identifier_node.hpp
- * @brief Declaration of the identifier node class.
+ * @file identifier_expression.hpp
+ * @brief Declaration of the identifier expression class.
  */
 
 #pragma once
@@ -9,12 +9,12 @@
 #include "expression/interface/expression.hpp"
 
 /**
- * @brief Represents an identifier node in the abstract syntax tree (AST).
+ * @brief Represents an identifier expression in the abstract syntax tree (AST).
  *
- * This class inherits from the IExpression interface and represents a node
+ * This class inherits from the IExpression interface and represents a expression
  * that holds an identifier (variable name) in the AST.
  */
-class FIdentifierNode final : public IExpression
+class FIdentifierExpression final : public IExpression
 {
 	// The name of the identifier.
 	std::string m_name;
@@ -22,10 +22,10 @@ class FIdentifierNode final : public IExpression
 public:
 
 	/**
-	 * @brief Constructs an identifier node with the specified name.
+	 * @brief Constructs an identifier expression with the specified name.
 	 * @param name The name of the identifier.
 	 */
-	FIdentifierNode(const std::string& name);
+	FIdentifierExpression(const std::string& name);
 
 	/**
 	 * @brief Returns the name of the identifier.
@@ -40,7 +40,7 @@ public:
 	void SetName(const std::string& name);
 
 	/**
-	 * @brief Evaluates the identifier node within the given context.
+	 * @brief Evaluates the identifier expression within the given context.
 	 *
 	 * This method retrieves the value associated with the identifier from the context.
 	 *

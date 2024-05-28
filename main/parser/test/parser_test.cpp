@@ -12,8 +12,8 @@
 // Expression
 #include "expression/operator/arithmetic/addition_expression.hpp"
 #include "expression/operator/arithmetic/multiply_expression.hpp"
-#include "expression/identifier_node.hpp"
-#include "expression/number_node.hpp"
+#include "expression/identifier_expression.hpp"
+#include "expression/literal/number_expression.hpp"
 
 // Test fixture for expressions
 class FParserTest : public ::testing::Test
@@ -39,7 +39,7 @@ protected:
 
 TEST_F(FParserTest, ExecuteAssignmentStatementTest)
 {
-    ExpressionPtr number = std::make_unique<FNumberNode>(10);
+    ExpressionPtr number = std::make_unique<FNumberExpression>(10);
 
     // Create an assignment node
     StatementPtr assignmentNode = std::make_unique<FAssignmentStatement>("x", std::move(number));
@@ -56,7 +56,7 @@ TEST_F(FParserTest, ExecuteAssignmentStatementTest)
 
 TEST_F(FParserTest, ExecuteVarDeclarationStatementTest)
 {
-    ExpressionPtr number = std::make_unique<FNumberNode>(20);
+    ExpressionPtr number = std::make_unique<FNumberExpression>(20);
 
     // Create a variable declaration statement
     StatementPtr varDeclarationNode = std::make_unique<FVarDeclarationStatement>("z", std::move(number));
@@ -73,7 +73,7 @@ TEST_F(FParserTest, ExecuteVarDeclarationStatementTest)
 
 TEST_F(FParserTest, ExecutePrintStatementStatementTest)
 {
-    ExpressionPtr identifier = std::make_unique<FIdentifierNode>("x");
+    ExpressionPtr identifier = std::make_unique<FIdentifierExpression>("x");
 
     // Create a print statement
     StatementPtr printNode = std::make_unique<FPrintStatement>(std::move(identifier));
@@ -117,14 +117,14 @@ TEST_F(FParserTest, ParseTest)
         const auto arithNode = dynamic_cast<FAdditionExpression*>(varDecl->GetExpression().get());
         ASSERT_NE(arithNode, nullptr);
 
-        const auto leftExpr = dynamic_cast<const FNumberNode*>(arithNode->GetLeft().get());
+        const auto leftExpr = dynamic_cast<const FNumberExpression*>(arithNode->GetLeft().get());
         ASSERT_NE(leftExpr, nullptr);
 
         const auto rightExpr = dynamic_cast<const FMultiplyExpression*>(arithNode->GetRight().get());
         ASSERT_NE(rightExpr, nullptr);
 
         ASSERT_NE(rightExpr->GetLeft(), nullptr);
-        ASSERT_NE(dynamic_cast<FNumberNode*>(rightExpr->GetRight().get()), nullptr);
+        ASSERT_NE(dynamic_cast<FNumberExpression*>(rightExpr->GetRight().get()), nullptr);
     }
 
     ASSERT_NE(statements.back(), nullptr);
@@ -132,7 +132,7 @@ TEST_F(FParserTest, ParseTest)
     ASSERT_NE(printStat, nullptr);
     ASSERT_NE(printStat->GetExpression(), nullptr);
 
-    const auto idExpr = dynamic_cast<FIdentifierNode*>(printStat->GetExpression().get());
+    const auto idExpr = dynamic_cast<FIdentifierExpression*>(printStat->GetExpression().get());
     ASSERT_NE(idExpr, nullptr);
 
     // Capture the standard output to verify the print statement

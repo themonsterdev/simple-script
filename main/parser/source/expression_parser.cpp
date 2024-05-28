@@ -14,10 +14,10 @@
 #include "expression/operator/arithmetic/modulo_expression.hpp"
 #include "expression/operator/arithmetic/multiply_expression.hpp"
 #include "expression/operator/arithmetic/subtract_expression.hpp"
-#include "expression/identifier_node.hpp"
-#include "expression/number_node.hpp"
-#include "expression/string_node.hpp"
-#include "expression/string_operator_node.hpp"
+#include "expression/identifier_expression.hpp"
+#include "expression/literal/number_expression.hpp"
+#include "expression/literal/string_expression.hpp"
+#include "expression/string_operator_expression.hpp"
 
 FExpressionParser::FExpressionParser(FTokenizer& tokenizer)
     : m_tokenizer(tokenizer)
@@ -29,17 +29,17 @@ ExpressionPtr FExpressionParser::ParseExpression()
     ExpressionPtr left = ParseTerm();
 
     // Check the type of the left term
-    if (dynamic_cast<FNumberNode*>(left.get()))
+    if (dynamic_cast<FNumberExpression*>(left.get()))
     {
         // If the left term is a number, parse arithmetic operator expression
         return ParseArithmeticOperatorExpression(std::move(left));
     }
-    else if (dynamic_cast<FStringNode*>(left.get()))
+    else if (dynamic_cast<FStringExpression*>(left.get()))
     {
         // If the left term is a string, parse string operator expression
         return ParseStringOperatorExpression(std::move(left));
     }
-    else if (dynamic_cast<FIdentifierNode*>(left.get()))
+    else if (dynamic_cast<FIdentifierExpression*>(left.get()))
     {
         // If the left term is an identifier, parse identifier operator expression
         // Uncomment the line below when implementing identifier operator expressions
@@ -106,7 +106,7 @@ ExpressionPtr FExpressionParser::ParseStringOperatorExpression(ExpressionPtr lef
             ExpressionPtr right = ParseTerm();
 
             // Create a string operator node for concatenation
-            left = std::make_unique<FStringOperatorNode>("+", std::move(left), std::move(right));
+            left = std::make_unique<FStringOperatorExpression>("+", std::move(left), std::move(right));
         }
         else
         {
@@ -132,7 +132,7 @@ ExpressionPtr FExpressionParser::ParseIdentifier()
     }
 
     // Create an identifier node with the token's lexeme as the identifier name
-    return std::make_unique<FIdentifierNode>(token.lexeme);
+    return std::make_unique<FIdentifierExpression>(token.lexeme);
 }
 
 ExpressionPtr FExpressionParser::ParseNumber()
@@ -149,7 +149,7 @@ ExpressionPtr FExpressionParser::ParseNumber()
 
     // Convert the token's lexeme to an integer and create a number node with that value
     int value = std::stoi(token.lexeme);
-    return std::make_unique<FNumberNode>(value);
+    return std::make_unique<FNumberExpression>(value);
 }
 
 ExpressionPtr FExpressionParser::ParseString()
@@ -165,7 +165,7 @@ ExpressionPtr FExpressionParser::ParseString()
     }
 
     // Create a string node with the token's lexeme as its value
-    return std::make_unique<FStringNode>(token.lexeme);
+    return std::make_unique<FStringExpression>(token.lexeme);
 }
 
 ExpressionPtr FExpressionParser::ParseTerm()
@@ -177,7 +177,7 @@ ExpressionPtr FExpressionParser::ParseTerm()
     while (m_tokenizer.HasNextToken())
     {
         // If the left operand is not a number, stop parsing further
-        if (!dynamic_cast<FNumberNode*>(left.get()))
+        if (!dynamic_cast<FNumberExpression*>(left.get()))
         {
             break;
         }

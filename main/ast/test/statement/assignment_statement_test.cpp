@@ -3,9 +3,9 @@
 #include "context.hpp"
 
 // Expression
-#include "expression/identifier_node.hpp"
-#include "expression/number_node.hpp"
-#include "expression/string_node.hpp"
+#include "expression/identifier_expression.hpp"
+#include "expression/literal/number_expression.hpp"
+#include "expression/literal/string_expression.hpp"
 
 // Statement
 #include "statement/assignment_statement.hpp"
@@ -33,14 +33,14 @@ protected:
 // Test constructor with valid arguments
 TEST_F(FAssignmentStatementTest, ConstructorValidArguments)
 {
-    ExpressionPtr expression = std::make_unique<FIdentifierNode>("x");
+    ExpressionPtr expression = std::make_unique<FIdentifierExpression>("x");
     FAssignmentStatement assignment("y", std::move(expression));
 
     // Verify assignment identifier and expression type
     EXPECT_EQ(assignment.GetIdentifier(), "y");
 
     EXPECT_NE(assignment.GetExpression(), nullptr);
-    EXPECT_NE(dynamic_cast<FIdentifierNode*>(assignment.GetExpression().get()), nullptr);
+    EXPECT_NE(dynamic_cast<FIdentifierExpression*>(assignment.GetExpression().get()), nullptr);
 }
 
 // Test constructor with null expression
@@ -55,7 +55,7 @@ TEST_F(FAssignmentStatementTest, ConstructorNullExpression)
 // Test evaluation with valid context
 TEST_F(FAssignmentStatementTest, ExecuteValidContext)
 {
-    ExpressionPtr expression = std::make_unique<FNumberNode>(42);
+    ExpressionPtr expression = std::make_unique<FNumberExpression>(42);
     FAssignmentStatement assignment("y", std::move(expression));
     EXPECT_NO_THROW(assignment.Execute(context));
 

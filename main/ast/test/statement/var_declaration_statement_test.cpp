@@ -3,9 +3,9 @@
 #include "context.hpp"
 
 // Expression
-#include "expression/identifier_node.hpp"
-#include "expression/number_node.hpp"
-#include "expression/string_node.hpp"
+#include "expression/identifier_expression.hpp"
+#include "expression/literal/number_expression.hpp"
+#include "expression/literal/string_expression.hpp"
 
 // Statement
 #include "statement/var_declaration_statement.hpp"
@@ -23,7 +23,7 @@ protected:
     {
         // Initialize test data
         identifier = "x";
-        expression = std::make_unique<FNumberNode>(42);
+        expression = std::make_unique<FNumberExpression>(42);
     }
 
     // Teardown method to clean up the test fixture

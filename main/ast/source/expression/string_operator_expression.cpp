@@ -1,15 +1,15 @@
 /**
- * @file string_operator_node.cpp
- * @brief Implementation of the string operator node class.
+ * @file string_operator_expression.cpp
+ * @brief Implementation of the string operator expression class.
  */
 
-// Include the declaration of the string operator node class
-#include "expression/string_operator_node.hpp"
+// Include the declaration of the string operator expression class
+#include "expression/string_operator_expression.hpp"
 
 // For runtime_error
 #include <stdexcept>
 
-FStringOperatorNode::FStringOperatorNode(const std::string& op, ExpressionPtr left, ExpressionPtr right)
+FStringOperatorExpression::FStringOperatorExpression(const std::string& op, ExpressionPtr left, ExpressionPtr right)
     // Initialize the string operator and its operands
     : m_operator(op)
     , m_left(left.release())
@@ -18,11 +18,11 @@ FStringOperatorNode::FStringOperatorNode(const std::string& op, ExpressionPtr le
     // Check if both left and right child expressions exist
     if (!m_left || !m_right)
     {
-        throw std::runtime_error("String operator node must have exactly two child expressions");
+        throw std::runtime_error("String operator expression must have exactly two child expressions");
     }
 }
 
-Value FStringOperatorNode::Evaluate(const FContext& context) const
+Value FStringOperatorExpression::Evaluate(const FContext& context) const
 {
     // Evaluate the operands expressions
     Value leftValue = m_left->Evaluate(context);
@@ -82,19 +82,19 @@ Value FStringOperatorNode::Evaluate(const FContext& context) const
     throw std::runtime_error("Unsupported string operator: " + m_operator);
 }
 
-std::string FStringOperatorNode::GetOperator() const
+std::string FStringOperatorExpression::GetOperator() const
 {
     // Return the string operator
     return m_operator;
 }
 
-const ExpressionPtr& FStringOperatorNode::GetLeft() const
+const ExpressionPtr& FStringOperatorExpression::GetLeft() const
 {
     // Returns a constant reference to the left operand.
     return m_left;
 }
 
-const ExpressionPtr& FStringOperatorNode::GetRight() const
+const ExpressionPtr& FStringOperatorExpression::GetRight() const
 {
     // Returns a constant reference to the right operand.
     return m_right;

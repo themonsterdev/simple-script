@@ -3,9 +3,9 @@
 #include "context.hpp"
 
 // Expression
-#include "expression/identifier_node.hpp"
-#include "expression/number_node.hpp"
-#include "expression/string_node.hpp"
+#include "expression/identifier_expression.hpp"
+#include "expression/literal/number_expression.hpp"
+#include "expression/literal/string_expression.hpp"
 
 // Statement
 #include "statement/print_statement.hpp"
@@ -32,7 +32,7 @@ protected:
 // Tests the creation of a print statement with a valid expression
 TEST_F(FPrintStatementTest, ConstructorValidExpression)
 {
-    ExpressionPtr expression = std::make_unique<FNumberNode>(42);
+    ExpressionPtr expression = std::make_unique<FNumberExpression>(42);
     FPrintStatement printStatement(std::move(expression));
 
     ASSERT_NE(printStatement.GetExpression(), nullptr);
@@ -48,7 +48,7 @@ TEST_F(FPrintStatementTest, ConstructorNullExpression)
 // Tests the execution of a print statement with a number expression
 TEST_F(FPrintStatementTest, ExecuteNumberExpression)
 {
-    ExpressionPtr expression = std::make_unique<FNumberNode>(42);
+    ExpressionPtr expression = std::make_unique<FNumberExpression>(42);
     FPrintStatement printStatement(std::move(expression));
 
     // Capture standard output
@@ -67,7 +67,7 @@ TEST_F(FPrintStatementTest, ExecuteNumberExpression)
 // Tests the execution of a print statement with a string expression
 TEST_F(FPrintStatementTest, ExecuteeStringExpression)
 {
-    ExpressionPtr expression = std::make_unique<FStringNode>("Hello, World!");
+    ExpressionPtr expression = std::make_unique<FStringExpression>("Hello, World!");
     FPrintStatement printStatement(std::move(expression));
 
     // Capture standard output
@@ -86,7 +86,7 @@ TEST_F(FPrintStatementTest, ExecuteeStringExpression)
 // Tests the execution of a print statement with an identifier expression
 TEST_F(FPrintStatementTest, ExecuteIdentifierExpression)
 {
-    ExpressionPtr expression = std::make_unique<FIdentifierNode>("x");
+    ExpressionPtr expression = std::make_unique<FIdentifierExpression>("x");
     FPrintStatement printStatement(std::move(expression));
 
     // Set the value of the identifier in the context
