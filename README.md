@@ -60,11 +60,32 @@ Number
     ::= [0-9]+
 
 String
-    ::= '"' ( Letter | Digit | Symbol )* '"'
+    ::= '"' [^"]* '"'
+    | "'" [^']* "'"
 
 Boolean
     ::= 'false'
     | 'true'
+
+Whitespace
+    ::= Space
+    | Comment
+
+Space
+    ::= '\t'
+    | '\n'
+    | '\r'
+    | ' '
+
+Comment
+    ::= CommentSingleLine
+    | CommentMultiLine
+
+CommentSingleLine
+    ::= '//' [^\n]*
+
+CommentMultiLine
+    ::= '/*' ( [^*] | '*'+ [^*/] )* '*'* '*/'
 ```
 
 For detailed information on the syntax and structure of Simple Script, please refer
