@@ -1,5 +1,5 @@
 #include "tokenizer.hpp"
-#include <stdexcept>
+#include "exception/lexical_exception.hpp"
 
 /**
  * @brief Checks if a character is a numeric character.
@@ -214,7 +214,7 @@ SToken FTokenizer::GetNextToken()
     // Throw an runtime_error if the token cannot be parsed
     std::string lexeme;
     lexeme += m_input[m_offset];
-    throw std::runtime_error("Failed to get next token: " + lexeme);
+    throw FLexicalException("Failed to get next token: " + lexeme);
 }
 
 SToken FTokenizer::PeekNextToken()
@@ -295,7 +295,7 @@ SToken FTokenizer::ParseString()
     if (m_offset >= m_input.size() || m_input[m_offset] != quoteChar)
     {
         // Throw an exception for unterminated string literal
-        throw std::runtime_error("Unterminated string literal");
+        throw FLexicalException("Unterminated string literal");
     }
     else
     {

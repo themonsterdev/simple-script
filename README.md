@@ -19,14 +19,27 @@ of symbols and the rules for forming expressions and declarations in the languag
 
 ```ebnf
 Statement
-    ::= var Identifier ( '=' ExpressionList )
-    | Identifier '='  ExpressionList
-    | print ExpressionList
+    ::= VarDeclarationStatement
+    | AssignmentStatement
+    | PrintStatement
+
+VarDeclarationStatement
+    ::= 'var' VarDeclaration (',' VarDeclaration)*
+
+VarDeclaration
+    ::= Identifier ('=' ExpressionList)?
+
+AssignmentStatement
+    ::= Identifier '=' ExpressionList
+
+PrintStatement
+    ::= 'print' ExpressionList
 
 ExpressionList
     ::= Identifier
     | Number
     | String
+    | Boolean
     | ArithmeticOperatorExpression
     | ComparisonOperatorExpression
     | StringOperatorExpression
@@ -35,19 +48,23 @@ ArithmeticOperatorExpression
     ::= ( Number | Identifier ) ( '*' | '+' | '-' | '/' | '%' ) ( Number | Identifier )
 
 ComparisonOperatorExpression
-    ::= ( String | Number | Identifier ) ( '==' | '>' | '>=' | '<' | '<=' | '!=' ) ( String | Number | Identifier )
+    ::= ( String | Number | Boolean | Identifier ) ( '==' | '>' | '>=' | '<' | '<=' | '!=' ) ( String | Number | Boolean | Identifier )
 
 StringOperatorExpression
     ::= ( String | Identifier ) ( '+' | '*' ) ( String | Identifier )
 
 Identifier
-    ::= [a-zA-Z_] [a-zA-Z0-9_]+
+    ::= [a-zA-Z_] [a-zA-Z0-9_]*
 
 Number
     ::= [0-9]+
 
 String
     ::= '"' ( Letter | Digit | Symbol )* '"'
+
+Boolean
+    ::= 'false'
+    | 'true'
 ```
 
 ## Lexical Analysis (Lexer)

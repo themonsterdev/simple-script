@@ -3,10 +3,10 @@
  * @brief Implementation of the FExpressionParser class.
  */
 
-#include "expression_parser.hpp" // Include the expression parser header file
-#include "tokenizer.hpp"         // Include the tokenizer header file
-#include "parser.hpp"            // Include the parser header file
-#include <stdexcept>             // For std::runtime_error
+#include "expression_parser.hpp"            // Include the expression parser header file
+#include "tokenizer.hpp"                    // Include the tokenizer header file
+#include "parser.hpp"                       // Include the parser header file
+#include "exception/syntax_exception.hpp"   // Include the syntax exception header file
 
  // Expressions
 #include "expression/operator/arithmetic/addition_expression.hpp"
@@ -128,7 +128,7 @@ ExpressionPtr FExpressionParser::ParseIdentifier()
     if (token.type != eTokenType::IDENTIFIER)
     {
         // Throw an error if it's not an identifier
-        throw std::runtime_error("Expected 'identifier'");
+        throw FSyntaxException("Expected 'identifier'");
     }
 
     // Create an identifier node with the token's lexeme as the identifier name
@@ -144,7 +144,7 @@ ExpressionPtr FExpressionParser::ParseNumber()
     if (token.type != eTokenType::NUMBER)
     {
         // Throw an error if it's not a number
-        throw std::runtime_error("Expected 'number'");
+        throw FSyntaxException("Expected 'number'");
     }
 
     // Convert the token's lexeme to an integer and create a number node with that value
@@ -161,7 +161,7 @@ ExpressionPtr FExpressionParser::ParseString()
     if (token.type != eTokenType::STRING)
     {
         // Throw an error if it's not a string
-        throw std::runtime_error("Expected 'string'");
+        throw FSyntaxException("Expected 'string'");
     }
 
     // Create a string node with the token's lexeme as its value
@@ -241,5 +241,5 @@ ExpressionPtr FExpressionParser::ParseFactor()
     }
 
     // If the token is none of the expected types, throw an error
-    throw std::runtime_error("Unexpected token in factor: " + token.lexeme);
+    throw FSyntaxException("Unexpected token in factor: " + token.lexeme);
 }

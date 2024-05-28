@@ -3,10 +3,10 @@
  * @brief Implementation of the FStatementParser class.
  */
 
-#include "statement_parser.hpp"	// Include the statement parser header file
-#include "tokenizer.hpp"		// Include the tokenizer header file
-#include "parser.hpp"		    // Include the parser header file
-#include <stdexcept>            // For std::runtime_error
+#include "statement_parser.hpp"	            // Include the statement parser header file
+#include "tokenizer.hpp"		            // Include the tokenizer header file
+#include "parser.hpp"		                // Include the parser header file
+#include "exception/syntax_exception.hpp"   // Include the syntax exception header file
 
  // Statements
 #include "statement/assignment_statement.hpp"
@@ -47,7 +47,7 @@ StatementPtr FStatementParser::ParseStatement()
     }
 
     // If none of the above conditions are met, throw an error
-    throw std::runtime_error("Unexpected token: " + token.lexeme);
+    throw FSyntaxException("Unexpected token: " + token.lexeme);
 }
 
 StatementPtr FStatementParser::ParseVarDeclarationStatement()
@@ -59,7 +59,7 @@ StatementPtr FStatementParser::ParseVarDeclarationStatement()
     if (varToken.type != eTokenType::KEYWORD || varToken.lexeme != "var")
     {
         // Throw an error if the token is not 'var'
-        throw std::runtime_error("Expected 'var'");
+        throw FSyntaxException("Expected 'var'");
     }
 
     StatementVector declarations;
@@ -71,7 +71,7 @@ StatementPtr FStatementParser::ParseVarDeclarationStatement()
     if (idToken.type != eTokenType::IDENTIFIER)
     {
         // Throw an error if the token is not an identifier
-        throw std::runtime_error("Expected identifier after 'var'");
+        throw FSyntaxException("Expected identifier after 'var'");
     }
 
     // Store the identifier
@@ -114,7 +114,7 @@ StatementPtr FStatementParser::ParseVarDeclarationStatement()
             if (idToken.type != eTokenType::IDENTIFIER)
             {
                 // Throw an error if the token is not an identifier
-                throw std::runtime_error("Expected identifier after ',', received " + idToken.lexeme);
+                throw FSyntaxException("Expected identifier after ',', received " + idToken.lexeme);
             }
 
             // Store the identifier
@@ -160,7 +160,7 @@ StatementPtr FStatementParser::ParsePrintStatement()
     if (printToken.type != eTokenType::KEYWORD)
     {
         // Throw an error if the token is not 'print'
-        throw std::runtime_error("Expected 'print'");
+        throw FSyntaxException("Expected 'print'");
     }
 
     // Parse the expression to be printed
@@ -179,7 +179,7 @@ StatementPtr FStatementParser::ParseAssignmentStatement()
     if (idToken.type != eTokenType::IDENTIFIER)
     {
         // Throw an error if the token is not an identifier
-        throw std::runtime_error("Expected identifier in assignment statement");
+        throw FSyntaxException("Expected identifier in assignment statement");
     }
 
     // Store the identifier
@@ -192,7 +192,7 @@ StatementPtr FStatementParser::ParseAssignmentStatement()
     if (equalToken.lexeme != "=")
     {
         // Throw an error if the token is not '='
-        throw std::runtime_error("Expected '=' in assignment statement");
+        throw FSyntaxException("Expected '=' in assignment statement");
     }
 
     // Parse the expression on the right side of the assignment
