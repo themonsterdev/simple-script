@@ -67,6 +67,9 @@ Boolean
     | 'true'
 ```
 
+For detailed information on the syntax and structure of Simple Script, please refer
+to the [Grammar](documentation/grammar/index.md) documentation.
+
 ## Lexical Analysis (Lexer)
 
 Lexical analysis involves converting a string of characters into a sequence of tokens.
