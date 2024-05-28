@@ -1,5 +1,9 @@
 ## Grammar (EBNF)
 
+The EBNF (Extended Backus-Naur Form) grammar describes the syntactic structure of the
+`Simple Script` language using formal production rules. It defines the different categories
+of symbols and the rules for forming expressions and declarations in the language.
+
 **Statement:**
 
 ![Statement](diagram/Statement.svg)
