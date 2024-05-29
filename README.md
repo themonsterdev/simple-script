@@ -43,6 +43,7 @@ ExpressionList
     | ArithmeticOperatorExpression
     | ComparisonOperatorExpression
     | StringOperatorExpression
+    | TernaryExpression
 
 ArithmeticOperatorExpression
     ::= ( Number | Identifier ) ( '*' | '+' | '-' | '/' | '%' ) ( Number | Identifier )
@@ -52,6 +53,10 @@ ComparisonOperatorExpression
 
 StringOperatorExpression
     ::= ( String | Identifier ) ( '+' | '*' ) ( String | Identifier )
+
+TernaryExpression
+    ::= Expression '?' Expression ':' Expression
+    | Expression '?' TernaryExpression ':' TernaryExpression
 
 Identifier
     ::= [a-zA-Z_] [a-zA-Z0-9_]*

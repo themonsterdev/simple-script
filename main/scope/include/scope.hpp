@@ -11,7 +11,7 @@
 #include <string>           // Include for std::string
 
 // Define a variant type to represent different possible values
-using Value = std::variant<int, std::string>;
+using Value = std::variant<bool, int, std::string>;
 
 /**
  * @brief Represents a scope for storing variables and their values.

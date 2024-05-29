@@ -160,6 +160,7 @@ TEST_F(FParserTest, MultipleVarDeclarationTest)
 
     auto varDeclList = dynamic_cast<FVarDeclarationListStatement*>(statements.front().get());
     ASSERT_NE(varDeclList, nullptr);
+    ASSERT_EQ(varDeclList->GetDeclarations().size(), 2);
 
     // Evaluate statements to ensure variables are initialized
     for (const auto& statement : statements)
@@ -168,7 +169,77 @@ TEST_F(FParserTest, MultipleVarDeclarationTest)
     }
 
     // Verify variables in the context
-    Value expectedValue = Value(0);
-    ASSERT_EQ(context.GetVariable("x2"), expectedValue);
-    ASSERT_EQ(context.GetVariable("y2"), expectedValue);
+    ASSERT_EQ(context.GetVariable("x2"), Value());
+    ASSERT_EQ(context.GetVariable("y2"), Value(0));
+}
+
+TEST_F(FParserTest, SingleTernaryTest)
+{
+    std::string input = "var x3 = 0\n";
+    input += "var y3 = x3 ? false : true";
+
+    FLexer lexer(input);
+    FParser parser(lexer);
+
+    StatementList statements = parser.Parse();
+    ASSERT_EQ(statements.size(), 2);
+
+    auto varDeclList = dynamic_cast<FVarDeclarationListStatement*>(statements.front().get());
+    ASSERT_NE(varDeclList, nullptr);
+    ASSERT_EQ(varDeclList->GetDeclarations().size(), 1);
+    
+    // Evaluate statements to ensure variables are initialized
+    for (const auto& statement : statements)
+    {
+        statement->Execute(context);
+    }
+
+    // Verify variables in the context
+    ASSERT_EQ(context.GetVariable("x3"), Value(0));
+    ASSERT_EQ(context.GetVariable("y3"), Value(true));
+}
+
+TEST_F(FParserTest, SingleTernaryFalseTest)
+{
+    std::string input = "var x3 = 0\n";
+    input += "var y3 = x3 ? false : true";
+
+    FLexer lexer(input);
+    FParser parser(lexer);
+
+    StatementList statements = parser.Parse();
+    ASSERT_EQ(statements.size(), 2);
+
+    for (const auto& statement : statements)
+    {
+        statement->Execute(context);
+    }
+
+    ASSERT_EQ(context.GetVariable("x3"), Value(0));
+    ASSERT_EQ(context.GetVariable("y3"), Value(true));
+}
+
+TEST_F(FParserTest, NestedTernaryTest)
+{
+    std::string a = "true ? \"A\" : \"B\"";
+    std::string b = "false ? \"1\" : \"2\"";
+
+    std::string input = "var x3 = 1\n";
+    input += "var y3 = x3\n";
+    input += "? " + a + "\n";
+    input += ": " + b;
+
+    FLexer lexer(input);
+    FParser parser(lexer);
+
+    StatementList statements = parser.Parse();
+    ASSERT_EQ(statements.size(), 2);
+
+    for (const auto& statement : statements)
+    {
+        statement->Execute(context);
+    }
+
+    ASSERT_EQ(context.GetVariable("x3"), Value(1));
+    ASSERT_EQ(context.GetVariable("y3"), Value("A"));
 }

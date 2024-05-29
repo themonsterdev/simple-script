@@ -17,6 +17,8 @@ static bool IsPunctuation(const char c)
     case ',':   // Check for comma
     case ';':   // Check for semicolon
     case '.':   // Check for period
+    case '?':   // check for Question
+    case ':':   // check for Colon
         return true;
     default:
         return false;

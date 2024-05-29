@@ -60,11 +60,26 @@ private:
     ExpressionPtr ParseStringOperatorExpression(ExpressionPtr left);
 
     /**
+     * @brief Parse a ternary expression.
+     *
+     * @param condition The condition of the ternary expression.
+     * @return ExpressionPtr A pointer to the parsed expression object.
+     */
+    ExpressionPtr ParseTernaryExpression(ExpressionPtr condition);
+
+    /**
      * @brief Parse an identifier expression.
      *
      * @return ExpressionPtr A pointer to the parsed expression object.
      */
     ExpressionPtr ParseIdentifier();
+
+    /**
+     * @brief Parse a boolean expression.
+     *
+     * @return ExpressionPtr A pointer to the parsed expression object.
+     */
+    ExpressionPtr ParseBoolean();
 
     /**
      * @brief Parse a number expression.

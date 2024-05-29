@@ -7,6 +7,7 @@
 #include "lexer_factory.hpp"
 
 // Include header files for lexical rules
+#include "rule/boolean_rule.hpp"
 #include "rule/comment_rule.hpp"
 #include "rule/identifier_rule.hpp"
 #include "rule/number_rule.hpp"
@@ -20,6 +21,7 @@ LexicalRuleVector FLexerFactory::CreateRules()
     LexicalRuleVector rules;
 
     // Add each lexical rule to the vector
+    rules.push_back(std::make_unique<FBooleanRule>());
     rules.push_back(std::make_unique<FCommentRule>());
     rules.push_back(std::make_unique<FIdentifierRule>());
     rules.push_back(std::make_unique<FNumberRule>());

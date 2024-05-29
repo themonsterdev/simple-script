@@ -80,6 +80,7 @@ ExpressionList
     | ArithmeticOperatorExpression
     | ComparisonOperatorExpression
     | StringOperatorExpression
+    | TernaryExpression
 ```
 
 referenced by:
@@ -126,6 +127,20 @@ StringOperatorExpression
 referenced by:
 
 * ExpressionList
+
+**TernaryExpression:**
+
+![TernaryExpression](diagram/TernaryExpression.svg)
+
+```
+TernaryExpression
+    ::= Expression '?' ( Expression ':' Expression | TernaryExpression ':' TernaryExpression )
+```
+
+referenced by:
+
+* ExpressionList
+* TernaryExpression
 
 **Identifier:**
 
@@ -243,8 +258,6 @@ CommentSingleLine
 referenced by:
 
 * Comment
-
-**CommentMultiLine:**
 
 ![CommentMultiLine](diagram/CommentMultiLine.svg)
 
