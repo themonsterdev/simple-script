@@ -195,6 +195,14 @@ cd build\main\interpreter\Debug
 The program will read the script.txt file, parse the code, build the syntax tree,
 and interpret the instructions.
 
+## Resources
+
+1. [Extended Backus–Naur form](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form)
+2. [Lexical analysis](https://en.wikipedia.org/wiki/Lexical_analysis)
+3. [Syntax analysis](https://en.wikipedia.org/wiki/Parsing)
+4. [Abstract syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree)
+5. [Interpreter pattern](https://en.wikipedia.org/wiki/Interpreter_pattern)
+
 ## Contribution
 
 Contributions are welcome! If you would like to improve this project, feel free to submit
@@ -202,4 +210,4 @@ pull requests or open issues.
 
 ## License
 
-This project is licensed under the MIT License. See the `LICENSE` file for more information.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
