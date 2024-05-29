@@ -1,19 +1,29 @@
-#pragma once
+/**
+ * @file less_than_expression.cpp
+ * @brief Implementation of the less-than expression class constructor and member functions.
+ */
 
+// Include header file for this implementation
 #include "expression/operator/comparison/less_than_expression.hpp"
+
+// Include for std::runtime_error
 #include <stdexcept>
 
 FLessThanExpression::FLessThanExpression(ExpressionPtr left, ExpressionPtr right)
-	: AComputeExpression(std::move(left), std::move(right))
+    // Call base class constructor to initialize operands
+    : AComputeExpression(std::move(left), std::move(right))
 {}
 
 Value FLessThanExpression::Evaluate(const FContext& context) const
 {
+    // Check if both operands are valid
     if (!m_left || !m_right)
     {
+        // Throw error if operands are missing
         throw std::runtime_error("Less than comparison must have exactly two operands");
     }
 
+    // Evaluate the left and right operands
     Value leftValue  = m_left->Evaluate(context);
     Value rightValue = m_right->Evaluate(context);
 
@@ -32,5 +42,6 @@ Value FLessThanExpression::Evaluate(const FContext& context) const
         throw std::runtime_error("Invalid operand types for less than operation");
     }
 
+    // Return result of less-than comparison
 	return leftInt < rightInt;
 }

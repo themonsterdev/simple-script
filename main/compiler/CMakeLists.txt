@@ -1,16 +1,16 @@
-# Ajouter les fichiers d'en-tête à la bibliothèque
+# Add header files to the library
 file(GLOB COMPILER_SOURCES "source/*.cpp")
 
-# Créer une bibliothèque pour le compiler
+# Create a library for the compiler
 add_executable(compiler ${COMPILER_SOURCES})
 
-# Inclure le dossier d'en-tête dans le projet principal
+# Include the header directory in the main project
 target_include_directories(compiler
 PUBLIC
-	include
+	"include"
 	"../lexer/include"
 	"../parser/include"
 )
 
-# Lier avec les librairies
+# Link with libraries
 target_link_libraries(compiler lexer parser)

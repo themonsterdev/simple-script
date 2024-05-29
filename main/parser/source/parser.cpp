@@ -3,16 +3,16 @@
  * @brief Implementation of the FParser class.
  */
 
-#include "parser.hpp"    // Include the parser header file
-#include "tokenizer.hpp" // Include the tokenizer header file
+#include "parser.hpp"   // Include the parser header file
+#include "lexer.hpp"    // Include the lexer header file
 
 // For std::runtime_error
 #include <stdexcept>
 
-FParser::FParser(FTokenizer& tokenizer)
-	: m_tokenizer(tokenizer)
-	, m_expressionParser(tokenizer)
-	, m_statementParser(tokenizer, m_expressionParser)
+FParser::FParser(FLexer& lexer)
+	: m_lexer(lexer)
+	, m_expressionParser(lexer)
+	, m_statementParser(lexer, m_expressionParser)
 {}
 
 StatementList FParser::Parse()
@@ -21,13 +21,13 @@ StatementList FParser::Parse()
     StatementList statements;
 
     // Continue parsing until there are no more tokens
-    while (m_tokenizer.HasNextToken())
+    while (m_lexer.HasNextToken())
     {
         // Peek at the next token without consuming it
-        const auto& token = m_tokenizer.PeekNextToken();
+        const auto& token = m_lexer.PeekNextToken();
 
         // Check if the token indicates the end of the input
-        if (token.type == eTokenType::END)
+        if (token.type == eTokenType::End)
         {
             break;
         }

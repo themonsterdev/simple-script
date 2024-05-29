@@ -1,19 +1,29 @@
-#pragma once
+/**
+ * @file logical_or_expression.cpp
+ * @brief Implementation of the logical OR expression class constructor and member functions.
+ */
 
+// Include header file for this implementation
 #include "expression/operator/logical/logical_or_expression.hpp"
+
+// Include for std::runtime_error
 #include <stdexcept>
 
 FLogicalOrExpression::FLogicalOrExpression(ExpressionPtr left, ExpressionPtr right)
-	: AComputeExpression(std::move(left), std::move(right))
+    // Initialize base class with provided expressions
+    : AComputeExpression(std::move(left), std::move(right))
 {}
 
 Value FLogicalOrExpression::Evaluate(const FContext& context) const
 {
+    // Check if both operands are valid
     if (!m_left || !m_right)
     {
+        // Throw error if operands are missing
         throw std::runtime_error("Logical or must have exactly two operands");
     }
 
+    // Evaluate the left and right operands
     Value leftValue  = m_left->Evaluate(context);
     Value rightValue = m_right->Evaluate(context);
 
@@ -32,5 +42,6 @@ Value FLogicalOrExpression::Evaluate(const FContext& context) const
         throw std::runtime_error("Invalid operand types for logical or operation");
     }
 
+    // Return result of logical OR operation
 	return leftInt || rightInt;
 }

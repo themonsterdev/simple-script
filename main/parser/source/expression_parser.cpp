@@ -4,8 +4,7 @@
  */
 
 #include "expression_parser.hpp"            // Include the expression parser header file
-#include "tokenizer.hpp"                    // Include the tokenizer header file
-#include "parser.hpp"                       // Include the parser header file
+#include "lexer.hpp"                        // Include the tokenizer header file
 #include "exception/syntax_exception.hpp"   // Include the syntax exception header file
 
  // Expressions
@@ -19,8 +18,8 @@
 #include "expression/literal/string_expression.hpp"
 #include "expression/string_operator_expression.hpp"
 
-FExpressionParser::FExpressionParser(FTokenizer& tokenizer)
-    : m_tokenizer(tokenizer)
+FExpressionParser::FExpressionParser(FLexer& lexer)
+    : m_lexer(lexer)
 {}
 
 ExpressionPtr FExpressionParser::ParseExpression()
@@ -53,16 +52,16 @@ ExpressionPtr FExpressionParser::ParseExpression()
 ExpressionPtr FExpressionParser::ParseArithmeticOperatorExpression(ExpressionPtr left)
 {
     // Continue parsing while there are tokens available
-    while (m_tokenizer.HasNextToken())
+    while (m_lexer.HasNextToken())
     {
         // Peek the next token
-        const auto& token = m_tokenizer.PeekNextToken();
+        const auto& token = m_lexer.PeekNextToken();
 
         // Check if the token is an operator and if it's addition or subtraction
-        if (token.type == eTokenType::OPERATOR && (token.lexeme == "+" || token.lexeme == "-"))
+        if (token.type == eTokenType::Operator && (token.lexeme == "+" || token.lexeme == "-"))
         {
             // Consume the operator token
-            m_tokenizer.GetNextToken();
+            m_lexer.GetNextToken();
 
             // Parse the right term
             ExpressionPtr right = ParseTerm();
@@ -91,16 +90,16 @@ ExpressionPtr FExpressionParser::ParseArithmeticOperatorExpression(ExpressionPtr
 ExpressionPtr FExpressionParser::ParseStringOperatorExpression(ExpressionPtr left)
 {
     // Continue parsing while there are tokens available
-    while (m_tokenizer.HasNextToken())
+    while (m_lexer.HasNextToken())
     {
         // Peek the next token
-        const SToken& token = m_tokenizer.PeekNextToken();
+        const auto& token = m_lexer.PeekNextToken();
 
         // Check if the token is an operator and if it's a concatenation operator
-        if (token.type == eTokenType::OPERATOR && token.lexeme == "+")
+        if (token.type == eTokenType::Operator && token.lexeme == "+")
         {
             // Consume the operator token
-            m_tokenizer.GetNextToken();
+            m_lexer.GetNextToken();
 
             // Parse the right term
             ExpressionPtr right = ParseTerm();
@@ -122,10 +121,10 @@ ExpressionPtr FExpressionParser::ParseStringOperatorExpression(ExpressionPtr lef
 ExpressionPtr FExpressionParser::ParseIdentifier()
 {
     // Get the next token
-    SToken token = m_tokenizer.GetNextToken();
+    SToken token = m_lexer.GetNextToken();
 
     // Check if the token is an identifier
-    if (token.type != eTokenType::IDENTIFIER)
+    if (token.type != eTokenType::Identifier)
     {
         // Throw an error if it's not an identifier
         throw FSyntaxException("Expected 'identifier'");
@@ -138,10 +137,10 @@ ExpressionPtr FExpressionParser::ParseIdentifier()
 ExpressionPtr FExpressionParser::ParseNumber()
 {
     // Get the next token
-    SToken token = m_tokenizer.GetNextToken();
+    SToken token = m_lexer.GetNextToken();
 
     // Check if the token is a number
-    if (token.type != eTokenType::NUMBER)
+    if (token.type != eTokenType::Number)
     {
         // Throw an error if it's not a number
         throw FSyntaxException("Expected 'number'");
@@ -155,10 +154,10 @@ ExpressionPtr FExpressionParser::ParseNumber()
 ExpressionPtr FExpressionParser::ParseString()
 {
     // Get the next token
-    SToken token = m_tokenizer.GetNextToken();
+    SToken token = m_lexer.GetNextToken();
 
     // Check if the token is a string
-    if (token.type != eTokenType::STRING)
+    if (token.type != eTokenType::String)
     {
         // Throw an error if it's not a string
         throw FSyntaxException("Expected 'string'");
@@ -174,7 +173,7 @@ ExpressionPtr FExpressionParser::ParseTerm()
     ExpressionPtr left = ParseFactor();
 
     // Continue parsing while there are more tokens available
-    while (m_tokenizer.HasNextToken())
+    while (m_lexer.HasNextToken())
     {
         // If the left operand is not a number, stop parsing further
         if (!dynamic_cast<FNumberExpression*>(left.get()))
@@ -183,13 +182,13 @@ ExpressionPtr FExpressionParser::ParseTerm()
         }
 
         // Peek at the next token to determine the operator
-        const SToken& token = m_tokenizer.PeekNextToken();
+        const SToken& token = m_lexer.PeekNextToken();
 
         // Check if the token is an operator and if it is one of '*', '/', or '%'
-        if (token.type == eTokenType::OPERATOR && (token.lexeme == "*" || token.lexeme == "/" || token.lexeme == "%"))
+        if (token.type == eTokenType::Operator && (token.lexeme == "*" || token.lexeme == "/" || token.lexeme == "%"))
         {
             // Consume the operator token
-            m_tokenizer.GetNextToken();
+            m_lexer.GetNextToken();
 
             // Parse the next factor and store it as the right operand
             ExpressionPtr right = ParseFactor();
@@ -222,20 +221,20 @@ ExpressionPtr FExpressionParser::ParseTerm()
 ExpressionPtr FExpressionParser::ParseFactor()
 {
     // Peek at the next token to determine its type
-    const SToken& token = m_tokenizer.PeekNextToken();
+    const SToken& token = m_lexer.PeekNextToken();
 
     // Check if the token is a number and parse it if true
-    if (token.type == eTokenType::NUMBER)
+    if (token.type == eTokenType::Number)
     {
         return ParseNumber();
     }
     // Check if the token is a string and parse it if true
-    else if (token.type == eTokenType::STRING)
+    else if (token.type == eTokenType::String)
     {
         return ParseString();
     }
     // Check if the token is an identifier and parse it if true
-    else if (token.type == eTokenType::IDENTIFIER)
+    else if (token.type == eTokenType::Identifier)
     {
         return ParseIdentifier();
     }

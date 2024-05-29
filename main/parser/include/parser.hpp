@@ -3,6 +3,7 @@
  * @brief Declaration of the FParser class.
  */
 
+// Ensure this file is included only once
 #pragma once
 
 // Include the interface for language statements
@@ -17,8 +18,8 @@
 // Include the statement parser header file
 #include "statement_parser.hpp"
 
-// Forward declaration of FTokenizer class
-class FTokenizer;
+// Forward declaration of FLexer class
+class FLexer;
 
 /**
  * @brief Represents a parser for the custom language.
@@ -28,18 +29,22 @@ class FTokenizer;
  */
 class FParser final
 {
-    // Reference to the tokenizer used by the parser.
-    FTokenizer& m_tokenizer;
+    // Reference to the lexer used by the parser
+    FLexer& m_lexer;
+
+    // Expression parser object
     FExpressionParser m_expressionParser;
+
+    // Statement parser object
     FStatementParser m_statementParser;
 
 public:
 
     /**
-     * @brief Constructs a parser with the given tokenizer.
-     * @param tokenizer The tokenizer to be used by the parser.
+     * @brief Constructs a parser with the given lexer.
+     * @param lexer The lexer to be used by the parser.
      */
-    explicit FParser(FTokenizer& tokenizer);
+    explicit FParser(FLexer& lexer);
 
     /**
      * @brief Parses the token stream and returns a list of statements.

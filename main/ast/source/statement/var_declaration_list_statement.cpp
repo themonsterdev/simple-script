@@ -10,18 +10,22 @@
 #include <stdexcept>
 
 FVarDeclarationListStatement::FVarDeclarationListStatement(StatementVector declarations)
-	: m_declarations(std::move(declarations))
+    // Initialize member variable with provided declarations
+    : m_declarations(std::move(declarations))
 {}
 
 void FVarDeclarationListStatement::Execute(const FContext& context) const
 {
+    // Iterate over each declaration in the list
     for (const auto& declarations : m_declarations)
     {
+        // Execute each declaration
         declarations->Execute(context);
     }
 }
 
 const StatementVector& FVarDeclarationListStatement::GetDeclarations() const
 {
+    // Return the vector of declarations
     return m_declarations;
 }

@@ -1,23 +1,32 @@
-#pragma once
+/**
+ * @file addition_expression.hpp
+ * @brief Declaration of the addition expression class.
+ */
 
+// Include header file for the FAdditionExpression class
 #include "expression/operator/arithmetic/addition_expression.hpp"
+
+// Include necessary standard library headers
 #include <stdexcept>
 
 FAdditionExpression::FAdditionExpression(ExpressionPtr left, ExpressionPtr right)
-	: AComputeExpression(std::move(left), std::move(right))
+    // Call base class constructor
+    : AComputeExpression(std::move(left), std::move(right))
 {}
 
 Value FAdditionExpression::Evaluate(const FContext& context) const
 {
+    // Check if left and right operands exist
     if (!m_left || !m_right)
     {
         throw std::runtime_error("Addition operator must have exactly two operands");
     }
 
+    // Evaluate the left and right operands
     Value leftValue  = m_left->Evaluate(context);
     Value rightValue = m_right->Evaluate(context);
 
-    // Extract int values from the variants
+    // Extract integer values from the variants
     int leftInt, rightInt;
 
     // Check if both operands are integers
@@ -32,5 +41,6 @@ Value FAdditionExpression::Evaluate(const FContext& context) const
         throw std::runtime_error("Invalid operand types for addition operation");
     }
 
+    // Return the sum of the left and right integer values
 	return leftInt + rightInt;
 }

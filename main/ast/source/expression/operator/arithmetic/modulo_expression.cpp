@@ -1,19 +1,29 @@
-#pragma once
+/**
+ * @file modulo_expression.cpp
+ * @brief Implementation of the modulo expression class constructor and member functions.
+ */
 
+// Include header file for this implementation
 #include "expression/operator/arithmetic/modulo_expression.hpp"
+
+// Include for std::runtime_error
 #include <stdexcept>
 
 FModuloExpression::FModuloExpression(ExpressionPtr left, ExpressionPtr right)
-	: AComputeExpression(std::move(left), std::move(right))
+    // Call base class constructor to initialize operands
+    : AComputeExpression(std::move(left), std::move(right))
 {}
 
 Value FModuloExpression::Evaluate(const FContext& context) const
 {
+    // Check if both operands are valid
     if (!m_left || !m_right)
     {
+        // Throw error if operands are missing
         throw std::runtime_error("Modulo operator must have exactly two operands");
     }
 
+    // Evaluate the left and right operands
     Value leftValue  = m_left->Evaluate(context);
     Value rightValue = m_right->Evaluate(context);
 
@@ -33,10 +43,12 @@ Value FModuloExpression::Evaluate(const FContext& context) const
     }
 
     // Validate operands before performing operations
-    if (rightInt == 0)
+    if (rightInt == 0) // Check if divisor is zero
     {
+        // Throw error if modulo by zero is attempted
         throw std::runtime_error("Modulo by zero error");
     }
 
+    // Return result of modulo operation
 	return leftInt % rightInt;
 }

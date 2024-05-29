@@ -3,6 +3,7 @@
  * @brief Declaration of the expression class.
  */
 
+// Ensure this file is included only once
 #pragma once
 
 #include <list>         // For std::list

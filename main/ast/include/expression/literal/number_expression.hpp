@@ -3,6 +3,7 @@
  * @brief Declaration of the number expression class.
  */
 
+// Ensure this file is included only once
 #pragma once
 
  // Include the expression interface

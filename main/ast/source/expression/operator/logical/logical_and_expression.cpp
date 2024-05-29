@@ -1,19 +1,29 @@
-#pragma once
+/**
+ * @file logical_and_expression.cpp
+ * @brief Implementation of the logical AND expression class constructor and member functions.
+ */
 
+// Include header file for this implementation
 #include "expression/operator/logical/logical_and_expression.hpp"
+
+// Include for std::runtime_error
 #include <stdexcept>
 
 FLogicalAndExpression::FLogicalAndExpression(ExpressionPtr left, ExpressionPtr right)
-	: AComputeExpression(std::move(left), std::move(right))
+    // Call base class constructor to initialize operands
+    : AComputeExpression(std::move(left), std::move(right))
 {}
 
 Value FLogicalAndExpression::Evaluate(const FContext& context) const
 {
+    // Check if both operands are valid
     if (!m_left || !m_right)
     {
+        // Throw error if operands are missing
         throw std::runtime_error("And logical must have exactly two operands");
     }
 
+    // Evaluate the left and right operands
     Value leftValue  = m_left->Evaluate(context);
     Value rightValue = m_right->Evaluate(context);
 
@@ -32,5 +42,6 @@ Value FLogicalAndExpression::Evaluate(const FContext& context) const
         throw std::runtime_error("Invalid operand types for and operation");
     }
 
+    // Return result of logical AND operation
 	return leftInt && rightInt;
 }

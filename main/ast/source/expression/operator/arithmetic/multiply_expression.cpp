@@ -1,19 +1,29 @@
-#pragma once
+/**
+ * @file multiply_expression.cpp
+ * @brief Implementation of the multiply expression class constructor and member functions.
+ */
 
+// Include header file for this implementation
 #include "expression/operator/arithmetic/multiply_expression.hpp"
+
+// Include for std::runtime_error
 #include <stdexcept>
 
 FMultiplyExpression::FMultiplyExpression(ExpressionPtr left, ExpressionPtr right)
-	: AComputeExpression(std::move(left), std::move(right))
+    // Call base class constructor to initialize operands
+    : AComputeExpression(std::move(left), std::move(right))
 {}
 
 Value FMultiplyExpression::Evaluate(const FContext& context) const
 {
+    // Check if both operands are valid
     if (!m_left || !m_right)
     {
+        // Throw error if operands are missing
         throw std::runtime_error("Multiply operator must have exactly two operands");
     }
 
+    // Evaluate the left and right operands
     Value leftValue  = m_left->Evaluate(context);
     Value rightValue = m_right->Evaluate(context);
 
@@ -32,5 +42,6 @@ Value FMultiplyExpression::Evaluate(const FContext& context) const
         throw std::runtime_error("Invalid operand types for multiply operation");
     }
 
+    // Return result of multiplication operation
 	return leftInt * rightInt;
 }

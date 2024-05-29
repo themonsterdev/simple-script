@@ -3,6 +3,7 @@
  * @brief Declaration of the statement interface class.
  */
 
+// Ensure this file is included only once
 #pragma once
 
 #include <map>          // For std::map

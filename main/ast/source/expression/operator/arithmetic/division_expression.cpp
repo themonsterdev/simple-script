@@ -1,19 +1,29 @@
-#pragma once
+/**
+ * @file division_expression.cpp
+ * @brief Implementation of the division expression class constructor and member functions.
+ */
 
+// Include header file for this implementation
 #include "expression/operator/arithmetic/division_expression.hpp"
+
+// Include for std::runtime_error
 #include <stdexcept>
 
 FDivisionExpression::FDivisionExpression(ExpressionPtr left, ExpressionPtr right)
-	: AComputeExpression(std::move(left), std::move(right))
+    // Call base class constructor to initialize operands
+    : AComputeExpression(std::move(left), std::move(right))
 {}
 
 Value FDivisionExpression::Evaluate(const FContext& context) const
 {
+    // Check if both operands are valid
     if (!m_left || !m_right)
     {
+        // Throw error if operands are missing
         throw std::runtime_error("Division operator must have exactly two operands");
     }
 
+    // Evaluate the left and right operands
     Value leftValue  = m_left->Evaluate(context);
     Value rightValue = m_right->Evaluate(context);
 
@@ -33,10 +43,12 @@ Value FDivisionExpression::Evaluate(const FContext& context) const
     }
 
     // Validate operands before performing operations
-    if (rightInt == 0)
+    if (rightInt == 0) // Check if divisor is zero
     {
+        // Throw error if division by zero is attempted
         throw std::runtime_error("Division by zero error");
     }
 
+    // Return result of division operation
 	return leftInt + rightInt;
 }

@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
-#include "tokenizer.hpp"
+
+#include "lexer.hpp"
 #include "parser.hpp"
 #include "context.hpp"
 
@@ -95,10 +96,8 @@ TEST_F(FParserTest, ParseTest)
     input += "var n = 1 + 2 * 3\n";
     input += "print n";
 
-    std::vector<std::string> keywords = { "var", "print" };
-
-    FTokenizer tokenizer(input, keywords);
-    FParser parser(tokenizer);
+    FLexer lexer(input);
+    FParser parser(lexer);
 
     StatementList statements = parser.Parse();
     ASSERT_EQ(statements.size(), 2);
@@ -153,10 +152,8 @@ TEST_F(FParserTest, MultipleVarDeclarationTest)
 {
     std::string input = "var x2, y2 = 0";
 
-    std::vector<std::string> keywords = { "var", "print" };
-
-    FTokenizer tokenizer(input, keywords);
-    FParser parser(tokenizer);
+    FLexer lexer(input);
+    FParser parser(lexer);
 
     StatementList statements = parser.Parse();
     ASSERT_EQ(statements.size(), 1);

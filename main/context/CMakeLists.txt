@@ -7,6 +7,7 @@ add_library(context ${CONTEXT_SOURCES})
 # Include the header directory in the main project
 target_include_directories(context PUBLIC "include")
 
+# Link with libraries
 target_link_libraries(context scope)
 
 # Add the test directory

@@ -3,6 +3,7 @@
  * @brief Declaration of the context class.
  */
 
+// Ensure this file is included only once
 #pragma once
 
 #include <deque>        // For std::deque

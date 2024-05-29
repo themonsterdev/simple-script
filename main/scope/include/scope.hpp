@@ -3,6 +3,7 @@
  * @brief Declaration of the FScope class.
  */
 
+// Ensure this file is included only once
 #pragma once
 
 #include <variant>          // Include for std::variant

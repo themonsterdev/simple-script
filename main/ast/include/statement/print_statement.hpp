@@ -3,6 +3,7 @@
  * @brief Declaration of the print statement class.
  */
 
+// Ensure this file is included only once
 #pragma once
 
 // Include the interface for language statements

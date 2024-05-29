@@ -1,19 +1,29 @@
-#pragma once
+/**
+ * @file not_equal_expression.cpp
+ * @brief Implementation of the not-equal-to expression class constructor and member functions.
+ */
 
+ // Include header file for this implementation
 #include "expression/operator/comparison/not_equal_expression.hpp"
+
+// Include for std::runtime_error
 #include <stdexcept>
 
 FNotEqualExpression::FNotEqualExpression(ExpressionPtr left, ExpressionPtr right)
-	: AComputeExpression(std::move(left), std::move(right))
+    // Call base class constructor to initialize operands
+    : AComputeExpression(std::move(left), std::move(right))
 {}
 
 Value FNotEqualExpression::Evaluate(const FContext& context) const
 {
+    // Check if both operands are valid
     if (!m_left || !m_right)
     {
+        // Throw error if operands are missing
         throw std::runtime_error("Not equal comparison must have exactly two operands");
     }
 
+    // Evaluate the left and right operands
     Value leftValue  = m_left->Evaluate(context);
     Value rightValue = m_right->Evaluate(context);
 
@@ -32,5 +42,6 @@ Value FNotEqualExpression::Evaluate(const FContext& context) const
         throw std::runtime_error("Invalid operand types for not equal operation");
     }
 
+    // Return result of not-equal-to comparison
 	return leftInt != rightInt;
 }

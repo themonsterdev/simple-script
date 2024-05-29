@@ -4,8 +4,7 @@
  */
 
 #include "statement_parser.hpp"	            // Include the statement parser header file
-#include "tokenizer.hpp"		            // Include the tokenizer header file
-#include "parser.hpp"		                // Include the parser header file
+#include "lexer.hpp"		                // Include the lexer header file
 #include "exception/syntax_exception.hpp"   // Include the syntax exception header file
 
  // Statements
@@ -14,18 +13,18 @@
 #include "statement/var_declaration_list_statement.hpp"
 #include "statement/var_declaration_statement.hpp"
 
-FStatementParser::FStatementParser(FTokenizer& tokenizer, FExpressionParser& expressionParser)
-    : m_tokenizer(tokenizer)
+FStatementParser::FStatementParser(FLexer& lexer, FExpressionParser& expressionParser)
+    : m_lexer(lexer)
     , m_expressionParser(expressionParser)
 {}
 
 StatementPtr FStatementParser::ParseStatement()
 {
     // Peek at the next token without consuming it
-    const auto& token = m_tokenizer.PeekNextToken();
+    const auto& token = m_lexer.PeekNextToken();
 
     // Check if the token is a keyword
-    if (token.type == eTokenType::KEYWORD)
+    if (token.type == eTokenType::Keyword)
     {
         // Check the type of keyword
         if (token.lexeme == "var")
@@ -40,7 +39,7 @@ StatementPtr FStatementParser::ParseStatement()
         }
     }
     // Check if the token is an identifier
-    else if (token.type == eTokenType::IDENTIFIER)
+    else if (token.type == eTokenType::Identifier)
     {
         // Parse an assignment statement
         return ParseAssignmentStatement();
@@ -53,10 +52,10 @@ StatementPtr FStatementParser::ParseStatement()
 StatementPtr FStatementParser::ParseVarDeclarationStatement()
 {
     // Get the next token, which should be 'var'
-    SToken varToken = m_tokenizer.GetNextToken();
+    SToken varToken = m_lexer.GetNextToken();
 
     // Check if the token is 'var'
-    if (varToken.type != eTokenType::KEYWORD || varToken.lexeme != "var")
+    if (varToken.type != eTokenType::Keyword || varToken.lexeme != "var")
     {
         // Throw an error if the token is not 'var'
         throw FSyntaxException("Expected 'var'");
@@ -65,10 +64,10 @@ StatementPtr FStatementParser::ParseVarDeclarationStatement()
     StatementVector declarations;
 
     // Get the first token, which should be an identifier
-    SToken idToken = m_tokenizer.GetNextToken();
+    SToken idToken = m_lexer.GetNextToken();
 
     // Check if the token is an identifier
-    if (idToken.type != eTokenType::IDENTIFIER)
+    if (idToken.type != eTokenType::Identifier)
     {
         // Throw an error if the token is not an identifier
         throw FSyntaxException("Expected identifier after 'var'");
@@ -81,13 +80,13 @@ StatementPtr FStatementParser::ParseVarDeclarationStatement()
     ExpressionPtr expression = nullptr;
 
     // Check if the next token is '='
-    if (m_tokenizer.HasNextToken())
+    if (m_lexer.HasNextToken())
     {
-        SToken nextToken = m_tokenizer.PeekNextToken();
+        SToken nextToken = m_lexer.PeekNextToken();
 
         if (nextToken.lexeme == "=")
         {
-            m_tokenizer.GetNextToken(); // consume token '='
+            m_lexer.GetNextToken(); // consume token '='
 
             // Parse the expression on the right side of the assignment
             expression = m_expressionParser.ParseExpression();
@@ -98,20 +97,20 @@ StatementPtr FStatementParser::ParseVarDeclarationStatement()
     declarations.push_back(std::make_unique<FVarDeclarationStatement>(identifier, std::move(expression)));
 
     // Parse any additional declarations
-    while (m_tokenizer.HasNextToken())
+    while (m_lexer.HasNextToken())
     {
         // Peek the next token to see if it is a comma
-        SToken nextToken = m_tokenizer.PeekNextToken();
+        SToken nextToken = m_lexer.PeekNextToken();
 
         if (nextToken.lexeme == ",")
         {
-            m_tokenizer.GetNextToken(); // consume token ','
+            m_lexer.GetNextToken(); // consume token ','
 
             // Get the next token, which should be an identifier
-            SToken idToken = m_tokenizer.GetNextToken();
+            SToken idToken = m_lexer.GetNextToken();
 
             // Check if the token is an identifier
-            if (idToken.type != eTokenType::IDENTIFIER)
+            if (idToken.type != eTokenType::Identifier)
             {
                 // Throw an error if the token is not an identifier
                 throw FSyntaxException("Expected identifier after ',', received " + idToken.lexeme);
@@ -124,13 +123,13 @@ StatementPtr FStatementParser::ParseVarDeclarationStatement()
             expression = nullptr;
 
             // Check if the next token is '='
-            if (m_tokenizer.HasNextToken())
+            if (m_lexer.HasNextToken())
             {
-                nextToken = m_tokenizer.PeekNextToken();
+                nextToken = m_lexer.PeekNextToken();
 
                 if (nextToken.lexeme == "=")
                 {
-                    m_tokenizer.GetNextToken(); // consume token '='
+                    m_lexer.GetNextToken(); // consume token '='
 
                     // Parse the expression on the right side of the assignment
                     expression = m_expressionParser.ParseExpression();
@@ -154,10 +153,10 @@ StatementPtr FStatementParser::ParseVarDeclarationStatement()
 StatementPtr FStatementParser::ParsePrintStatement()
 {
     // Get the next token, which should be 'print'
-    SToken printToken = m_tokenizer.GetNextToken();
+    SToken printToken = m_lexer.GetNextToken();
 
     // Check if the token is 'print'
-    if (printToken.type != eTokenType::KEYWORD)
+    if (printToken.type != eTokenType::Keyword)
     {
         // Throw an error if the token is not 'print'
         throw FSyntaxException("Expected 'print'");
@@ -173,10 +172,10 @@ StatementPtr FStatementParser::ParsePrintStatement()
 StatementPtr FStatementParser::ParseAssignmentStatement()
 {
     // Get the next token, which should be an identifier
-    SToken idToken = m_tokenizer.GetNextToken();
+    SToken idToken = m_lexer.GetNextToken();
 
     // Check if the token is an identifier
-    if (idToken.type != eTokenType::IDENTIFIER)
+    if (idToken.type != eTokenType::Identifier)
     {
         // Throw an error if the token is not an identifier
         throw FSyntaxException("Expected identifier in assignment statement");
@@ -186,7 +185,7 @@ StatementPtr FStatementParser::ParseAssignmentStatement()
     std::string identifier = idToken.lexeme;
 
     // Get the next token, which should be '='
-    SToken equalToken = m_tokenizer.GetNextToken();
+    SToken equalToken = m_lexer.GetNextToken();
 
     // Check if the token is '='
     if (equalToken.lexeme != "=")
