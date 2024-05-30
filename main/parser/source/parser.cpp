@@ -23,17 +23,8 @@ StatementList FParser::Parse()
     // Continue parsing until there are no more tokens
     while (m_lexer.HasNextToken())
     {
-        // Peek at the next token without consuming it
-        const auto& token = m_lexer.PeekNextToken();
-
-        // Check if the token indicates the end of the input
-        if (token.type == eTokenType::End)
-        {
-            break;
-        }
-
         // Parse the next statement
-        auto statement = m_statementParser.ParseStatement();
+        auto statement = ParseNextStatement();
 
         // If a valid statement is parsed, add it to the list of statements
         if (statement)
@@ -44,4 +35,16 @@ StatementList FParser::Parse()
 
     // Return the list of parsed statements
     return statements;
+}
+
+StatementPtr FParser::ParseNextStatement()
+{
+    const auto& token = m_lexer.PeekNextToken();
+
+    if (token.type != eTokenType::End)
+    {
+        return m_statementParser.ParseStatement();
+    }
+
+    return nullptr;
 }

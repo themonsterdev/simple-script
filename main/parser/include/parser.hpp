@@ -13,10 +13,10 @@
 #include "expression/interface/expression.hpp"
 
 // Include the expression parser header file
-#include "expression_parser.hpp"
+#include "expression/expression_parser.hpp"
 
 // Include the statement parser header file
-#include "statement_parser.hpp"
+#include "statement/statement_parser.hpp"
 
 // Forward declaration of FLexer class
 class FLexer;
@@ -51,4 +51,10 @@ public:
      * @return A list of parsed statements.
      */
     StatementList Parse();
+
+    /**
+     * @brief Parse the token stream and return a statement.
+     * @return A statement of parsed.
+     */
+    StatementPtr ParseNextStatement();
 };

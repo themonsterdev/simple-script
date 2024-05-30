@@ -13,7 +13,9 @@
 #include "expression/interface/expression.hpp"
 
 // Include the expression parser header file
-#include "expression_parser.hpp"
+#include "expression/expression_parser.hpp"
+
+#include "statement/interface/statement_rule.hpp"
 
 // Forward declaration of FLexer class
 class FLexer;
@@ -32,6 +34,9 @@ class FStatementParser
     // Reference to the expression parser
     FExpressionParser& m_expressionParser;
 
+    // Vector of statement rules
+    StatementRuleVector m_rules;
+
 public:
 
     /**
@@ -48,30 +53,4 @@ public:
      * @return StatementPtr A pointer to the parsed statement object.
      */
     StatementPtr ParseStatement();
-
-private:
-
-    /**
-     * @brief Parses an assignment statement from the token stream.
-     *
-     * @return StatementPtr A pointer to the parsed assignment statement.
-     */
-    StatementPtr ParseAssignmentStatement();
-
-    /**
-     * @brief Parses a variable declaration statement from the token stream.
-     *
-     * @return StatementPtr A pointer to the parsed variable declaration statement.
-     */
-    StatementPtr ParseVarDeclarationStatement();
-
-    /**
-     * @brief Parses a print statement from the token stream.
-     *
-     * @return StatementPtr A pointer to the parsed print statement.
-     */
-    StatementPtr ParsePrintStatement();
 };
-
-// Define a pointer type for FStatementParser using unique_ptr
-using StatementParserPtr = std::unique_ptr<FStatementParser>;

@@ -134,7 +134,8 @@ referenced by:
 
 ```
 TernaryExpression
-    ::= Expression '?' ( Expression ':' Expression | TernaryExpression ':' TernaryExpression )
+    ::= Expression '?' Expression ':' Expression
+    | Expression '?' TernaryExpression ':' TernaryExpression
 ```
 
 referenced by:

@@ -10,6 +10,7 @@
 static constexpr auto KEYWORDS =
 {
     "var",
+    "const",
     "print",
 };
 

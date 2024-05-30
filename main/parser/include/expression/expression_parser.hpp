@@ -41,6 +41,15 @@ public:
      */
     ExpressionPtr ParseExpression();
 
+    /**
+     * @brief Parse a term in an expression.
+     *
+     * @return ExpressionPtr A pointer to the parsed expression object.
+     */
+    ExpressionPtr ParseTerm();
+
+    const FLexer& GetLexer() const;
+
 private:
 
     /**
@@ -96,19 +105,9 @@ private:
     ExpressionPtr ParseString();
 
     /**
-     * @brief Parse a term in an expression.
-     *
-     * @return ExpressionPtr A pointer to the parsed expression object.
-     */
-    ExpressionPtr ParseTerm();
-
-    /**
      * @brief Parse a factor in an expression.
      *
      * @return ExpressionPtr A pointer to the parsed expression object.
      */
     ExpressionPtr ParseFactor();
 };
-
-// Define a type alias for FExpressionParser pointer
-using ExpressionParserPtr = std::unique_ptr<FExpressionParser>;

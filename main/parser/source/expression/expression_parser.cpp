@@ -3,11 +3,11 @@
  * @brief Implementation of the FExpressionParser class.
  */
 
-#include "expression_parser.hpp"            // Include the expression parser header file
-#include "lexer.hpp"                        // Include the tokenizer header file
+#include "expression/expression_parser.hpp" // Include the expression parser header file
 #include "exception/syntax_exception.hpp"   // Include the syntax exception header file
+#include "lexer.hpp"                        // Include the tokenizer header file
 
- // Expressions
+// Expressions
 #include "expression/operator/arithmetic/addition_expression.hpp"
 #include "expression/operator/arithmetic/division_expression.hpp"
 #include "expression/operator/arithmetic/modulo_expression.hpp"
@@ -52,6 +52,11 @@ ExpressionPtr FExpressionParser::ParseExpression()
 
     // Return the parsed expression
     return left;
+}
+
+const FLexer& FExpressionParser::GetLexer() const
+{
+    return m_lexer;
 }
 
 ExpressionPtr FExpressionParser::ParseArithmeticOperatorExpression(ExpressionPtr left)
@@ -106,8 +111,8 @@ ExpressionPtr FExpressionParser::ParseStringOperatorExpression(ExpressionPtr lef
             // Consume the operator token
             m_lexer.GetNextToken();
 
-            // Parse the right term
-            ExpressionPtr right = ParseTerm();
+            // Parse the right string
+            ExpressionPtr right = ParseString();
 
             // Create a string operator node for concatenation
             left = std::make_unique<FStringOperatorExpression>("+", std::move(left), std::move(right));
@@ -164,6 +169,57 @@ ExpressionPtr FExpressionParser::ParseTernaryExpression(ExpressionPtr condition)
         std::move(trueExpr),
         std::move(falseExpr)
     );
+}
+
+ExpressionPtr FExpressionParser::ParseTerm()
+{
+    // Parse the initial factor and store it as the left operand
+    ExpressionPtr left = ParseFactor();
+
+    // Continue parsing while there are more tokens available
+    while (m_lexer.HasNextToken())
+    {
+        // If the left operand is not a number, stop parsing further
+        if (!dynamic_cast<FNumberExpression*>(left.get()))
+        {
+            break;
+        }
+
+        // Peek at the next token to determine the operator
+        const SToken& token = m_lexer.PeekNextToken();
+
+        // Check if the token is an operator and if it is one of '*', '/', or '%'
+        if (token.type == eTokenType::Operator && (token.lexeme == "*" || token.lexeme == "/" || token.lexeme == "%"))
+        {
+            // Consume the operator token
+            m_lexer.GetNextToken();
+
+            // Parse the next factor and store it as the right operand
+            ExpressionPtr right = ParseFactor();
+
+            // Create an arithmetic operator node based on the operator and update the left operand
+            if (token.lexeme == "*")
+            {
+                left = std::make_unique<FMultiplyExpression>(std::move(left), std::move(right));
+            }
+            else if (token.lexeme == "/")
+            {
+                left = std::make_unique<FDivisionExpression>(std::move(left), std::move(right));
+            }
+            else if (token.lexeme == "%")
+            {
+                left = std::make_unique<FModuloExpression>(std::move(left), std::move(right));
+            }
+        }
+        else
+        {
+            // If the token is not an operator or not one of '*', '/', or '%', stop parsing
+            break;
+        }
+    }
+
+    // Return the parsed term
+    return left;
 }
 
 ExpressionPtr FExpressionParser::ParseIdentifier()
@@ -230,57 +286,6 @@ ExpressionPtr FExpressionParser::ParseString()
 
     // Create a string node with the token's lexeme as its value
     return std::make_unique<FStringExpression>(token.lexeme);
-}
-
-ExpressionPtr FExpressionParser::ParseTerm()
-{
-    // Parse the initial factor and store it as the left operand
-    ExpressionPtr left = ParseFactor();
-
-    // Continue parsing while there are more tokens available
-    while (m_lexer.HasNextToken())
-    {
-        // If the left operand is not a number, stop parsing further
-        if (!dynamic_cast<FNumberExpression*>(left.get()))
-        {
-            break;
-        }
-
-        // Peek at the next token to determine the operator
-        const SToken& token = m_lexer.PeekNextToken();
-
-        // Check if the token is an operator and if it is one of '*', '/', or '%'
-        if (token.type == eTokenType::Operator && (token.lexeme == "*" || token.lexeme == "/" || token.lexeme == "%"))
-        {
-            // Consume the operator token
-            m_lexer.GetNextToken();
-
-            // Parse the next factor and store it as the right operand
-            ExpressionPtr right = ParseFactor();
-
-            // Create an arithmetic operator node based on the operator and update the left operand
-            if (token.lexeme == "*")
-            {
-                left = std::make_unique<FMultiplyExpression>(std::move(left), std::move(right));
-            }
-            else if (token.lexeme == "/")
-            {
-                left = std::make_unique<FDivisionExpression>(std::move(left), std::move(right));
-            }
-            else if (token.lexeme == "%")
-            {
-                left = std::make_unique<FModuloExpression>(std::move(left), std::move(right));
-            }
-        }
-        else
-        {
-            // If the token is not an operator or not one of '*', '/', or '%', stop parsing
-            break;
-        }
-    }
-
-    // Return the parsed term
-    return left;
 }
 
 ExpressionPtr FExpressionParser::ParseFactor()
