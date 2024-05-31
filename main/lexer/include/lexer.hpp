@@ -56,6 +56,8 @@ public:
      */
     SToken GetNextToken(size_t n = 0);
 
+    bool TryConsumeToken(eTokenType expectedType, const std::string& expectedLexeme);
+
 private:
 
     /**

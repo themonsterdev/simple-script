@@ -12,10 +12,18 @@ bool FCommentRule::Match(const std::string& text, size_t& index, SToken& token) 
     size_t startPos = index;
 
     // Check for single-line comment
-    if (text.substr(index, 2) == "//")
+    if (text[index] == '#' || text.substr(index, 2) == "//")
     {
-        // Move past the "//" characters
-        index += 2;
+        if (text[index] == '#')
+        {
+            // Move past the "#" characters
+            index++;
+        }
+        else
+        {
+            // Move past the "//" characters
+            index += 2;
+        }
 
         // Find the end of the line or the end of the text
         while (index < text.size() && text[index] != '\n')

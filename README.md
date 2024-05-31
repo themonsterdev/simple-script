@@ -22,20 +22,24 @@ Statement
     ::= VarDeclarationStatement
     | AssignmentStatement
     | PrintStatement
+    | ConditionalStatement
 
 VarDeclarationStatement
     ::= 'var' VarDeclaration (',' VarDeclaration)*
 
 VarDeclaration
-    ::= Identifier ('=' ExpressionList)?
+    ::= Identifier ('=' Expression)?
 
 AssignmentStatement
-    ::= Identifier '=' ExpressionList
+    ::= Identifier '=' Expression
 
 PrintStatement
-    ::= 'print' ExpressionList
+    ::= 'print' Expression
 
-ExpressionList
+ConditionalStatement
+    ::= 'if' Expression 'then' statement ('else' 'if' Expression 'then' statement)+ ('else' statement) ? 'end'
+
+Expression
     ::= Identifier
     | Number
     | String

@@ -6,5 +6,5 @@ class FVarDeclarationListStatementRule final : public IStatementRule
 {
 public:
 
-    StatementPtr Parse(FLexer& lexer, FExpressionParser& expressionParser) const override;
+    StatementPtr Parse(FLexer& lexer, FStatementParser& statementParser, FExpressionParser& expressionParser) const override;
 };

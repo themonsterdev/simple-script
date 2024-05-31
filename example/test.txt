@@ -1,0 +1,16 @@
+# Déclaration de deux variables
+print "Déclaration de deux variables"
+var number = 10
+var message = ""
+
+# Vérification si le nombre est pair ou impair
+print "Vérification si le nombre est pair ou impair"
+if number % 2 == 0 then
+    message = "Le nombre est pair."
+else
+    message = "Le nombre est impair."
+end
+
+# Affichage du résultat
+print "Affichage du résultat"
+print message

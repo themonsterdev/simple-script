@@ -6,6 +6,6 @@ class FPrintStatementRule final : public IStatementRule
 {
 public:
 
-    bool Match(FLexer& lexer, FExpressionParser& expressionParser) const override;
-    StatementPtr Parse(FLexer& lexer, FExpressionParser& expressionParser) const override;
+    bool Match(FLexer& lexer) const override;
+    StatementPtr Parse(FLexer& lexer, FStatementParser& statementParser, FExpressionParser& expressionParser) const override;
 };

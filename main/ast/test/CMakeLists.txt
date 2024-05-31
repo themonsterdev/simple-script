@@ -1,9 +1,14 @@
+# Declaration of source files for tests
+file(GLOB_RECURSE TEST_SOURCES "*.cpp")
+
+# Add test files
+add_executable(ast_test ${TEST_SOURCES})
+
 # Link Google Test libraries
-link_libraries(gtest gtest_main ast context)
+target_link_libraries(ast_test gtest gtest_main ast context)
 
 # Include the header directory
-include_directories(PUBLIC "../include")
+target_include_directories(ast_test PUBLIC "../include")
 
-# Add subdirectories for expression and statement tests
-add_subdirectory(expression)
-add_subdirectory(statement)
+# Add tests to CTest
+add_test(NAME ast_test COMMAND ast_test)

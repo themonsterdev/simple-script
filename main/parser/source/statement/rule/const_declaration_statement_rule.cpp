@@ -1,18 +1,19 @@
 #include "statement/rule/const_declaration_statement_rule.hpp"
 #include "expression/expression_parser.hpp"
 #include "lexer.hpp"
+#include "parser.hpp"
 
 #include "exception/syntax_exception.hpp"
 #include "statement/const_declaration_statement.hpp"
 #include "statement/var_declaration_list_statement.hpp"
 
-bool FConstDeclarationStatementRule::Match(FLexer& lexer, FExpressionParser& expressionParser) const
+bool FConstDeclarationStatementRule::Match(FLexer& lexer) const
 {
     const auto& token = lexer.PeekNextToken();
     return token.type == eTokenType::Keyword && token.lexeme == "const";
 }
 
-StatementPtr FConstDeclarationStatementRule::Parse(FLexer& lexer, FExpressionParser& expressionParser) const
+StatementPtr FConstDeclarationStatementRule::Parse(FLexer& lexer, FStatementParser& statementParser, FExpressionParser& expressionParser) const
 {
     // Get the next token, which should be 'const'
     SToken constToken = lexer.GetNextToken();

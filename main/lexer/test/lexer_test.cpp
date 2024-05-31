@@ -130,3 +130,59 @@ TEST_F(FLexerTest, LexerDeclarationListTest)
     EXPECT_EQ(tokens[9].type, eTokenType::Number);
     EXPECT_EQ(tokens[9].lexeme, "2");
 }
+
+TEST_F(FLexerTest, LexerNotEndTokenTest)
+{
+    std::string input("var x = 0");
+    FLexer lexer(input);
+
+    auto token = lexer.GetNextToken();
+    EXPECT_EQ(token.type, eTokenType::Keyword);
+    EXPECT_EQ(token.lexeme, "var");
+    EXPECT_EQ(token.line, 1);
+    EXPECT_EQ(token.column, 1);
+
+    token = lexer.GetNextToken();
+    EXPECT_EQ(token.type, eTokenType::Identifier);
+    EXPECT_EQ(token.lexeme, "x");
+
+    token = lexer.GetNextToken();
+    EXPECT_EQ(token.type, eTokenType::Operator);
+    EXPECT_EQ(token.lexeme, "=");
+
+    token = lexer.GetNextToken();
+    EXPECT_EQ(token.type, eTokenType::Number);
+    EXPECT_EQ(token.lexeme, "0");
+
+    token = lexer.GetNextToken();
+    EXPECT_EQ(token.type, eTokenType::End);
+    EXPECT_EQ(token.lexeme, "");
+}
+
+TEST_F(FLexerTest, LexerEndTokenTest)
+{
+    std::string input("var x = 0\n");
+    FLexer lexer(input);
+
+    auto token = lexer.GetNextToken();
+    EXPECT_EQ(token.type, eTokenType::Keyword);
+    EXPECT_EQ(token.lexeme, "var");
+    EXPECT_EQ(token.line, 1);
+    EXPECT_EQ(token.column, 1);
+
+    token = lexer.GetNextToken();
+    EXPECT_EQ(token.type, eTokenType::Identifier);
+    EXPECT_EQ(token.lexeme, "x");
+
+    token = lexer.GetNextToken();
+    EXPECT_EQ(token.type, eTokenType::Operator);
+    EXPECT_EQ(token.lexeme, "=");
+
+    token = lexer.GetNextToken();
+    EXPECT_EQ(token.type, eTokenType::Number);
+    EXPECT_EQ(token.lexeme, "0");
+
+    token = lexer.GetNextToken();
+    EXPECT_EQ(token.type, eTokenType::End);
+    EXPECT_EQ(token.lexeme, "");
+}

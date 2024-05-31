@@ -1,17 +1,18 @@
 #include "statement/rule/assignment_statement_rule.hpp"
 #include "expression/expression_parser.hpp"
 #include "lexer.hpp"
+#include "parser.hpp"
 
 #include "exception/syntax_exception.hpp"
 #include "statement/assignment_statement.hpp"
 
-bool FAssignmentStatementRule::Match(FLexer& lexer, FExpressionParser& expressionParser) const
+bool FAssignmentStatementRule::Match(FLexer& lexer) const
 {
     const auto& token = lexer.PeekNextToken();
     return token.type == eTokenType::Identifier;
 }
 
-StatementPtr FAssignmentStatementRule::Parse(FLexer& lexer, FExpressionParser& expressionParser) const
+StatementPtr FAssignmentStatementRule::Parse(FLexer& lexer, FStatementParser& statementParser, FExpressionParser& expressionParser) const
 {
     // Get the next token, which should be an identifier
     SToken idToken = lexer.GetNextToken();

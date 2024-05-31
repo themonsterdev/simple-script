@@ -1,18 +1,19 @@
 #include "statement/rule/var_declaration_statement_rule.hpp"
 #include "expression/expression_parser.hpp"
 #include "lexer.hpp"
+#include "parser.hpp"
 
 #include "exception/syntax_exception.hpp"
 #include "statement/var_declaration_statement.hpp"
 #include "statement/var_declaration_list_statement.hpp"
 
-bool FVarDeclarationStatementRule::Match(FLexer& lexer, FExpressionParser& expressionParser) const
+bool FVarDeclarationStatementRule::Match(FLexer& lexer) const
 {
     const auto& token = lexer.PeekNextToken();
     return token.type == eTokenType::Keyword && token.lexeme == "var";
 }
 
-StatementPtr FVarDeclarationStatementRule::Parse(FLexer& lexer, FExpressionParser& expressionParser) const
+StatementPtr FVarDeclarationStatementRule::Parse(FLexer& lexer, FStatementParser& statementParser, FExpressionParser& expressionParser) const
 {
     // Get the next token, which should be 'var'
     SToken varToken = lexer.GetNextToken();
@@ -107,6 +108,11 @@ StatementPtr FVarDeclarationStatementRule::Parse(FLexer& lexer, FExpressionParse
             // If no comma is found, end parsing
             break;
         }
+    }
+
+    if (declarations.size() == 1)
+    {
+        return std::move(declarations.front());
     }
 
     // Return a unique pointer to the FVarDeclarationListStatement with the list of declarations

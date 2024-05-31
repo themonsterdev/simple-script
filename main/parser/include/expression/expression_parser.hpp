@@ -41,16 +41,16 @@ public:
      */
     ExpressionPtr ParseExpression();
 
-    /**
-     * @brief Parse a term in an expression.
-     *
-     * @return ExpressionPtr A pointer to the parsed expression object.
-     */
-    ExpressionPtr ParseTerm();
-
-    const FLexer& GetLexer() const;
-
 private:
+
+
+
+    /**
+    * @brief Parse a term in an expression.
+    *
+    * @return ExpressionPtr A pointer to the parsed expression object.
+    */
+    ExpressionPtr ParseTerm();
 
     /**
      * @brief Parse an arithmetic operator expression.
@@ -59,6 +59,7 @@ private:
      * @return ExpressionPtr A pointer to the parsed expression object.
      */
     ExpressionPtr ParseArithmeticOperatorExpression(ExpressionPtr left);
+    ExpressionPtr ParseComparisonOperatorExpression(ExpressionPtr left);
 
     /**
      * @brief Parse a string operator expression.
@@ -67,6 +68,8 @@ private:
      * @return ExpressionPtr A pointer to the parsed expression object.
      */
     ExpressionPtr ParseStringOperatorExpression(ExpressionPtr left);
+
+    ExpressionPtr ParseIdentifierOperatorExpression(ExpressionPtr left);
 
     /**
      * @brief Parse a ternary expression.

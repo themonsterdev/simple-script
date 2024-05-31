@@ -12,13 +12,11 @@
 // Include the interface for expressions
 #include "expression/interface/expression.hpp"
 
-// Include the expression parser header file
-#include "expression/expression_parser.hpp"
-
 #include "statement/interface/statement_rule.hpp"
 
 // Forward declaration of FLexer class
 class FLexer;
+class FExpressionParser;
 
 /**
  * @brief Parser class for language statements.
@@ -31,7 +29,7 @@ class FStatementParser
     // Reference to the lexer used by the parser
     FLexer& m_lexer;
 
-    // Reference to the expression parser
+    // Reference to the statement parser used by the parser
     FExpressionParser& m_expressionParser;
 
     // Vector of statement rules

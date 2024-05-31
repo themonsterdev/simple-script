@@ -3,11 +3,8 @@
  * @brief Implementation of the FParser class.
  */
 
-#include "parser.hpp"   // Include the parser header file
-#include "lexer.hpp"    // Include the lexer header file
-
-// For std::runtime_error
-#include <stdexcept>
+#include "parser.hpp" // Include the parser header file
+#include "lexer.hpp"  // Include the lexer header file
 
 FParser::FParser(FLexer& lexer)
 	: m_lexer(lexer)
@@ -23,6 +20,16 @@ StatementList FParser::Parse()
     // Continue parsing until there are no more tokens
     while (m_lexer.HasNextToken())
     {
+        // Peek at the next token without consuming it
+        const auto& token = m_lexer.PeekNextToken();
+
+        // Check if the token type is not Whitespace or Comment
+        if (token.type == eTokenType::Whitespace || token.type == eTokenType::Comment)
+        {
+            m_lexer.GetNextToken();
+            continue;
+        }
+
         // Parse the next statement
         auto statement = ParseNextStatement();
 
@@ -30,6 +37,10 @@ StatementList FParser::Parse()
         if (statement)
         {
             statements.push_back(std::move(statement));
+        }
+        else // If ParseNextStatement returns null, it's the end of the file
+        {
+            break;
         }
     }
 
@@ -39,12 +50,15 @@ StatementList FParser::Parse()
 
 StatementPtr FParser::ParseNextStatement()
 {
+    // Peek at the next token without consuming it
     const auto& token = m_lexer.PeekNextToken();
 
+    // Return null if the next token indicates the end of the input
     if (token.type != eTokenType::End)
     {
         return m_statementParser.ParseStatement();
     }
 
+    // Parse and return the next statement
     return nullptr;
 }

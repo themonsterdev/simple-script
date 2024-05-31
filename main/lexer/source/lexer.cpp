@@ -63,9 +63,19 @@ SToken FLexer::PeekNextToken(size_t n)
 SToken FLexer::GetNextToken(size_t n)
 {
     // Advance the index by n characters
-    if (m_index + n < m_source.length())
+    size_t source_length = m_source.length();
+
+    size_t i = 0;
+    while (i < n && HasNextToken())
     {
-        m_index += n;
+        if (m_source[m_index] == ' ')
+        {
+            m_index++;
+            continue;
+        }
+
+        m_index++;
+        i++;
     }
 
     // Skip whitespace characters
@@ -98,6 +108,29 @@ SToken FLexer::GetNextToken(size_t n)
     // If no match is found, throw an exception
     std::string lexeme(1, m_source[m_index]);
     throw FLexicalException("Unknown token: " + lexeme);
+}
+
+bool FLexer::TryConsumeToken(eTokenType expectedType, const std::string& expectedLexeme)
+{
+    // Check if there is a next token available
+    if (!HasNextToken())
+    {
+        return false;
+    }
+
+    // Get the next token
+    const SToken& token = PeekNextToken();
+
+    // Checks if the type and lexeme of the token match those expected
+    if (token.type == expectedType && token.lexeme == expectedLexeme)
+    {
+        // Consume the token if the match is successful
+        GetNextToken();
+        return true;
+    }
+
+    // Return false if the token does not match
+    return false;
 }
 
 void FLexer::SkipWhitespace()

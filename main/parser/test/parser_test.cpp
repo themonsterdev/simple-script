@@ -11,8 +11,8 @@
 #include "statement/var_declaration_statement.hpp"
 
 // Expression
-#include "expression/operator/arithmetic/addition_expression.hpp"
-#include "expression/operator/arithmetic/multiply_expression.hpp"
+#include "expression/operator/additive/addition_expression.hpp"
+#include "expression/operator/multiplicative/multiply_expression.hpp"
 #include "expression/identifier_expression.hpp"
 #include "expression/literal/number_expression.hpp"
 
@@ -103,28 +103,21 @@ TEST_F(FParserTest, ParseTest)
     ASSERT_EQ(statements.size(), 2);
 
     ASSERT_NE(statements.front(), nullptr);
-    auto varDecl = dynamic_cast<FVarDeclarationListStatement*>(statements.front().get());
+    const auto varDecl = dynamic_cast<FVarDeclarationStatement*>(statements.front().get());
     ASSERT_NE(varDecl, nullptr);
-    ASSERT_EQ(varDecl->GetDeclarations().size(), 1);
 
-    for (auto& declaration : varDecl->GetDeclarations())
-    {
-        const auto varDecl = dynamic_cast<FVarDeclarationStatement*>(declaration.get());
-        ASSERT_NE(varDecl, nullptr);
+    ASSERT_NE(varDecl->GetExpression(), nullptr);
+    const auto arithNode = dynamic_cast<FAdditionExpression*>(varDecl->GetExpression().get());
+    ASSERT_NE(arithNode, nullptr);
 
-        ASSERT_NE(varDecl->GetExpression(), nullptr);
-        const auto arithNode = dynamic_cast<FAdditionExpression*>(varDecl->GetExpression().get());
-        ASSERT_NE(arithNode, nullptr);
+    const auto leftExpr = dynamic_cast<const FNumberExpression*>(arithNode->GetLeft().get());
+    ASSERT_NE(leftExpr, nullptr);
 
-        const auto leftExpr = dynamic_cast<const FNumberExpression*>(arithNode->GetLeft().get());
-        ASSERT_NE(leftExpr, nullptr);
+    const auto rightExpr = dynamic_cast<const FMultiplyExpression*>(arithNode->GetRight().get());
+    ASSERT_NE(rightExpr, nullptr);
 
-        const auto rightExpr = dynamic_cast<const FMultiplyExpression*>(arithNode->GetRight().get());
-        ASSERT_NE(rightExpr, nullptr);
-
-        ASSERT_NE(rightExpr->GetLeft(), nullptr);
-        ASSERT_NE(dynamic_cast<FNumberExpression*>(rightExpr->GetRight().get()), nullptr);
-    }
+    ASSERT_NE(rightExpr->GetLeft(), nullptr);
+    ASSERT_NE(dynamic_cast<FNumberExpression*>(rightExpr->GetRight().get()), nullptr);
 
     ASSERT_NE(statements.back(), nullptr);
     auto printStat = dynamic_cast<FPrintStatement*>(statements.back().get());
@@ -184,15 +177,17 @@ TEST_F(FParserTest, SingleTernaryTest)
     StatementList statements = parser.Parse();
     ASSERT_EQ(statements.size(), 2);
 
-    auto varDeclList = dynamic_cast<FVarDeclarationListStatement*>(statements.front().get());
-    ASSERT_NE(varDeclList, nullptr);
-    ASSERT_EQ(varDeclList->GetDeclarations().size(), 1);
+    ASSERT_NE(statements.front(), nullptr);
+    auto varDeclX3 = dynamic_cast<FVarDeclarationStatement*>(statements.front().get());
+    ASSERT_NE(varDeclX3, nullptr);
+
+    ASSERT_NE(statements.back(), nullptr);
+    auto varDeclY3 = dynamic_cast<FVarDeclarationStatement*>(statements.back().get());
+    ASSERT_NE(varDeclY3, nullptr);
     
     // Evaluate statements to ensure variables are initialized
-    for (const auto& statement : statements)
-    {
-        statement->Execute(context);
-    }
+    varDeclX3->Execute(context);
+    varDeclY3->Execute(context);
 
     // Verify variables in the context
     ASSERT_EQ(context.GetVariable("x3"), Value(0));
