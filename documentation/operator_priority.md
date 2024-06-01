@@ -6,12 +6,10 @@ rules for evaluating expressions.
 | Precedence | Operator         | Description                                               | Associativity |
 |------------|------------------|-----------------------------------------------------------|---------------|
 | 1          | ::               | Scope resolution                                          | Left-to-right |
-|------------|------------------|-----------------------------------------------------------|---------------|
 | 2          | a++, a--         | Suffix/postfix increment and decrement                    |               |
 |            | type(), type{}   | Functional cast                                           |               |
 |            | a(), a[]         | Function call and subscript                               |               |
 |            | ., ->            | Member access                                             |               |
-|------------|------------------|-----------------------------------------------------------|---------------|
 | 3          | ++a, --a         | Prefix increment and decrement                            | Right-to-left |
 |            | +a, -a           | Unary plus and minus                                      |               |
 |            | !, ~             | Logical and bitwise NOT                                   |               |
