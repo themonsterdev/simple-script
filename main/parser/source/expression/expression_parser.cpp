@@ -9,25 +9,39 @@
 
 // Expressions
 #include "expression/operator/additive/addition_expression.hpp"
-#include "expression/operator/additive/subtract_expression.hpp"
+#include "expression/operator/additive/subtraction_expression.hpp"
 
 #include "expression/operator/multiplicative/division_expression.hpp"
 #include "expression/operator/multiplicative/modulo_expression.hpp"
 #include "expression/operator/multiplicative/multiply_expression.hpp"
 
+#include "expression/operator/shift/shift_left_expression.hpp"
+#include "expression/operator/shift/shift_right_expression.hpp"
+
 #include "expression/operator/equality/equal_to_expression.hpp"
 #include "expression/operator/equality/not_equal_expression.hpp"
 
 #include "expression/operator/comparison/greater_than_expression.hpp"
-#include "expression/operator/comparison/greater_than_or_equal_to_expression.hpp"
+#include "expression/operator/comparison/greater_than_or_equal_expression.hpp"
 #include "expression/operator/comparison/less_than_expression.hpp"
-#include "expression/operator/comparison/less_than_or_equal_to_expression.hpp"
+#include "expression/operator/comparison/less_than_or_equal_expression.hpp"
+
+#include "expression/operator/bitwise/bitwise_and_expression.hpp"
+#include "expression/operator/bitwise/bitwise_or_expression.hpp"
+#include "expression/operator/bitwise/bitwise_xor_expression.hpp"
+
+#include "expression/operator/logical/logical_and_expression.hpp"
+#include "expression/operator/logical/logical_or_expression.hpp"
 
 #include "expression/operator/ternary/ternary_expression.hpp"
+
+#include "expression/operator/unary/unary_negate_expression.hpp"
+#include "expression/operator/unary/unary_not_expression.hpp"
 
 #include "expression/literal/boolean_expression.hpp"
 #include "expression/literal/number_expression.hpp"
 #include "expression/literal/string_expression.hpp"
+#include "expression/literal/string_format_expression.hpp"
 
 #include "expression/string_operator_expression.hpp"
 #include "expression/identifier_expression.hpp"
@@ -38,455 +52,337 @@ FExpressionParser::FExpressionParser(FLexer& lexer)
 
 ExpressionPtr FExpressionParser::ParseExpression()
 {
-    // Peek at the next token to determine its type
-    const auto& token = m_lexer.PeekNextToken();
-
-    // Parse the left term of the expression
-    ExpressionPtr left = ParseTerm();
-
-    // Check if there is a ternary expression to parse
-    left = ParseTernaryExpression(std::move(left));
-
-    if (token.type == eTokenType::Boolean)
-    {
-        
-    }
-    else if (token.type == eTokenType::Float)
-    {
-
-    }
-    else if (token.type == eTokenType::Identifier)
-    {
-        // If the left term is an identifier, parse identifier operator expression
-        left = ParseIdentifierOperatorExpression(std::move(left));
-    }
-    else if (token.type == eTokenType::Number)
-    {
-        // Peek at the next token to determine its type
-        const auto& operatorToken = m_lexer.PeekNextToken();
-
-        if (operatorToken.type == eTokenType::Operator)
-        {
-            // Peek at the next token to determine its type
-            const auto& nextToken = m_lexer.PeekNextToken(1);
-
-            if (nextToken.type == eTokenType::String)
-            {
-                // If the left term is a string, parse string operator expression
-                left = ParseStringOperatorExpression(std::move(left));
-            }
-            else
-            {
-                // If the left term is a number, parse arithmetic operator expression
-                left = ParseArithmeticOperatorExpression(std::move(left));
-            }
-        }
-    }
-    else if (token.type == eTokenType::String)
-    {
-        // If the left term is a string, parse string operator expression
-        left = ParseStringOperatorExpression(std::move(left));
-    }
-
-    // Return the parsed expression
-    return left;
+    return ParseTernaryExpression();
 }
 
-ExpressionPtr FExpressionParser::ParseArithmeticOperatorExpression(ExpressionPtr left)
+ExpressionPtr FExpressionParser::ParseTernaryExpression()
 {
-    // Continue parsing while there are tokens available
-    while (m_lexer.HasNextToken())
+    ExpressionPtr condition = ParseLogicalOrExpression();
+
+    while (m_lexer.HasNextToken() && m_lexer.PeekNextToken().type == eTokenType::Operator && m_lexer.PeekNextToken().lexeme == "?")
     {
-        // Peek the next token
-        const auto& token = m_lexer.PeekNextToken();
-
-        // Check if the token is an operator and if it's addition or subtraction
-        if (token.type == eTokenType::Operator && (token.lexeme == "+" || token.lexeme == "-"))
-        {
-            // Consume the operator token
-            m_lexer.GetNextToken();
-
-            // Parse the right term
-            ExpressionPtr right = ParseTerm();
-
-            // Create an arithmetic operator node based on the operator token
-            if (token.lexeme == "+")
-            {
-                left = std::make_unique<FAdditionExpression>(std::move(left), std::move(right));
-            }
-            else if (token.lexeme == "-")
-            {
-                left = std::make_unique<FSubtractExpression>(std::move(left), std::move(right));
-            }
-        }
-        else
-        {
-            // If the token is not an operator, break the loop
-            break;
-        }
-    }
-
-    // Return the parsed expression
-    return left;
-}
-
-ExpressionPtr FExpressionParser::ParseComparisonOperatorExpression(ExpressionPtr left)
-{
-    // Continue parsing while there are tokens available
-    while (m_lexer.HasNextToken())
-    {
-        // Peek the next token
-        const auto& token = m_lexer.PeekNextToken();
-
-        if (token.type == eTokenType::Operator && token.lexeme == "=")
-        {
-            // Consume the token '='
-            m_lexer.GetNextToken();
-
-            if (!m_lexer.TryConsumeToken(eTokenType::Operator, "="))
-            {
-                throw FSyntaxException("Excepted '=='");
-            }
-
-            // Parse the right term
-            ExpressionPtr right = ParseTerm();
-
-            left = std::make_unique<FEqualToExpression>(std::move(left), std::move(right));
-        }
-        else
-        {
-            // If the token is not an operator, break the loop
-            break;
-        }
-    }
-
-    // Return the parsed expression
-    return left;
-}
-
-ExpressionPtr FExpressionParser::ParseStringOperatorExpression(ExpressionPtr left)
-{
-    // Continue parsing while there are tokens available
-    while (m_lexer.HasNextToken())
-    {
-        // Peek the next token
-        const auto& token = m_lexer.PeekNextToken();
-
-        if (token.type == eTokenType::Operator)
-        {
-            if (token.lexeme == "+")
-            {
-                // Consume the operator token
-                m_lexer.GetNextToken();
-
-                // Parse the right string
-                ExpressionPtr right = ParseString();
-
-                // Create a string operator node for concatenation
-                left = std::make_unique<FStringOperatorExpression>("+", std::move(left), std::move(right));
-            }
-            else if (token.lexeme == "*")
-            {
-                // Consume the operator token
-                m_lexer.GetNextToken();
-
-                // Parse the right string
-                ExpressionPtr right = ParseString();
-
-                // Create a string operator node for concatenation
-                left = std::make_unique<FStringOperatorExpression>("*", std::move(left), std::move(right));
-            }
-            else
-            {
-                // If the token is not a concatenation operator, break the loop
-                break;
-            }
-        }
-        else
-        {
-            // If the token is not a concatenation operator, break the loop
-            break;
-        }
-    }
-
-    // Return the parsed expression
-    return left;
-}
-
-ExpressionPtr FExpressionParser::ParseIdentifierOperatorExpression(ExpressionPtr left)
-{
-    // Continue parsing while there are tokens available
-    while (m_lexer.HasNextToken())
-    {
-        // Peek the next token
-        const auto& token = m_lexer.PeekNextToken();
-
-        if (token.type == eTokenType::Operator)
-        {
-            if (token.lexeme == "+" || token.lexeme == "-")
-            {
-                // Consume the operator token
-                m_lexer.GetNextToken();
-
-                // Parse the right term
-                ExpressionPtr right = ParseTerm();
-
-                // Create an arithmetic operator node based on the operator token
-                if (token.lexeme == "+")
-                {
-                    left = std::make_unique<FAdditionExpression>(std::move(left), std::move(right));
-                }
-                else if (token.lexeme == "-")
-                {
-                    left = std::make_unique<FSubtractExpression>(std::move(left), std::move(right));
-                }
-            }
-            else
-            {
-                break;
-            }
-        }
-        else
-        {
-            // If the token is not an operator applicable to identifiers, break the loop
-            break;
-        }
-    }
-
-    // Return the parsed expression
-    return left;
-}
-
-ExpressionPtr FExpressionParser::ParseTernaryExpression(ExpressionPtr condition)
-{
-    // Peek at the next token to check for the ternary operator '?'
-    auto nextToken = m_lexer.PeekNextToken();
-
-    // Ensure the condition expression is followed by the ternary operator '?'
-    if (nextToken.type != eTokenType::Punctuation || nextToken.lexeme != "?")
-    {
-        // If not, return the condition expression as is
-        return condition;
-    }
-
-    // Consume the ternary operator token '?'
-    m_lexer.GetNextToken();
-
-    // Parse the true expression (the expression after the '?')
-    ExpressionPtr trueExpr = ParseExpression();
-
-    // Get the next token which should be the ':' separating true and false expressions
-    nextToken = m_lexer.GetNextToken();
-
-    // Consume the colon token ':'
-    if (nextToken.type != eTokenType::Punctuation || nextToken.lexeme != ":")
-    {
-        // If the token is not a colon, throw a syntax exception
-        throw FSyntaxException("Expected ':' in ternary expression after '?'");
-    }
-
-    // Parse the false expression (the expression after the ':')
-    ExpressionPtr falseExpr = ParseExpression();
-
-    // Recursively check if the true expression or false expression is another ternary expression
-    trueExpr = ParseTernaryExpression(std::move(trueExpr));
-    falseExpr = ParseTernaryExpression(std::move(falseExpr));
-
-    // Create and return the ternary expression object
-    return std::make_unique<FTernaryExpression>(
-        std::move(condition),
-        std::move(trueExpr),
-        std::move(falseExpr)
-    );
-}
-
-ExpressionPtr FExpressionParser::ParseTerm()
-{
-    // Parse the initial factor and store it as the left operand
-    ExpressionPtr left = ParseFactor();
-
-    // Continue parsing while there are more tokens available
-    while (m_lexer.HasNextToken())
-    {
-        // If the left operand is not a number, stop parsing further
-        if (!dynamic_cast<FNumberExpression*>(left.get())
-            && !dynamic_cast<FIdentifierExpression*>(left.get()))
-        {
-            break;
-        }
-
-        // Peek at the next token to determine the operator
-        const SToken& token = m_lexer.PeekNextToken();
-
-        // Peek at the next token to determine the operator
-        const SToken& nextToken = m_lexer.PeekNextToken(1);
-
-        if (nextToken.type == eTokenType::String)
-            break;
-
-        // Check if the token is an operator and if it is one of '*', '/', or '%'
-        if (token.type == eTokenType::Operator && (token.lexeme == "*" || token.lexeme == "/" || token.lexeme == "%"))
-        {
-            // Consume the operator token
-            m_lexer.GetNextToken();
-
-            // Parse the next factor and store it as the right operand
-            ExpressionPtr right = ParseFactor();
-
-            // Create an arithmetic operator node based on the operator and update the left operand
-            if (token.lexeme == "*")
-            {
-                left = std::make_unique<FMultiplyExpression>(std::move(left), std::move(right));
-            }
-            else if (token.lexeme == "/")
-            {
-                left = std::make_unique<FDivisionExpression>(std::move(left), std::move(right));
-            }
-            else if (token.lexeme == "%")
-            {
-                left = std::make_unique<FModuloExpression>(std::move(left), std::move(right));
-
-                left = ParseComparisonOperatorExpression(std::move(left));
-            }
-        }
-        else if (token.type == eTokenType::Operator && (token.lexeme == "<" || token.lexeme == ">"))
-        {
-            // Consume the operator token
-            m_lexer.GetNextToken();
-
-            // Parse the next factor and store it as the right operand
-            ExpressionPtr right = ParseFactor();
-
-            if (token.lexeme == "<")
-            {
-                left = std::make_unique<FLessThanExpression>(std::move(left), std::move(right));
-            }
-            else if (token.lexeme == ">")
-            {
-                left = std::make_unique<FGreaterThanExpression>(std::move(left), std::move(right));
-            }
-        }
-        else
-        {
-            // If the token is not an operator or not one of '*', '/', or '%', stop parsing
-            break;
-        }
-    }
-
-    // Return the parsed term
-    return left;
-}
-
-ExpressionPtr FExpressionParser::ParseFactor()
-{
-    // Peek at the next token to determine its type
-    const auto& token = m_lexer.PeekNextToken();
-
-    // Check if the token is a boolean and parse it if true
-    if (token.type == eTokenType::Boolean)
-    {
-        return ParseBoolean();
-    }
-    // Check if the token is a number and parse it if true
-    else if (token.type == eTokenType::Number)
-    {
-        return ParseNumber();
-    }
-    // Check if the token is a string and parse it if true
-    else if (token.type == eTokenType::String)
-    {
-        return ParseString();
-    }
-    // Check if the token is an identifier and parse it if true
-    else if (token.type == eTokenType::Identifier)
-    {
-        return ParseIdentifier();
-    }
-    else if (token.lexeme == "(")
-    {
-        // Consume the '(' token
+        // Consume the ternary operator token '?'
         m_lexer.GetNextToken();
 
-        // Parse the expression inside the parentheses
-        ExpressionPtr expr = ParseExpression();
+        ExpressionPtr trueExpr = ParseExpression();
 
-        // Ensure the next token is ')'
-        if (m_lexer.TryConsumeToken(eTokenType::Delimiter, ")"))
+        if (!m_lexer.TryConsumeToken(eTokenType::Operator, ":")) // delimiter
         {
-            throw FSyntaxException("Expected ')' after expression");
+            throw FSyntaxException("Expected ':' in ternary expression after '?'");
         }
 
-        return expr;
+        ExpressionPtr falseExpr = ParseExpression();
+
+        condition = std::make_unique<FTernaryExpression>(std::move(condition), std::move(trueExpr), std::move(falseExpr));
     }
 
-    // If the token is none of the expected types, throw an error
-    throw FSyntaxException("Unexpected token in factor: " + token.lexeme);
+    return condition;
 }
 
-ExpressionPtr FExpressionParser::ParseIdentifier()
+ExpressionPtr FExpressionParser::ParseLogicalOrExpression()
 {
-    // Get the next token
-    SToken token = m_lexer.GetNextToken();
+    ExpressionPtr left = ParseLogicalAndExpression();
 
-    // Check if the token is an identifier
-    if (token.type != eTokenType::Identifier)
+    while (m_lexer.HasNextToken() && m_lexer.PeekNextToken().type == eTokenType::Operator && m_lexer.PeekNextToken().lexeme == "||")
     {
-        // Throw an error if it's not an identifier
-        throw FSyntaxException("Expected 'identifier'");
+        m_lexer.GetNextToken();
+        ExpressionPtr right = ParseLogicalAndExpression();
+        left = std::make_unique<FLogicalOrExpression>(std::move(left), std::move(right));
     }
 
-    // Create an identifier node with the token's lexeme as the identifier name
-    return std::make_unique<FIdentifierExpression>(token.lexeme);
+    return left;
 }
 
-ExpressionPtr FExpressionParser::ParseBoolean()
+ExpressionPtr FExpressionParser::ParseLogicalAndExpression()
 {
-    // Get at the next token to determine its type
-    const auto& token = m_lexer.GetNextToken();
+    ExpressionPtr left = ParseBitwiseOrExpression();
 
-    // Check if the token is a boolean
-    if (token.type == eTokenType::Boolean)
+    while (m_lexer.HasNextToken() && m_lexer.PeekNextToken().type == eTokenType::Operator && m_lexer.PeekNextToken().lexeme == "&&")
     {
-        // Convert the token's lexeme to a boolean value
-        bool value = (token.lexeme == "true");
-
-        // Create a boolean expression with the boolean value
-        return std::make_unique<FBooleanExpression>(value);
+        m_lexer.GetNextToken();
+        ExpressionPtr right = ParseBitwiseOrExpression();
+        left = std::make_unique<FLogicalAndExpression>(std::move(left), std::move(right));
     }
 
-    // If the token is not a boolean, throw a syntax exception
-    throw FSyntaxException("Expected boolean");
+    return left;
 }
 
-ExpressionPtr FExpressionParser::ParseNumber()
+ExpressionPtr FExpressionParser::ParseBitwiseOrExpression()
 {
-    // Get the next token
-    SToken token = m_lexer.GetNextToken();
+    ExpressionPtr left = ParseBitwiseXorExpression();
 
-    // Check if the token is a number
-    if (token.type != eTokenType::Number)
+    while (m_lexer.HasNextToken() && m_lexer.PeekNextToken().type == eTokenType::Operator && m_lexer.PeekNextToken().lexeme == "|")
     {
-        // Throw an error if it's not a number
-        throw FSyntaxException("Expected 'number'");
+        m_lexer.GetNextToken();
+        ExpressionPtr right = ParseBitwiseXorExpression();
+        left = std::make_unique<FBitwiseOrExpression>(std::move(left), std::move(right));
     }
 
-    // Convert the token's lexeme to an integer and create a number node with that value
-    int value = std::stoi(token.lexeme);
-    return std::make_unique<FNumberExpression>(value);
+    return left;
 }
 
-ExpressionPtr FExpressionParser::ParseString()
+ExpressionPtr FExpressionParser::ParseBitwiseXorExpression()
 {
-    // Get the next token
-    SToken token = m_lexer.GetNextToken();
+    ExpressionPtr left = ParseBitwiseAndExpression();
 
-    // Check if the token is a string
-    if (token.type != eTokenType::String)
+    while (m_lexer.HasNextToken() && m_lexer.PeekNextToken().type == eTokenType::Operator && m_lexer.PeekNextToken().lexeme == "^")
     {
-        // Throw an error if it's not a string
-        throw FSyntaxException("Expected 'string'");
+        m_lexer.GetNextToken();
+        ExpressionPtr right = ParseBitwiseAndExpression();
+        left = std::make_unique<FBitwiseXorExpression>(std::move(left), std::move(right));
     }
 
-    // Create a string node with the token's lexeme as its value
-    return std::make_unique<FStringExpression>(token.lexeme);
+    return left;
+}
+
+ExpressionPtr FExpressionParser::ParseBitwiseAndExpression()
+{
+    ExpressionPtr left = ParseEqualityExpression();
+
+    while (m_lexer.HasNextToken() && m_lexer.PeekNextToken().type == eTokenType::Operator && m_lexer.PeekNextToken().lexeme == "&")
+    {
+        m_lexer.GetNextToken();
+        ExpressionPtr right = ParseEqualityExpression();
+        left = std::make_unique<FBitwiseAndExpression>(std::move(left), std::move(right));
+    }
+
+    return left;
+}
+
+ExpressionPtr FExpressionParser::ParseEqualityExpression()
+{
+    ExpressionPtr left = ParseComparisonExpression();
+
+    while (m_lexer.HasNextToken() && m_lexer.PeekNextToken().type == eTokenType::Operator)
+    {
+        if (m_lexer.PeekNextToken().lexeme == "==")
+        {
+            m_lexer.GetNextToken();
+            ExpressionPtr right = ParseComparisonExpression();
+            left = std::make_unique<FEqualToExpression>(std::move(left), std::move(right));
+        }
+        else if (m_lexer.PeekNextToken().lexeme == "!=")
+        {
+            m_lexer.GetNextToken();
+            ExpressionPtr right = ParseComparisonExpression();
+            left = std::make_unique<FNotEqualExpression>(std::move(left), std::move(right));
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return left;
+}
+
+ExpressionPtr FExpressionParser::ParseComparisonExpression()
+{
+    ExpressionPtr left = ParseShiftExpression();
+
+    while (m_lexer.HasNextToken() && m_lexer.PeekNextToken().type == eTokenType::Operator)
+    {
+        if (m_lexer.PeekNextToken().lexeme == "<")
+        {
+            m_lexer.GetNextToken();
+            ExpressionPtr right = ParseShiftExpression();
+            left = std::make_unique<FLessThanExpression>(std::move(left), std::move(right));
+        }
+        else if (m_lexer.PeekNextToken().lexeme == "<=")
+        {
+            m_lexer.GetNextToken();
+            ExpressionPtr right = ParseShiftExpression();
+            left = std::make_unique<FLessThanOrEqualExpression>(std::move(left), std::move(right));
+        }
+        else if (m_lexer.PeekNextToken().lexeme == ">")
+        {
+            m_lexer.GetNextToken();
+            ExpressionPtr right = ParseShiftExpression();
+            left = std::make_unique<FGreaterThanExpression>(std::move(left), std::move(right));
+        }
+        else if (m_lexer.PeekNextToken().lexeme == ">=")
+        {
+            m_lexer.GetNextToken();
+            ExpressionPtr right = ParseShiftExpression();
+            left = std::make_unique<FGreaterThanOrEqualExpression>(std::move(left), std::move(right));
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return left;
+}
+
+ExpressionPtr FExpressionParser::ParseShiftExpression()
+{
+    ExpressionPtr left = ParseAdditiveExpression();
+
+    while (m_lexer.HasNextToken() && m_lexer.PeekNextToken().type == eTokenType::Operator)
+    {
+        if (m_lexer.PeekNextToken().lexeme == "<<")
+        {
+            m_lexer.GetNextToken();
+            ExpressionPtr right = ParseAdditiveExpression();
+            left = std::make_unique<FShiftLeftExpression>(std::move(left), std::move(right));
+        }
+        else if (m_lexer.PeekNextToken().lexeme == ">>")
+        {
+            m_lexer.GetNextToken();
+            ExpressionPtr right = ParseAdditiveExpression();
+            left = std::make_unique<FShiftRightExpression>(std::move(left), std::move(right));
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return left;
+}
+
+ExpressionPtr FExpressionParser::ParseAdditiveExpression()
+{
+    ExpressionPtr left = ParseMultiplicativeExpression();
+
+    while (m_lexer.HasNextToken() && m_lexer.PeekNextToken().type == eTokenType::Operator)
+    {
+        if (m_lexer.PeekNextToken().lexeme == "+")
+        {
+            m_lexer.GetNextToken();
+            ExpressionPtr right = ParseMultiplicativeExpression();
+            left = std::make_unique<FAdditionExpression>(std::move(left), std::move(right));
+        }
+        else if (m_lexer.PeekNextToken().lexeme == "-")
+        {
+            m_lexer.GetNextToken();
+            ExpressionPtr right = ParseMultiplicativeExpression();
+            left = std::make_unique<FSubtractionExpression>(std::move(left), std::move(right));
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return left;
+}
+
+ExpressionPtr FExpressionParser::ParseMultiplicativeExpression()
+{
+    ExpressionPtr left = ParseUnaryExpression();
+
+    while (m_lexer.HasNextToken() && m_lexer.PeekNextToken().type == eTokenType::Operator)
+    {
+        if (m_lexer.PeekNextToken().lexeme == "*")
+        {
+            m_lexer.GetNextToken();
+            ExpressionPtr right = ParseUnaryExpression();
+            left = std::make_unique<FMultiplicationExpression>(std::move(left), std::move(right));
+        }
+        else if (m_lexer.PeekNextToken().lexeme == "/")
+        {
+            m_lexer.GetNextToken();
+            ExpressionPtr right = ParseUnaryExpression();
+            left = std::make_unique<FDivisionExpression>(std::move(left), std::move(right));
+        }
+        else if (m_lexer.PeekNextToken().lexeme == "%")
+        {
+            m_lexer.GetNextToken();
+            ExpressionPtr right = ParseUnaryExpression();
+            left = std::make_unique<FModuloExpression>(std::move(left), std::move(right));
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return left;
+}
+
+ExpressionPtr FExpressionParser::ParseUnaryExpression()
+{
+    if (m_lexer.HasNextToken() && m_lexer.PeekNextToken().type == eTokenType::Operator)
+    {
+        if (m_lexer.PeekNextToken().lexeme == "+")
+        {
+            m_lexer.GetNextToken();
+            return ParseUnaryExpression();
+        }
+        else if (m_lexer.PeekNextToken().lexeme == "-")
+        {
+            m_lexer.GetNextToken();
+            ExpressionPtr expr = ParseUnaryExpression();
+            return std::make_unique<FUnaryNegateExpression>(std::move(expr));
+        }
+        else if (m_lexer.PeekNextToken().lexeme == "!")
+        {
+            m_lexer.GetNextToken();
+            ExpressionPtr expr = ParseUnaryExpression();
+            return std::make_unique<FUnaryNotExpression>(std::move(expr));
+        }
+        // else if (m_lexer.PeekNextToken().lexeme == "~")
+        // {
+        //     m_lexer.GetNextToken();
+        //     ExpressionPtr expr = ParseUnaryExpression();
+        //     return std::make_unique<FBinaryNotExpression>(std::move(expr));
+        // }
+        else
+        {
+            return ParsePrimaryExpression();
+        }
+    }
+    else
+    {
+        return ParsePrimaryExpression();
+    }
+}
+
+ExpressionPtr FExpressionParser::ParseAccessExpression()
+{
+    return nullptr;
+}
+
+ExpressionPtr FExpressionParser::ParsePrimaryExpression()
+{
+    SToken token;
+
+    if (m_lexer.HasNextToken())
+    {
+        token = m_lexer.GetNextToken();
+
+        if (token.type == eTokenType::Number)
+        {
+            return std::make_unique<FNumberExpression>(std::stoi(token.lexeme));
+        }
+        else if (token.type == eTokenType::Boolean)
+        {
+            return std::make_unique<FBooleanExpression>(token.lexeme == "true");
+        }
+        else if (token.type == eTokenType::String)
+        {
+            return std::make_unique<FStringExpression>(token.lexeme);
+        }
+        else if (token.type == eTokenType::StringFormatLiteral)
+        {
+            return std::make_unique<FStringFormatExpression>(token.lexeme);
+        }
+        else if (token.type == eTokenType::Identifier)
+        {
+            return std::make_unique<FIdentifierExpression>(token.lexeme);
+        }
+        else if (token.type == eTokenType::Delimiter && token.lexeme == "(")
+        {
+            ExpressionPtr expr = ParseExpression();
+            if (!m_lexer.TryConsumeToken(eTokenType::Delimiter, ")"))
+            {
+                throw FSyntaxException("Expected ')' after expression");
+            }
+            return expr;
+        }
+    }
+
+    throw FSyntaxException("Unexpected end of expression: " + token.lexeme);
 }

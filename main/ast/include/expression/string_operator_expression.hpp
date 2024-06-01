@@ -12,15 +12,11 @@
 /**
  * @brief Represents a string operator expression in the abstract syntax tree.
  *
- * This class inherits from the IExpression interface and represents a expression that
+ * This class inherits from the IExpression interface and represents an expression that
  * performs string operations, such as concatenation or repetition.
  */
 class FStringOperatorExpression final : public IExpression
 {
-    std::string m_operator; // The string operator.
-    ExpressionPtr m_left;   // The left operand.
-    ExpressionPtr m_right;  // The right operand.
-
 public:
 
     /**
@@ -36,7 +32,7 @@ public:
      * @param context The context in which the evaluation occurs.
      * @return The value resulting from the evaluation of the string operation.
      */
-	virtual Value Evaluate(const FContext& context) const override;
+    virtual Value Evaluate(const FContext& context) const override;
 
     /**
      * @brief Returns the string operator.
@@ -55,4 +51,10 @@ public:
      * @return A constant reference to the right operand.
      */
     const ExpressionPtr& GetRight() const;
+
+private:
+
+    std::string m_operator; // The string operator.
+    ExpressionPtr m_left;   // The left operand.
+    ExpressionPtr m_right;  // The right operand.
 };

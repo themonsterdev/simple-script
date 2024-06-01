@@ -3,7 +3,7 @@
  * @brief Declaration of the FTernaryExpression class.
  */
 
- // Ensure this file is included only once
+// Ensure this file is included only once
 #pragma once
 
 // Include the expression interface
@@ -25,7 +25,7 @@ public:
      * @param falseExpr The expression to be evaluated if the condition is false.
      */
     FTernaryExpression(ExpressionPtr condition, ExpressionPtr trueExpr, ExpressionPtr falseExpr);
-    
+
     /**
      * @brief Evaluates the ternary expression based on the provided context.
      * @param context The context used for evaluation.
@@ -33,8 +33,22 @@ public:
      */
     virtual Value Evaluate(const FContext& context) const override;
 
+    /**
+     * @brief Gets the condition expression.
+     * @return The condition expression.
+     */
     const ExpressionPtr& GetCondition() const;
+
+    /**
+     * @brief Gets the true expression.
+     * @return The true expression.
+     */
     const ExpressionPtr& GetTrue() const;
+
+    /**
+     * @brief Gets the false expression.
+     * @return The false expression.
+     */
     const ExpressionPtr& GetFalse() const;
 
 private:

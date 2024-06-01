@@ -1,6 +1,6 @@
 /**
  * @file logical_or_expression.cpp
- * @brief Implementation of the logical OR expression class constructor and member functions.
+ * @brief Implementation of the FLogicalOrExpression class.
  */
 
 // Include header file for this implementation
@@ -20,28 +20,33 @@ Value FLogicalOrExpression::Evaluate(const FContext& context) const
     if (!m_left || !m_right)
     {
         // Throw error if operands are missing
-        throw std::runtime_error("Logical or must have exactly two operands");
+        throw std::runtime_error("Logical OR must have exactly two operands");
     }
 
     // Evaluate the left and right operands
     Value leftValue  = m_left->Evaluate(context);
     Value rightValue = m_right->Evaluate(context);
 
-    // Extract int values from the variants
-    int leftInt, rightInt;
-
-    // Check if both operands are integers
     if (std::holds_alternative<int>(leftValue) && std::holds_alternative<int>(rightValue))
     {
         // Extract integer values from the variants
-        leftInt  = std::get<int>(leftValue);
-        rightInt = std::get<int>(rightValue);
+        int leftInt = std::get<int>(leftValue);
+        int rightInt = std::get<int>(rightValue);
+
+        // Return result of logical OR operation
+        return leftInt || rightInt;
+    }
+    else if (std::holds_alternative<bool>(leftValue) && std::holds_alternative<bool>(rightValue))
+    {
+        // Extract integer values from the variants
+        bool leftInt = std::get<bool>(leftValue);
+        bool rightInt = std::get<bool>(rightValue);
+
+        // Return result of logical OR operation
+        return leftInt || rightInt;
     }
     else // Throw exception for invalid operand types
     {
-        throw std::runtime_error("Invalid operand types for logical or operation");
+        throw std::runtime_error("Invalid operand types for logical OR operation");
     }
-
-    // Return result of logical OR operation
-	return leftInt || rightInt;
 }

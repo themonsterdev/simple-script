@@ -43,74 +43,28 @@ public:
 
 private:
 
-
-
-    /**
-    * @brief Parse a term in an expression.
-    *
-    * @return ExpressionPtr A pointer to the parsed expression object.
-    */
-    ExpressionPtr ParseTerm();
-
-    /**
-     * @brief Parse an arithmetic operator expression.
-     *
-     * @param left The left operand of the expression.
-     * @return ExpressionPtr A pointer to the parsed expression object.
-     */
-    ExpressionPtr ParseArithmeticOperatorExpression(ExpressionPtr left);
-    ExpressionPtr ParseComparisonOperatorExpression(ExpressionPtr left);
-
-    /**
-     * @brief Parse a string operator expression.
-     *
-     * @param left The left operand of the expression.
-     * @return ExpressionPtr A pointer to the parsed expression object.
-     */
-    ExpressionPtr ParseStringOperatorExpression(ExpressionPtr left);
-
-    ExpressionPtr ParseIdentifierOperatorExpression(ExpressionPtr left);
-
     /**
      * @brief Parse a ternary expression.
      *
      * @param condition The condition of the ternary expression.
      * @return ExpressionPtr A pointer to the parsed expression object.
      */
-    ExpressionPtr ParseTernaryExpression(ExpressionPtr condition);
+    ExpressionPtr ParseTernaryExpression();
 
-    /**
-     * @brief Parse an identifier expression.
-     *
-     * @return ExpressionPtr A pointer to the parsed expression object.
-     */
-    ExpressionPtr ParseIdentifier();
+    ExpressionPtr ParseLogicalOrExpression();
+    ExpressionPtr ParseLogicalAndExpression();
 
-    /**
-     * @brief Parse a boolean expression.
-     *
-     * @return ExpressionPtr A pointer to the parsed expression object.
-     */
-    ExpressionPtr ParseBoolean();
+    ExpressionPtr ParseBitwiseOrExpression();
+    ExpressionPtr ParseBitwiseXorExpression();
+    ExpressionPtr ParseBitwiseAndExpression();
 
-    /**
-     * @brief Parse a number expression.
-     *
-     * @return ExpressionPtr A pointer to the parsed expression object.
-     */
-    ExpressionPtr ParseNumber();
+    ExpressionPtr ParseEqualityExpression();
+    ExpressionPtr ParseComparisonExpression();
+    ExpressionPtr ParseShiftExpression();
+    ExpressionPtr ParseAdditiveExpression();
+    ExpressionPtr ParseMultiplicativeExpression();
+    ExpressionPtr ParseUnaryExpression();
+    ExpressionPtr ParseAccessExpression();
 
-    /**
-     * @brief Parse a string expression.
-     *
-     * @return ExpressionPtr A pointer to the parsed expression object.
-     */
-    ExpressionPtr ParseString();
-
-    /**
-     * @brief Parse a factor in an expression.
-     *
-     * @return ExpressionPtr A pointer to the parsed expression object.
-     */
-    ExpressionPtr ParseFactor();
+    ExpressionPtr ParsePrimaryExpression();
 };

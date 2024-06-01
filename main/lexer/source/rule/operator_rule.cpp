@@ -9,7 +9,7 @@
 bool FOperatorRule::Match(const std::string& text, size_t& index, SToken& token) const
 {
     // Define a string containing the operators
-    const std::string operators = "/*-+%=<>^";
+    const std::string operators = "/*-+%=<>^?:!";
 
     // Check if the current character is one of the operators
     if (operators.find(text[index]) != std::string::npos)
@@ -19,6 +19,35 @@ bool FOperatorRule::Match(const std::string& text, size_t& index, SToken& token)
 
         // Set token lexeme to the current character
         token.lexeme = text.substr(index, 1);
+
+        if (token.lexeme == "=" && text.substr(index + 1, 1) == "=")
+        {
+            token.lexeme = "==";
+
+            // Move to the next character
+            index++;
+        }
+        else if (token.lexeme == "!" && text.substr(index + 1, 1) == "=")
+        {
+            token.lexeme = "!=";
+
+            // Move to the next character
+            index++;
+        }
+        else if (token.lexeme == "<" && text.substr(index + 1, 1) == "=")
+        {
+            token.lexeme = "<=";
+
+            // Move to the next character
+            index++;
+        }
+        else if (token.lexeme == ">" && text.substr(index + 1, 1) == "=")
+        {
+            token.lexeme = ">=";
+
+            // Move to the next character
+            index++;
+        }
 
         // Move to the next character
         index++;

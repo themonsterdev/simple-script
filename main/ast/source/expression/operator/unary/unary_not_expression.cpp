@@ -3,25 +3,25 @@
  * @brief Implementation of the unary not expression class.
  */
 
- // Include the header file for the FUnaryNotExpression class
+// Include the header file for the FUnaryNotExpression class
 #include "expression/operator/unary/unary_not_expression.hpp"
 #include <stdexcept>
 
 FUnaryNotExpression::FUnaryNotExpression(ExpressionPtr expression)
-	: m_expression(std::move(expression))
+    : m_expression(std::move(expression))
 {}
 
 Value FUnaryNotExpression::Evaluate(const FContext& context) const
 {
-    // Évaluation de l'expression interne
+    // Evaluate the inner expression
     Value innerValue = m_expression->Evaluate(context);
 
-    // Vérification si la valeur est integer
+    // Check if the value is a boolean
     if (!std::holds_alternative<bool>(innerValue)) {
-        throw std::runtime_error("Operand of unary negate must be integer");
+        throw std::runtime_error("Operand of unary negate must be boolean");
     }
 
-    // Négation logique de la valeur integer
+    // Negate the boolean value
     bool result = !std::get<bool>(innerValue);
 
     return result;

@@ -9,10 +9,10 @@
 // Include base class header
 #include "expression/abstract/compute_expression.hpp"
 
-/**
- * @brief Class for logical AND expressions.
- * This class represents logical AND expressions.
- */
+ /**
+  * @brief Class for logical AND expressions.
+  * This class represents logical AND expressions.
+  */
 class FLogicalAndExpression final : public AComputeExpression
 {
 public:

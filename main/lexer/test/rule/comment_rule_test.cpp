@@ -41,6 +41,25 @@ TEST(FCommentRuleTest, MultiLineCommentMatch)
     ASSERT_EQ(index, 35); // Index should be moved to the end of the comment
 }
 
+// Test case for multi-line comment rule
+TEST(FLexerRulesTest, CommentMultiLine4)
+{
+    FCommentRule rule;
+    SToken token;
+    size_t index = 0;
+    std::string input = "/**\n";
+    input += " * One line\n";
+    input += " * Two line\n";
+    input += " * three line\n";
+    input += " * four line\n";
+    input += " */";
+
+    ASSERT_TRUE(rule.Match(input, index, token));
+    EXPECT_EQ(token.type, eTokenType::Comment);
+    EXPECT_EQ(token.lexeme, input);
+    EXPECT_EQ(index, 58);
+}
+
 TEST(FCommentRuleTest, NoCommentMatch)
 {
     // Initialize test data

@@ -9,12 +9,12 @@
 // Include for std::runtime_error
 #include <stdexcept>
 
-FMultiplyExpression::FMultiplyExpression(ExpressionPtr left, ExpressionPtr right)
+FMultiplicationExpression::FMultiplicationExpression(ExpressionPtr left, ExpressionPtr right)
     // Call base class constructor to initialize operands
     : AComputeExpression(std::move(left), std::move(right))
 {}
 
-Value FMultiplyExpression::Evaluate(const FContext& context) const
+Value FMultiplicationExpression::Evaluate(const FContext& context) const
 {
     // Check if both operands are valid
     if (!m_left || !m_right)
@@ -43,5 +43,5 @@ Value FMultiplyExpression::Evaluate(const FContext& context) const
     }
 
     // Return result of multiplication operation
-	return leftInt * rightInt;
+    return leftInt * rightInt;
 }

@@ -2,72 +2,61 @@
 #include "expression/operator/additive/addition_expression.hpp"
 #include "expression/literal/number_expression.hpp"
 
-class FAdditionExpressionTest : public ::testing::Test
+// Test for addition with integers
+TEST(FAdditionExpressionTest, AdditionWithIntegers)
 {
-protected:
-
-    void SetUp() override
-    {
-        // Initialisation des données communes aux tests, si nécessaire
-    }
-
-    void TearDown() override
-    {
-        // Nettoyage des ressources allouées, si nécessaire
-    }
-};
-
-TEST_F(FAdditionExpressionTest, AdditionWithIntegers)
-{
-    // Création d'une expression d'addition avec des entiers
+    // Create an addition expression with integers
     ExpressionPtr left = std::make_unique<FNumberExpression>(5);
     ExpressionPtr right = std::make_unique<FNumberExpression>(3);
     FAdditionExpression addition(std::move(left), std::move(right));
 
-    // Création d'un contexte vide pour l'évaluation
+    // Create an empty context for evaluation
     FContext context;
 
-    // Vérification que l'évaluation retourne la somme attendue
+    // Check that the evaluation returns the expected sum
     EXPECT_EQ(addition.Evaluate(context), Value(8));
 }
 
-TEST_F(FAdditionExpressionTest, AdditionWithNegativeIntegers)
+// Test for addition with negative integers
+TEST(FAdditionExpressionTest, AdditionWithNegativeIntegers)
 {
-    // Création d'une expression d'addition avec des entiers négatifs
+    // Create an addition expression with negative integers
     ExpressionPtr left = std::make_unique<FNumberExpression>(-5);
     ExpressionPtr right = std::make_unique<FNumberExpression>(-3);
     FAdditionExpression addition(std::move(left), std::move(right));
 
-    // Création d'un contexte vide pour l'évaluation
+    // Create an empty context for evaluation
     FContext context;
 
-    // Vérification que l'évaluation retourne la somme attendue
+    // Check that the evaluation returns the expected sum
     EXPECT_EQ(addition.Evaluate(context), Value(-8));
 }
 
-TEST_F(FAdditionExpressionTest, AdditionWithMixedIntegers)
+// Test for addition with mixed integers
+TEST(FAdditionExpressionTest, AdditionWithMixedIntegers)
 {
-    // Création d'une expression d'addition avec des entiers positifs et négatifs
+    // Create an addition expression with mixed positive and negative integers
     ExpressionPtr left = std::make_unique<FNumberExpression>(5);
     ExpressionPtr right = std::make_unique<FNumberExpression>(-3);
     FAdditionExpression addition(std::move(left), std::move(right));
 
-    // Création d'un contexte vide pour l'évaluation
+    // Create an empty context for evaluation
     FContext context;
 
-    // Vérification que l'évaluation retourne la somme attendue
+    // Check that the evaluation returns the expected sum
     EXPECT_EQ(addition.Evaluate(context), Value(2));
 }
 
-TEST_F(FAdditionExpressionTest, MissingOperands)
+// Test for addition with missing operands
+TEST(FAdditionExpressionTest, MissingOperands)
 {
-    // Création d'une expression d'addition avec un opérande manquant
+    // Create an addition expression with a missing operand
     ExpressionPtr left = std::make_unique<FNumberExpression>(5);
     FAdditionExpression addition(std::move(left), nullptr);
 
-    // Création d'un contexte vide pour l'évaluation
+    // Create an empty context for evaluation
     FContext context;
 
-    // Vérification que l'évaluation lève une exception
+    // Check that the evaluation throws an exception
     EXPECT_THROW(addition.Evaluate(context), std::runtime_error);
 }

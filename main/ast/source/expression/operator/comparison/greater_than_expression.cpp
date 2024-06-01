@@ -1,12 +1,12 @@
 /**
  * @file greater_than_expression.cpp
- * @brief Implementation of the greater-than expression class constructor and member functions.
+ * @brief Implementation of the FGreaterThanExpression class.
  */
 
-// Include header file for this implementation
+// Include header file for the FGreaterThanExpression class
 #include "expression/operator/comparison/greater_than_expression.hpp"
 
-// Include for std::runtime_error
+// Include necessary standard library headers
 #include <stdexcept>
 
 FGreaterThanExpression::FGreaterThanExpression(ExpressionPtr left, ExpressionPtr right)
@@ -27,7 +27,7 @@ Value FGreaterThanExpression::Evaluate(const FContext& context) const
     Value leftValue  = m_left->Evaluate(context);
     Value rightValue = m_right->Evaluate(context);
 
-    // Extract int values from the variants
+    // Extract integer values from the variants
     int leftInt, rightInt;
 
     // Check if both operands are integers
@@ -42,6 +42,6 @@ Value FGreaterThanExpression::Evaluate(const FContext& context) const
         throw std::runtime_error("Invalid operand types for greater than operation");
     }
 
-    // Return result of greater-than comparison
-	return leftInt > rightInt;
+    // Return the result of the greater-than comparison
+    return leftInt > rightInt;
 }

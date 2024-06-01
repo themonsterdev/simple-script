@@ -1,9 +1,9 @@
 /**
- * @file addition_expression.hpp
- * @brief Declaration of the addition expression class.
+ * @file addition_expression.cpp
+ * @brief Implementation of the FAdditionExpression class.
  */
 
-// Include header file for the FAdditionExpression class
+ // Include header file for the FAdditionExpression class
 #include "expression/operator/additive/addition_expression.hpp"
 
 // Include necessary standard library headers
@@ -42,5 +42,5 @@ Value FAdditionExpression::Evaluate(const FContext& context) const
     }
 
     // Return the sum of the left and right integer values
-	return leftInt + rightInt;
+    return leftInt + rightInt;
 }

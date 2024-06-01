@@ -25,7 +25,14 @@ bool FStringRule::Match(const std::string& text, size_t& index, SToken& token) c
             throw FLexicalException("Unterminated string literal");
         }
         index++;
-        token.type   = eTokenType::String;
+        if (quoteChar == '`')
+        {
+            token.type = eTokenType::StringFormatLiteral;
+        }
+        else
+        {
+            token.type = eTokenType::String;
+        }
         token.lexeme = text.substr(startPos + 1, index - startPos - 2);
         return true;
     }

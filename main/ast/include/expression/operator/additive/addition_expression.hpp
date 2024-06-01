@@ -18,7 +18,7 @@ class FAdditionExpression final : public AComputeExpression
 public:
 
     /**
-     * @brief Constructs an FAdditionExpression object with given left and right operands.
+     * @brief Constructs an FAdditionExpression object with the given left and right operands.
      * @param left The left operand.
      * @param right The right operand.
      */

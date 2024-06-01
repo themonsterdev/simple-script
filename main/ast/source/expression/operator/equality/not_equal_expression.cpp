@@ -1,9 +1,9 @@
 /**
  * @file not_equal_expression.cpp
- * @brief Implementation of the not-equal-to expression class constructor and member functions.
+ * @brief Implementation of the FNotEqualExpression class.
  */
 
- // Include header file for this implementation
+// Include header file for this implementation
 #include "expression/operator/equality/not_equal_expression.hpp"
 
 // Include for std::runtime_error
@@ -27,21 +27,17 @@ Value FNotEqualExpression::Evaluate(const FContext& context) const
     Value leftValue  = m_left->Evaluate(context);
     Value rightValue = m_right->Evaluate(context);
 
-    // Extract int values from the variants
-    int leftInt, rightInt;
-
     // Check if both operands are integers
-    if (std::holds_alternative<int>(leftValue) && std::holds_alternative<int>(rightValue))
+    if (!std::holds_alternative<int>(leftValue) || !std::holds_alternative<int>(rightValue))
     {
-        // Extract integer values from the variants
-        leftInt  = std::get<int>(leftValue);
-        rightInt = std::get<int>(rightValue);
-    }
-    else // Throw exception for invalid operand types
-    {
+        // Throw exception for invalid operand types
         throw std::runtime_error("Invalid operand types for not equal operation");
     }
 
+    // Extract integer values from the variants
+    int leftInt  = std::get<int>(leftValue);
+    int rightInt = std::get<int>(rightValue);
+
     // Return result of not-equal-to comparison
-	return leftInt != rightInt;
+    return leftInt != rightInt;
 }

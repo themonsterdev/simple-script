@@ -9,26 +9,8 @@
 #include "rule/operator_rule.hpp"
 #include "rule/string_rule.hpp"
 
-// Test fixture for lexer
-class FLexerTest : public ::testing::Test
-{
-protected:
-
-    // SetUp function will be called before each test
-    void SetUp() override
-    {
-        // Initialize common resources for tests
-    }
-
-    // TearDown function will be called after each test
-    void TearDown() override
-    {
-        // Clean up common resources after tests
-    }
-};
-
 // Test case for lexer
-TEST_F(FLexerTest, LexerTest)
+TEST(FLexerTest, LexerTest)
 {
     std::string input;
     input += "var n = 1 + 2 * 3\n";
@@ -90,7 +72,7 @@ TEST_F(FLexerTest, LexerTest)
 }
 
 // Test case for lexer with declaration list
-TEST_F(FLexerTest, LexerDeclarationListTest)
+TEST(FLexerTest, LexerDeclarationListTest)
 {
     std::string input("var x, y = 1, z = 2");
     FLexer lexer(input);
@@ -131,7 +113,7 @@ TEST_F(FLexerTest, LexerDeclarationListTest)
     EXPECT_EQ(tokens[9].lexeme, "2");
 }
 
-TEST_F(FLexerTest, LexerNotEndTokenTest)
+TEST(FLexerTest, LexerNotEndTokenTest)
 {
     std::string input("var x = 0");
     FLexer lexer(input);
@@ -159,7 +141,7 @@ TEST_F(FLexerTest, LexerNotEndTokenTest)
     EXPECT_EQ(token.lexeme, "");
 }
 
-TEST_F(FLexerTest, LexerEndTokenTest)
+TEST(FLexerTest, LexerEndTokenTest)
 {
     std::string input("var x = 0\n");
     FLexer lexer(input);

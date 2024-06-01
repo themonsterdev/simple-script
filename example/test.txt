@@ -1,16 +1,29 @@
-# Déclaration de deux variables
-print "Déclaration de deux variables"
-var number = 10
-var message = ""
+# Variable declaration
+var total = 0
+const max_value = 10
 
-# Vérification si le nombre est pair ou impair
-print "Vérification si le nombre est pair ou impair"
-if number % 2 == 0 then
-    message = "Le nombre est pair."
-else
-    message = "Le nombre est impair."
+# Initial values display
+print `Initial total: ${total}`
+print `Max value: ${max_value}`
+
+# Calculating the sum of even numbers up to max_value
+print "Calculating sum of even numbers up to max_value"
+var i = 0
+do
+    if i % 2 == 0 then
+        total = total + i
+    end
+    i = i + 1
+while i <= max_value
+
+print `Sum of even numbers up to max_value: ${total}`
+
+# Displaying odd numbers up to max_value
+print "Displaying odd numbers up to max_value"
+var j = 1
+while j <= max_value then
+    print j
+    j = j + 2
 end
 
-# Affichage du résultat
-print "Affichage du résultat"
-print message
+print "End of the program"

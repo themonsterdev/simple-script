@@ -7,7 +7,7 @@
 
 // Expression includes
 #include "expression/operator/additive/addition_expression.hpp"
-#include "expression/operator/additive/subtract_expression.hpp"
+#include "expression/operator/additive/subtraction_expression.hpp"
 #include "expression/operator/multiplicative/multiply_expression.hpp"
 #include "expression/identifier_expression.hpp"
 #include "expression/literal/number_expression.hpp"
@@ -64,7 +64,7 @@ TEST_F(FParserArithmeticOperatorExpressionTest, ParseSimpleSubtract)
     const auto& expression = parser.ParseExpression();
     ASSERT_NE(expression, nullptr);
 
-    const auto& addExpr = dynamic_cast<FSubtractExpression*>(expression.get());
+    const auto& addExpr = dynamic_cast<FSubtractionExpression*>(expression.get());
     ASSERT_NE(addExpr, nullptr);
 
     auto leftExpr = dynamic_cast<FNumberExpression*>(addExpr->GetLeft().get());
@@ -86,7 +86,7 @@ TEST_F(FParserArithmeticOperatorExpressionTest, ParseSimpleMultiply)
     const auto& expression = parser.ParseExpression();
     ASSERT_NE(expression, nullptr);
 
-    const auto& addExpr = dynamic_cast<FMultiplyExpression*>(expression.get());
+    const auto& addExpr = dynamic_cast<FMultiplicationExpression*>(expression.get());
     ASSERT_NE(addExpr, nullptr);
 
     auto leftExpr = dynamic_cast<FNumberExpression*>(addExpr->GetLeft().get());
@@ -112,7 +112,7 @@ TEST_F(FParserArithmeticOperatorExpressionTest, ParseNestedAdditionMultiplicatio
     ASSERT_NE(addExpr, nullptr);
 
     auto leftExpr = dynamic_cast<FNumberExpression*>(addExpr->GetLeft().get());
-    auto rightExpr = dynamic_cast<FMultiplyExpression*>(addExpr->GetRight().get());
+    auto rightExpr = dynamic_cast<FMultiplicationExpression*>(addExpr->GetRight().get());
     ASSERT_NE(leftExpr, nullptr);
     ASSERT_NE(rightExpr, nullptr);
 

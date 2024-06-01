@@ -28,10 +28,11 @@ enum class eTokenType
 	Delimiter,   // Delimiter token
 
 	// Literals
-	Number,      // Number literal token
-	Float,       // Float literal token
-	String,      // String literal token
-	Boolean,     // Boolean literal token
+	Number,					// Number literal token
+	Float,					// Float literal token
+	String,					// String literal token
+	StringFormatLiteral,	// String format literal token
+	Boolean,				// Boolean literal token
 
 	// Comments
 	Comment,     // Comment token

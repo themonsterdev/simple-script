@@ -1,12 +1,12 @@
 /**
  * @file less_than_expression.cpp
- * @brief Implementation of the less-than expression class constructor and member functions.
+ * @brief Implementation of the FLessThanExpression class.
  */
 
-// Include header file for this implementation
+// Include header file for the FLessThanExpression class
 #include "expression/operator/comparison/less_than_expression.hpp"
 
-// Include for std::runtime_error
+// Include necessary standard library headers
 #include <stdexcept>
 
 FLessThanExpression::FLessThanExpression(ExpressionPtr left, ExpressionPtr right)
@@ -27,7 +27,7 @@ Value FLessThanExpression::Evaluate(const FContext& context) const
     Value leftValue  = m_left->Evaluate(context);
     Value rightValue = m_right->Evaluate(context);
 
-    // Extract int values from the variants
+    // Extract integer values from the variants
     int leftInt, rightInt;
 
     // Check if both operands are integers
@@ -42,6 +42,6 @@ Value FLessThanExpression::Evaluate(const FContext& context) const
         throw std::runtime_error("Invalid operand types for less than operation");
     }
 
-    // Return result of less-than comparison
-	return leftInt < rightInt;
+    // Return the result of the less-than comparison
+    return leftInt < rightInt;
 }

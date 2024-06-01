@@ -2,32 +2,32 @@
 #include "expression/operator/multiplicative/multiply_expression.hpp"
 #include "expression/literal/number_expression.hpp"
 
-class MultiplyExpressionTest : public ::testing::Test {
-protected:
-    void SetUp() override {
-        // Initialisation des données communes aux tests, si nécessaire
-    }
-
-    void TearDown() override {
-        // Nettoyage des ressources allouées, si nécessaire
-    }
-};
-
-TEST_F(MultiplyExpressionTest, MultiplyWithIntegers) {
+TEST(FMultiplyExpressionTest, MultiplyWithIntegers)
+{
+    // Create number expressions for multiplication
     ExpressionPtr left = std::make_unique<FNumberExpression>(6);
     ExpressionPtr right = std::make_unique<FNumberExpression>(3);
-    FMultiplyExpression multiply(std::move(left), std::move(right));
+    // Create a multiplication expression
+    FMultiplicationExpression multiply(std::move(left), std::move(right));
 
+    // Create an execution context
     FContext context;
+    // Evaluate the expression
     Value result = multiply.Evaluate(context);
+    // Verify that the result is an integer value
     EXPECT_TRUE(std::holds_alternative<int>(result));
+    // Verify that the result is 18 (6 * 3)
     EXPECT_EQ(std::get<int>(result), 18);
 }
 
-TEST_F(MultiplyExpressionTest, MissingOperands) {
+TEST(FMultiplyExpressionTest, MissingOperands)
+{
+    // Create a multiplication expression with one operand missing
     ExpressionPtr left = std::make_unique<FNumberExpression>(6);
-    FMultiplyExpression multiply(std::move(left), nullptr);
+    FMultiplicationExpression multiply(std::move(left), nullptr);
 
+    // Create an execution context
     FContext context;
+    // Verify that evaluating the expression throws a runtime_error
     EXPECT_THROW(multiply.Evaluate(context), std::runtime_error);
 }

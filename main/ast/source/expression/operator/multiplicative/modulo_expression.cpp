@@ -50,5 +50,5 @@ Value FModuloExpression::Evaluate(const FContext& context) const
     }
 
     // Return result of modulo operation
-	return leftInt % rightInt;
+    return leftInt % rightInt;
 }

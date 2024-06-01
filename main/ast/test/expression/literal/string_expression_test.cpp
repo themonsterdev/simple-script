@@ -1,26 +1,39 @@
 #include <gtest/gtest.h>
 #include "expression/literal/string_expression.hpp"
 
-TEST(StringExpressionTest, GetValue)
+// Test for the GetValue method of FStringExpression
+TEST(FStringExpressionTest, GetValue)
 {
+    // Create a string expression with the value "Hello, world!"
     FStringExpression expr("Hello, world!");
+    // Ensure that the GetValue method returns "Hello, world!"
     EXPECT_EQ(expr.GetValue(), "Hello, world!");
 }
 
-TEST(StringExpressionTest, SetValue)
+// Test for the SetValue method of FStringExpression
+TEST(FStringExpressionTest, SetValue)
 {
+    // Create a string expression with the initial value "Hello, world!"
     FStringExpression expr("Hello, world!");
+    // Ensure that the GetValue method returns "Hello, world!"
     EXPECT_EQ(expr.GetValue(), "Hello, world!");
 
+    // Set the value of the expression to "Goodbye, world!"
     expr.SetValue("Goodbye, world!");
+    // Ensure that the GetValue method now returns "Goodbye, world!"
     EXPECT_EQ(expr.GetValue(), "Goodbye, world!");
 }
 
-TEST(StringExpressionTest, Evaluate)
+// Test for the Evaluate method of FStringExpression
+TEST(FStringExpressionTest, Evaluate)
 {
+    // Create a context
     FContext context;
+    // Create a string expression with the value "Hello, world!"
     FStringExpression expr("Hello, world!");
+    // Evaluate the expression in the context
     Value result = expr.Evaluate(context);
+    // Ensure that the result is a string value and it's "Hello, world!"
     ASSERT_TRUE(std::holds_alternative<std::string>(result));
     EXPECT_EQ(std::get<std::string>(result), "Hello, world!");
 }

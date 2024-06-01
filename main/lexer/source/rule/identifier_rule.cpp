@@ -9,14 +9,21 @@
 // Define the list of keywords
 static constexpr auto KEYWORDS =
 {
-    // Statement
-    "var",
-    "const",
-    "print",
-
     // Conditional
     "if",
     "else",
+
+    // Declaration
+    "var",
+    "const",
+
+    // Loop
+    "do",
+    "for",
+    "while",
+
+    // Print
+    "print",
 
     // Scope
     "then",

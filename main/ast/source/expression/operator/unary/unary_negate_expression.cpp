@@ -8,20 +8,21 @@
 #include <stdexcept>
 
 FUnaryNegateExpression::FUnaryNegateExpression(ExpressionPtr expression)
-	: m_expression(std::move(expression))
+    : m_expression(std::move(expression))
 {}
 
 Value FUnaryNegateExpression::Evaluate(const FContext& context) const
 {
-    // Évaluation de l'expression interne
+    // Evaluate the inner expression
     Value innerValue = m_expression->Evaluate(context);
 
-    // Vérification si la valeur est integer
-    if (!std::holds_alternative<int>(innerValue)) {
+    // Check if the value is an integer
+    if (!std::holds_alternative<int>(innerValue))
+    {
         throw std::runtime_error("Operand of unary negate must be integer");
     }
 
-    // Négation logique de la valeur integer
+    // Negate the integer value
     int result = -std::get<int>(innerValue);
 
     return result;
