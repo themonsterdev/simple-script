@@ -10,14 +10,14 @@ of symbols and the rules for forming expressions and declarations in the languag
 
 ```
 Statement
-         ::= BlockStatement
-           | IfStatement
-           | AssignmentStatement
-           | ConstDeclarationStatement
-           | VarDeclarationStatement
-           | DoWhileLoopStatement
-           | WhileLoopStatement
-           | PrintStatement
+    ::= BlockStatement
+    | IfStatement
+    | AssignmentStatement
+    | ConstDeclarationStatement
+    | VarDeclarationStatement
+    | DoWhileLoopStatement
+    | WhileLoopStatement
+    | PrintStatement
 ```
 
 referenced by:
@@ -30,7 +30,7 @@ referenced by:
 
 ```
 BlockStatement
-         ::= Statement+
+    ::= Statement+
 ```
 
 referenced by:
@@ -46,7 +46,7 @@ referenced by:
 
 ```
 IfStatement
-         ::= 'if' Expression 'then' BlockStatement ( 'else' 'if' Expression 'then' BlockStatement )+ ( 'else' BlockStatement )? 'end'
+    ::= 'if' Expression 'then' BlockStatement ( 'else' 'if' Expression 'then' BlockStatement )+ ( 'else' BlockStatement )? 'end'
 ```
 
 referenced by:
@@ -59,7 +59,7 @@ referenced by:
 
 ```
 AssignmentStatement
-         ::= Identifier '=' Expression
+    ::= Identifier '=' Expression
 ```
 
 referenced by:
@@ -72,7 +72,7 @@ referenced by:
 
 ```
 ConstDeclarationStatement
-         ::= 'const' VariableDeclaration ( ',' VariableDeclaration )*
+    ::= 'const' VariableDeclaration ( ',' VariableDeclaration )*
 ```
 
 referenced by:
@@ -85,7 +85,7 @@ referenced by:
 
 ```
 VarDeclarationStatement
-         ::= 'var' VariableDeclaration ( ',' VariableDeclaration )*
+    ::= 'var' VariableDeclaration ( ',' VariableDeclaration )*
 ```
 
 referenced by:
@@ -98,7 +98,7 @@ referenced by:
 
 ```
 VariableDeclaration
-         ::= Identifier ( '=' Expression )?
+    ::= Identifier ( '=' Expression )?
 ```
 
 referenced by:
@@ -112,7 +112,7 @@ referenced by:
 
 ```
 DoWhileLoopStatement
-         ::= 'do' BlockStatement 'while' Expression
+    ::= 'do' BlockStatement 'while' Expression
 ```
 
 referenced by:
@@ -125,7 +125,7 @@ referenced by:
 
 ```
 WhileLoopStatement
-         ::= 'while' Expression 'then' BlockStatement 'end'
+    ::= 'while' Expression 'then' BlockStatement 'end'
 ```
 
 referenced by:
@@ -138,7 +138,7 @@ referenced by:
 
 ```
 PrintStatement
-         ::= 'print' '(' Expression ')'
+    ::= 'print' '(' Expression ')'
 ```
 
 referenced by:
@@ -151,19 +151,19 @@ referenced by:
 
 ```
 Expression
-         ::= TernaryExpression
-           | LogicalOrExpression
-           | LogicalAndExpression
-           | BitwiseOrExpression
-           | BitwiseXorExpression
-           | BitwiseAndExpression
-           | EqualityExpression
-           | ComparisonExpression
-           | ShiftExpression
-           | AdditiveExpression
-           | MultiplicativeExpression
-           | UnaryExpression
-```
+    ::= TernaryExpression
+    | LogicalOrExpression
+    | LogicalAndExpression
+    | BitwiseOrExpression
+    | BitwiseXorExpression
+    | BitwiseAndExpression
+    | EqualityExpression
+    | ComparisonExpression
+    | ShiftExpression
+    | AdditiveExpression
+    | MultiplicativeExpression
+    | UnaryExpression
+    ```
 
 referenced by:
 
@@ -193,7 +193,7 @@ referenced by:
 
 ```
 TernaryExpression
-         ::= Expression ( '?' Expression ':' Expression )*
+    ::= Expression ( '?' Expression ':' Expression )*
 ```
 
 referenced by:
@@ -206,7 +206,7 @@ referenced by:
 
 ```
 LogicalOrExpression
-         ::= Expression ( '||' Expression )*
+    ::= Expression ( '||' Expression )*
 ```
 
 referenced by:
@@ -219,7 +219,7 @@ referenced by:
 
 ```
 LogicalAndExpression
-         ::= Expression ( '&&' Expression )*
+    ::= Expression ( '&&' Expression )*
 ```
 
 referenced by:
@@ -232,7 +232,7 @@ referenced by:
 
 ```
 BitwiseOrExpression
-         ::= Expression ( '|' Expression )*
+    ::= Expression ( '|' Expression )*
 ```
 
 referenced by:
@@ -245,7 +245,7 @@ referenced by:
 
 ```
 BitwiseXorExpression
-         ::= Expression ( '^' Expression )*
+    ::= Expression ( '^' Expression )*
 ```
 
 referenced by:
@@ -258,7 +258,7 @@ referenced by:
 
 ```
 BitwiseAndExpression
-         ::= Expression ( '&' Expression )*
+    ::= Expression ( '&' Expression )*
 ```
 
 referenced by:
@@ -271,7 +271,7 @@ referenced by:
 
 ```
 EqualityExpression
-         ::= Expression ( ( '==' | '!=' ) Expression )*
+    ::= Expression ( ( '==' | '!=' ) Expression )*
 ```
 
 referenced by:
@@ -284,7 +284,7 @@ referenced by:
 
 ```
 ComparisonExpression
-         ::= Expression ( ( '<' | '<=' | '>' | '>=' | '<=>' ) Expression )*
+    ::= Expression ( ( '<' | '<=' | '>' | '>=' | '<=>' ) Expression )*
 ```
 
 referenced by:
@@ -297,7 +297,7 @@ referenced by:
 
 ```
 ShiftExpression
-         ::= Expression ( ( '<<' | '>>' ) Expression )*
+    ::= Expression ( ( '<<' | '>>' ) Expression )*
 ```
 
 referenced by:
@@ -310,7 +310,7 @@ referenced by:
 
 ```
 AdditiveExpression
-         ::= Expression ( ( '+' | '-' ) Expression )*
+    ::= Expression ( ( '+' | '-' ) Expression )*
 ```
 
 referenced by:
@@ -323,7 +323,7 @@ referenced by:
 
 ```
 MultiplicativeExpression
-         ::= Expression ( ( '*' | '/' | '%' ) Expression )*
+    ::= Expression ( ( '*' | '/' | '%' ) Expression )*
 ```
 
 referenced by:
@@ -336,8 +336,8 @@ referenced by:
 
 ```
 UnaryExpression
-         ::= ( '+' | '-' | '!' ) Expression
-           | PrimaryExpression
+    ::= ( '+' | '-' | '!' ) Expression
+    | PrimaryExpression
 ```
 
 referenced by:
@@ -350,12 +350,12 @@ referenced by:
 
 ```
 PrimaryExpression
-         ::= Identifier
-           | Number
-           | String
-           | StringFormat
-           | Boolean
-           | '(' Expression ')'
+    ::= Identifier
+    | Number
+    | String
+    | StringFormat
+    | Boolean
+    | '(' Expression ')'
 ```
 
 referenced by:
@@ -368,7 +368,7 @@ referenced by:
 
 ```
 Identifier
-         ::= [a-zA-Z_] [a-zA-Z0-9_]*
+    ::= [a-zA-Z_] [a-zA-Z0-9_]*
 ```
 
 referenced by:
@@ -382,7 +382,8 @@ referenced by:
 ![Number](diagram/Number.svg)
 
 ```
-Number   ::= [0-9]+
+Number
+    ::= [0-9]+
 ```
 
 referenced by:
@@ -394,8 +395,9 @@ referenced by:
 ![String](diagram/String.svg)
 
 ```
-String   ::= '"' [^"]* '"'
-           | "'" [^']* "'"
+String
+    ::= '"' [^"]* '"'
+    | "'" [^']* "'"
 ```
 
 referenced by:
@@ -408,7 +410,7 @@ referenced by:
 
 ```
 StringFormat
-         ::= '`' [^"]* '`'
+    ::= '`' [^"]* '`'
 ```
 
 referenced by:
@@ -420,8 +422,9 @@ referenced by:
 ![Boolean](diagram/Boolean.svg)
 
 ```
-Boolean  ::= 'false'
-           | 'true'
+Boolean 
+    ::= 'false'
+    | 'true'
 ```
 
 referenced by:
@@ -434,8 +437,8 @@ referenced by:
 
 ```
 Whitespace
-         ::= Space
-           | Comment
+    ::= Space
+    | Comment
 ```
 
 **Space:**
@@ -443,10 +446,11 @@ Whitespace
 ![Space](diagram/Space.svg)
 
 ```
-Space    ::= '\t'
-           | '\n'
-           | '\r'
-           | ' '
+Space
+    ::= '\t'
+    | '\n'
+    | '\r'
+    | ' '
 ```
 
 referenced by:
@@ -458,8 +462,9 @@ referenced by:
 ![Comment](diagram/Comment.svg)
 
 ```
-Comment  ::= CommentSingleLine
-           | CommentMultiLine
+Comment
+    ::= CommentSingleLine
+    | CommentMultiLine
 ```
 
 referenced by:
@@ -472,7 +477,7 @@ referenced by:
 
 ```
 CommentSingleLine
-         ::= '//' [^\n]*
+    ::= '//' [^\n]*
 ```
 
 referenced by:
