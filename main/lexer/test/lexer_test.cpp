@@ -88,7 +88,7 @@ TEST(FLexerTest, LexerDeclarationListTest)
     EXPECT_EQ(tokens[1].type, eTokenType::Identifier);
     EXPECT_EQ(tokens[1].lexeme, "x");
 
-    EXPECT_EQ(tokens[2].type, eTokenType::Punctuation);
+    EXPECT_EQ(tokens[2].type, eTokenType::Delimiter);
     EXPECT_EQ(tokens[2].lexeme, ",");
 
     EXPECT_EQ(tokens[3].type, eTokenType::Identifier);
@@ -100,7 +100,7 @@ TEST(FLexerTest, LexerDeclarationListTest)
     EXPECT_EQ(tokens[5].type, eTokenType::Number);
     EXPECT_EQ(tokens[5].lexeme, "1");
 
-    EXPECT_EQ(tokens[6].type, eTokenType::Punctuation);
+    EXPECT_EQ(tokens[6].type, eTokenType::Delimiter);
     EXPECT_EQ(tokens[6].lexeme, ",");
 
     EXPECT_EQ(tokens[7].type, eTokenType::Identifier);

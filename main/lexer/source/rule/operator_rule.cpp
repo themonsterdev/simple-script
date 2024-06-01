@@ -9,7 +9,7 @@
 bool FOperatorRule::Match(const std::string& text, size_t& index, SToken& token) const
 {
     // Define a string containing the operators
-    const std::string operators = "/*-+%=<>^?:!";
+    const std::string operators = "/*-+%=<>^?!";
 
     // Check if the current character is one of the operators
     if (operators.find(text[index]) != std::string::npos)

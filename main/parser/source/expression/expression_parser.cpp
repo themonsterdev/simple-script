@@ -66,7 +66,7 @@ ExpressionPtr FExpressionParser::ParseTernaryExpression()
 
         ExpressionPtr trueExpr = ParseExpression();
 
-        if (!m_lexer.TryConsumeToken(eTokenType::Operator, ":")) // delimiter
+        if (!m_lexer.TryConsumeToken(eTokenType::Delimiter, ":")) // delimiter
         {
             throw FSyntaxException("Expected ':' in ternary expression after '?'");
         }

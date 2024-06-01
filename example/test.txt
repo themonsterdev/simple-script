@@ -10,7 +10,7 @@ print `Max value: ${max_value}`
 print "Calculating sum of even numbers up to max_value"
 var i = 0
 do
-    if i % 2 == 0 then
+    if (i % 2) == 0 then
         total = total + i
     end
     i = i + 1
