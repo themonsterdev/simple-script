@@ -19,13 +19,13 @@ rules for evaluating expressions.
 | 8          | ==, !=           | Equality operators                                        |                 |
 | 9          | a&b              | Bitwise AND                                               |                 |
 | 10         | ^                | Bitwise XOR (exclusive or)                                |                 |
-| 11         | |                | Bitwise OR (inclusive or)                                 |                 |
+| 11         | \|               | Bitwise OR (inclusive or)                                 |                 |
 | 12         | &&               | Logical AND                                               |                 |
-| 13         | ||               | Logical OR                                                |                 |
+| 13         | \|\|             | Logical OR                                                |                 |
 | 14         | a?b:c            | Ternary conditional                                       | Right-to-left ← |
 |            | =                | Direct assignment                                         |                 |
 |            | +=, -=           | Compound assignment by sum, difference                    |                 |
 |            | *=, /=, %=       | Compound assignment by product, quotient, and remainder   |                 |
 |            | <<=, >>=         | Compound assignment by bitwise left shift and right shift |                 |
-|            | &=, ^=, \|=      | Compound assignment by bitwise AND, XOR, and OR           |                 |
+|            | &=, ^=, \\|=     | Compound assignment by bitwise AND, XOR, and OR           |                 |
 | 15         | ,                | Comma                                                     | Left-to-right → |
