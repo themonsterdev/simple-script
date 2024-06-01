@@ -10,36 +10,48 @@ of symbols and the rules for forming expressions and declarations in the languag
 
 ```
 Statement
-    ::= VarDeclarationStatement
-    | AssignmentStatement
-    | PrintStatement
+         ::= BlockStatement
+           | IfStatement
+           | AssignmentStatement
+           | ConstDeclarationStatement
+           | VarDeclarationStatement
+           | DoWhileLoopStatement
+           | WhileLoopStatement
+           | PrintStatement
 ```
 
-**VarDeclarationStatement:**
+referenced by:
 
-![VarDeclarationStatement](diagram/VarDeclarationStatement.svg)
+* BlockStatement
+
+**BlockStatement:**
+
+![BlockStatement](diagram/BlockStatement.svg)
 
 ```
-VarDeclarationStatement
-    ::= 'var' VarDeclaration ( ',' VarDeclaration )*
+BlockStatement
+         ::= Statement+
+```
+
+referenced by:
+
+* DoWhileLoopStatement
+* IfStatement
+* Statement
+* WhileLoopStatement
+
+**IfStatement:**
+
+![IfStatement](diagram/IfStatement.svg)
+
+```
+IfStatement
+         ::= 'if' Expression 'then' BlockStatement ( 'else' 'if' Expression 'then' BlockStatement )+ ( 'else' BlockStatement )? 'end'
 ```
 
 referenced by:
 
 * Statement
-
-**VarDeclaration:**
-
-![VarDeclaration](diagram/VarDeclaration.svg)
-
-```
-VarDeclaration
-    ::= Identifier ( '=' ExpressionList )?
-```
-
-referenced by:
-
-* VarDeclarationStatement
 
 **AssignmentStatement:**
 
@@ -47,7 +59,73 @@ referenced by:
 
 ```
 AssignmentStatement
-    ::= Identifier '=' ExpressionList
+         ::= Identifier '=' Expression
+```
+
+referenced by:
+
+* Statement
+
+**ConstDeclarationStatement:**
+
+![ConstDeclarationStatement](diagram/ConstDeclarationStatement.svg)
+
+```
+ConstDeclarationStatement
+         ::= 'const' VariableDeclaration ( ',' VariableDeclaration )*
+```
+
+referenced by:
+
+* Statement
+
+**VarDeclarationStatement:**
+
+![VarDeclarationStatement](diagram/VarDeclarationStatement.svg)
+
+```
+VarDeclarationStatement
+         ::= 'var' VariableDeclaration ( ',' VariableDeclaration )*
+```
+
+referenced by:
+
+* Statement
+
+**VariableDeclaration:**
+
+![VariableDeclaration](diagram/VariableDeclaration.svg)
+
+```
+VariableDeclaration
+         ::= Identifier ( '=' Expression )?
+```
+
+referenced by:
+
+* ConstDeclarationStatement
+* VarDeclarationStatement
+
+**DoWhileLoopStatement:**
+
+![DoWhileLoopStatement](diagram/DoWhileLoopStatement.svg)
+
+```
+DoWhileLoopStatement
+         ::= 'do' BlockStatement 'while' Expression
+```
+
+referenced by:
+
+* Statement
+
+**WhileLoopStatement:**
+
+![WhileLoopStatement](diagram/WhileLoopStatement.svg)
+
+```
+WhileLoopStatement
+         ::= 'while' Expression 'then' BlockStatement 'end'
 ```
 
 referenced by:
@@ -60,73 +138,54 @@ referenced by:
 
 ```
 PrintStatement
-    ::= 'print' ExpressionList
+         ::= 'print' '(' Expression ')'
 ```
 
 referenced by:
 
 * Statement
 
-**ExpressionList:**
+**Expression:**
 
-![ExpressionList](diagram/ExpressionList.svg)
+![Expression](diagram/Expression.svg)
 
 ```
-ExpressionList
-    ::= Identifier
-    | Number
-    | String
-    | Boolean
-    | ArithmeticOperatorExpression
-    | ComparisonOperatorExpression
-    | StringOperatorExpression
-    | TernaryExpression
+Expression
+         ::= TernaryExpression
+           | LogicalOrExpression
+           | LogicalAndExpression
+           | BitwiseOrExpression
+           | BitwiseXorExpression
+           | BitwiseAndExpression
+           | EqualityExpression
+           | ComparisonExpression
+           | ShiftExpression
+           | AdditiveExpression
+           | MultiplicativeExpression
+           | UnaryExpression
 ```
 
 referenced by:
 
+* AdditiveExpression
 * AssignmentStatement
+* BitwiseAndExpression
+* BitwiseOrExpression
+* BitwiseXorExpression
+* ComparisonExpression
+* DoWhileLoopStatement
+* EqualityExpression
+* IfStatement
+* LogicalAndExpression
+* LogicalOrExpression
+* MultiplicativeExpression
+* PrimaryExpression
 * PrintStatement
-* VarDeclaration
-
-**ArithmeticOperatorExpression:**
-
-![ArithmeticOperatorExpression](diagram/ArithmeticOperatorExpression.svg)
-
-```
-ArithmeticOperatorExpression
-    ::= ( Number | Identifier ) ( '*' | '+' | '-' | '/' | '%' ) ( Number | Identifier )
-```
-
-referenced by:
-
-* ExpressionList
-
-**ComparisonOperatorExpression:**
-
-![ComparisonOperatorExpression](diagram/ComparisonOperatorExpression.svg)
-
-```
-ComparisonOperatorExpression
-    ::= ( String | Number | Boolean | Identifier ) ( '==' | '>' | '>=' | '<' | '<=' | '!=' ) ( String | Number | Boolean | Identifier )
-```
-
-referenced by:
-
-* ExpressionList
-
-**StringOperatorExpression:**
-
-![StringOperatorExpression](diagram/StringOperatorExpression.svg)
-
-```
-StringOperatorExpression
-    ::= ( String | Identifier ) ( '+' | '*' ) ( String | Identifier )
-```
-
-referenced by:
-
-* ExpressionList
+* ShiftExpression
+* TernaryExpression
+* UnaryExpression
+* VariableDeclaration
+* WhileLoopStatement
 
 **TernaryExpression:**
 
@@ -134,14 +193,174 @@ referenced by:
 
 ```
 TernaryExpression
-    ::= Expression '?' Expression ':' Expression
-    | Expression '?' TernaryExpression ':' TernaryExpression
+         ::= Expression ( '?' Expression ':' Expression )*
 ```
 
 referenced by:
 
-* ExpressionList
-* TernaryExpression
+* Expression
+
+**LogicalOrExpression:**
+
+![LogicalOrExpression](diagram/LogicalOrExpression.svg)
+
+```
+LogicalOrExpression
+         ::= Expression ( '||' Expression )*
+```
+
+referenced by:
+
+* Expression
+
+**LogicalAndExpression:**
+
+![LogicalAndExpression](diagram/LogicalAndExpression.svg)
+
+```
+LogicalAndExpression
+         ::= Expression ( '&&' Expression )*
+```
+
+referenced by:
+
+* Expression
+
+**BitwiseOrExpression:**
+
+![BitwiseOrExpression](diagram/BitwiseOrExpression.svg)
+
+```
+BitwiseOrExpression
+         ::= Expression ( '|' Expression )*
+```
+
+referenced by:
+
+* Expression
+
+**BitwiseXorExpression:**
+
+![BitwiseXorExpression](diagram/BitwiseXorExpression.svg)
+
+```
+BitwiseXorExpression
+         ::= Expression ( '^' Expression )*
+```
+
+referenced by:
+
+* Expression
+
+**BitwiseAndExpression:**
+
+![BitwiseAndExpression](diagram/BitwiseAndExpression.svg)
+
+```
+BitwiseAndExpression
+         ::= Expression ( '&' Expression )*
+```
+
+referenced by:
+
+* Expression
+
+**EqualityExpression:**
+
+![EqualityExpression](diagram/EqualityExpression.svg)
+
+```
+EqualityExpression
+         ::= Expression ( ( '==' | '!=' ) Expression )*
+```
+
+referenced by:
+
+* Expression
+
+**ComparisonExpression:**
+
+![ComparisonExpression](diagram/ComparisonExpression.svg)
+
+```
+ComparisonExpression
+         ::= Expression ( ( '<' | '<=' | '>' | '>=' | '<=>' ) Expression )*
+```
+
+referenced by:
+
+* Expression
+
+**ShiftExpression:**
+
+![ShiftExpression](diagram/ShiftExpression.svg)
+
+```
+ShiftExpression
+         ::= Expression ( ( '<<' | '>>' ) Expression )*
+```
+
+referenced by:
+
+* Expression
+
+**AdditiveExpression:**
+
+![AdditiveExpression](diagram/AdditiveExpression.svg)
+
+```
+AdditiveExpression
+         ::= Expression ( ( '+' | '-' ) Expression )*
+```
+
+referenced by:
+
+* Expression
+
+**MultiplicativeExpression:**
+
+![MultiplicativeExpression](diagram/MultiplicativeExpression.svg)
+
+```
+MultiplicativeExpression
+         ::= Expression ( ( '*' | '/' | '%' ) Expression )*
+```
+
+referenced by:
+
+* Expression
+
+**UnaryExpression:**
+
+![UnaryExpression](diagram/UnaryExpression.svg)
+
+```
+UnaryExpression
+         ::= ( '+' | '-' | '!' ) Expression
+           | PrimaryExpression
+```
+
+referenced by:
+
+* Expression
+
+**PrimaryExpression:**
+
+![PrimaryExpression](diagram/PrimaryExpression.svg)
+
+```
+PrimaryExpression
+         ::= Identifier
+           | Number
+           | String
+           | StringFormat
+           | Boolean
+           | '(' Expression ')'
+```
+
+referenced by:
+
+* UnaryExpression
 
 **Identifier:**
 
@@ -149,63 +368,65 @@ referenced by:
 
 ```
 Identifier
-    ::= [a-zA-Z_] [a-zA-Z0-9_]*
+         ::= [a-zA-Z_] [a-zA-Z0-9_]*
 ```
 
 referenced by:
 
-* ArithmeticOperatorExpression
 * AssignmentStatement
-* ComparisonOperatorExpression
-* ExpressionList
-* StringOperatorExpression
-* VarDeclaration
+* PrimaryExpression
+* VariableDeclaration
 
 **Number:**
 
 ![Number](diagram/Number.svg)
 
 ```
-Number
-    ::= [0-9]+
+Number   ::= [0-9]+
 ```
 
 referenced by:
 
-* ArithmeticOperatorExpression
-* ComparisonOperatorExpression
-* ExpressionList
+* PrimaryExpression
 
 **String:**
 
 ![String](diagram/String.svg)
 
 ```
-String
-    ::= '"' [^"]* '"'
-    | "'" [^']* "'"
+String   ::= '"' [^"]* '"'
+           | "'" [^']* "'"
 ```
 
 referenced by:
 
-* ComparisonOperatorExpression
-* ExpressionList
-* StringOperatorExpression
+* PrimaryExpression
+
+**StringFormat:**
+
+![StringFormat](diagram/StringFormat.svg)
+
+```
+StringFormat
+         ::= '`' [^"]* '`'
+```
+
+referenced by:
+
+* PrimaryExpression
 
 **Boolean:**
 
 ![Boolean](diagram/Boolean.svg)
 
 ```
-Boolean
-    ::= 'false'
-    | 'true'
+Boolean  ::= 'false'
+           | 'true'
 ```
 
 referenced by:
 
-* ComparisonOperatorExpression
-* ExpressionList
+* PrimaryExpression
 
 **Whitespace:**
 
@@ -213,8 +434,8 @@ referenced by:
 
 ```
 Whitespace
-    ::= Space
-    | Comment
+         ::= Space
+           | Comment
 ```
 
 **Space:**
@@ -222,11 +443,10 @@ Whitespace
 ![Space](diagram/Space.svg)
 
 ```
-Space
-    ::= '\t'
-    | '\n'
-    | '\r'
-    | ' '
+Space    ::= '\t'
+           | '\n'
+           | '\r'
+           | ' '
 ```
 
 referenced by:
@@ -238,9 +458,8 @@ referenced by:
 ![Comment](diagram/Comment.svg)
 
 ```
-Comment
-    ::= CommentSingleLine
-    | CommentMultiLine
+Comment  ::= CommentSingleLine
+           | CommentMultiLine
 ```
 
 referenced by:
@@ -253,7 +472,7 @@ referenced by:
 
 ```
 CommentSingleLine
-    ::= '//' [^\n]*
+         ::= '//' [^\n]*
 ```
 
 referenced by:

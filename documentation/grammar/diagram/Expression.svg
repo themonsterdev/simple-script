@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="269" height="521">
+   <defs>
+      <style type="text/css">
+    @namespace "http://www.w3.org/2000/svg";
+    .line                 {fill: none; stroke: #000535; stroke-width: 1;}
+    .bold-line            {stroke: #E0E3FF; shape-rendering: crispEdges; stroke-width: 2;}
+    .thin-line            {stroke: #00031F; shape-rendering: crispEdges}
+    .filled               {fill: #000535; stroke: none;}
+    text.terminal         {font-family: Verdana, Sans-serif;
+                            font-size: 12px;
+                            fill: #E0E3FF;
+                            font-weight: bold;
+                          }
+    text.nonterminal      {font-family: Verdana, Sans-serif;
+                            font-size: 12px;
+                            fill: #00031A;
+                            font-weight: normal;
+                          }
+    text.regexp           {font-family: Verdana, Sans-serif;
+                            font-size: 12px;
+                            fill: #00031F;
+                            font-weight: normal;
+                          }
+    rect, circle, polygon {fill: #000535; stroke: #000535;}
+    rect.terminal         {fill: #5768FF; stroke: #000535; stroke-width: 1;}
+    rect.nonterminal      {fill: #A4ADFF; stroke: #000535; stroke-width: 1;}
+    rect.text             {fill: none; stroke: none;}
+    polygon.regexp        {fill: #CACFFF; stroke: #000535; stroke-width: 1;}
+  </style>
+   </defs>
+   <polygon points="9 17 1 13 1 21"/>
+   <polygon points="17 17 9 13 9 21"/>
+   <a xmlns:xlink="http://www.w3.org/1999/xlink"
+      xlink:href="#TernaryExpression"
+      xlink:title="TernaryExpression">
+      <rect x="51" y="3" width="138" height="32"/>
+      <rect x="49" y="1" width="138" height="32" class="nonterminal"/>
+      <text class="nonterminal" x="59" y="21">TernaryExpression</text>
+   </a>
+   <a xmlns:xlink="http://www.w3.org/1999/xlink"
+      xlink:href="#LogicalOrExpression"
+      xlink:title="LogicalOrExpression">
+      <rect x="51" y="47" width="148" height="32"/>
+      <rect x="49" y="45" width="148" height="32" class="nonterminal"/>
+      <text class="nonterminal" x="59" y="65">LogicalOrExpression</text>
+   </a>
+   <a xmlns:xlink="http://www.w3.org/1999/xlink"
+      xlink:href="#LogicalAndExpression"
+      xlink:title="LogicalAndExpression">
+      <rect x="51" y="91" width="158" height="32"/>
+      <rect x="49" y="89" width="158" height="32" class="nonterminal"/>
+      <text class="nonterminal" x="59" y="109">LogicalAndExpression</text>
+   </a>
+   <a xmlns:xlink="http://www.w3.org/1999/xlink"
+      xlink:href="#BitwiseOrExpression"
+      xlink:title="BitwiseOrExpression">
+      <rect x="51" y="135" width="148" height="32"/>
+      <rect x="49" y="133" width="148" height="32" class="nonterminal"/>
+      <text class="nonterminal" x="59" y="153">BitwiseOrExpression</text>
+   </a>
+   <a xmlns:xlink="http://www.w3.org/1999/xlink"
+      xlink:href="#BitwiseXorExpression"
+      xlink:title="BitwiseXorExpression">
+      <rect x="51" y="179" width="154" height="32"/>
+      <rect x="49" y="177" width="154" height="32" class="nonterminal"/>
+      <text class="nonterminal" x="59" y="197">BitwiseXorExpression</text>
+   </a>
+   <a xmlns:xlink="http://www.w3.org/1999/xlink"
+      xlink:href="#BitwiseAndExpression"
+      xlink:title="BitwiseAndExpression">
+      <rect x="51" y="223" width="158" height="32"/>
+      <rect x="49" y="221" width="158" height="32" class="nonterminal"/>
+      <text class="nonterminal" x="59" y="241">BitwiseAndExpression</text>
+   </a>
+   <a xmlns:xlink="http://www.w3.org/1999/xlink"
+      xlink:href="#EqualityExpression"
+      xlink:title="EqualityExpression">
+      <rect x="51" y="267" width="140" height="32"/>
+      <rect x="49" y="265" width="140" height="32" class="nonterminal"/>
+      <text class="nonterminal" x="59" y="285">EqualityExpression</text>
+   </a>
+   <a xmlns:xlink="http://www.w3.org/1999/xlink"
+      xlink:href="#ComparisonExpression"
+      xlink:title="ComparisonExpression">
+      <rect x="51" y="311" width="166" height="32"/>
+      <rect x="49" y="309" width="166" height="32" class="nonterminal"/>
+      <text class="nonterminal" x="59" y="329">ComparisonExpression</text>
+   </a>
+   <a xmlns:xlink="http://www.w3.org/1999/xlink"
+      xlink:href="#ShiftExpression"
+      xlink:title="ShiftExpression">
+      <rect x="51" y="355" width="118" height="32"/>
+      <rect x="49" y="353" width="118" height="32" class="nonterminal"/>
+      <text class="nonterminal" x="59" y="373">ShiftExpression</text>
+   </a>
+   <a xmlns:xlink="http://www.w3.org/1999/xlink"
+      xlink:href="#AdditiveExpression"
+      xlink:title="AdditiveExpression">
+      <rect x="51" y="399" width="140" height="32"/>
+      <rect x="49" y="397" width="140" height="32" class="nonterminal"/>
+      <text class="nonterminal" x="59" y="417">AdditiveExpression</text>
+   </a>
+   <a xmlns:xlink="http://www.w3.org/1999/xlink"
+      xlink:href="#MultiplicativeExpression"
+      xlink:title="MultiplicativeExpression">
+      <rect x="51" y="443" width="170" height="32"/>
+      <rect x="49" y="441" width="170" height="32" class="nonterminal"/>
+      <text class="nonterminal" x="59" y="461">MultiplicativeExpression</text>
+   </a>
+   <a xmlns:xlink="http://www.w3.org/1999/xlink"
+      xlink:href="#UnaryExpression"
+      xlink:title="UnaryExpression">
+      <rect x="51" y="487" width="126" height="32"/>
+      <rect x="49" y="485" width="126" height="32" class="nonterminal"/>
+      <text class="nonterminal" x="59" y="505">UnaryExpression</text>
+   </a>
+   <path class="line"
+         d="m17 17 h2 m20 0 h10 m138 0 h10 m0 0 h32 m-210 0 h20 m190 0 h20 m-230 0 q10 0 10 10 m210 0 q0 -10 10 -10 m-220 10 v24 m210 0 v-24 m-210 24 q0 10 10 10 m190 0 q10 0 10 -10 m-200 10 h10 m148 0 h10 m0 0 h22 m-200 -10 v20 m210 0 v-20 m-210 20 v24 m210 0 v-24 m-210 24 q0 10 10 10 m190 0 q10 0 10 -10 m-200 10 h10 m158 0 h10 m0 0 h12 m-200 -10 v20 m210 0 v-20 m-210 20 v24 m210 0 v-24 m-210 24 q0 10 10 10 m190 0 q10 0 10 -10 m-200 10 h10 m148 0 h10 m0 0 h22 m-200 -10 v20 m210 0 v-20 m-210 20 v24 m210 0 v-24 m-210 24 q0 10 10 10 m190 0 q10 0 10 -10 m-200 10 h10 m154 0 h10 m0 0 h16 m-200 -10 v20 m210 0 v-20 m-210 20 v24 m210 0 v-24 m-210 24 q0 10 10 10 m190 0 q10 0 10 -10 m-200 10 h10 m158 0 h10 m0 0 h12 m-200 -10 v20 m210 0 v-20 m-210 20 v24 m210 0 v-24 m-210 24 q0 10 10 10 m190 0 q10 0 10 -10 m-200 10 h10 m140 0 h10 m0 0 h30 m-200 -10 v20 m210 0 v-20 m-210 20 v24 m210 0 v-24 m-210 24 q0 10 10 10 m190 0 q10 0 10 -10 m-200 10 h10 m166 0 h10 m0 0 h4 m-200 -10 v20 m210 0 v-20 m-210 20 v24 m210 0 v-24 m-210 24 q0 10 10 10 m190 0 q10 0 10 -10 m-200 10 h10 m118 0 h10 m0 0 h52 m-200 -10 v20 m210 0 v-20 m-210 20 v24 m210 0 v-24 m-210 24 q0 10 10 10 m190 0 q10 0 10 -10 m-200 10 h10 m140 0 h10 m0 0 h30 m-200 -10 v20 m210 0 v-20 m-210 20 v24 m210 0 v-24 m-210 24 q0 10 10 10 m190 0 q10 0 10 -10 m-200 10 h10 m170 0 h10 m-200 -10 v20 m210 0 v-20 m-210 20 v24 m210 0 v-24 m-210 24 q0 10 10 10 m190 0 q10 0 10 -10 m-200 10 h10 m126 0 h10 m0 0 h44 m23 -484 h-3"/>
+   <polygon points="259 17 267 13 267 21"/>
+   <polygon points="259 17 251 13 251 21"/>
+</svg>

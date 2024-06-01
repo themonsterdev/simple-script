@@ -19,48 +19,100 @@ of symbols and the rules for forming expressions and declarations in the languag
 
 ```ebnf
 Statement
-    ::= VarDeclarationStatement
+    ::= BlockStatement
+    | IfStatement
     | AssignmentStatement
+    | ConstDeclarationStatement
+    | VarDeclarationStatement
+    | DoWhileLoopStatement
+    | WhileLoopStatement
     | PrintStatement
-    | ConditionalStatement
 
-VarDeclarationStatement
-    ::= 'var' VarDeclaration (',' VarDeclaration)*
+BlockStatement
+    ::= (Statement)+
 
-VarDeclaration
-    ::= Identifier ('=' Expression)?
+IfStatement
+    ::= 'if' Expression 'then' BlockStatement ('else' 'if' Expression 'then' BlockStatement)+ ('else' BlockStatement) ? 'end'
 
 AssignmentStatement
     ::= Identifier '=' Expression
 
-PrintStatement
-    ::= 'print' Expression
+ConstDeclarationStatement
+    ::= 'const' VariableDeclaration (',' VariableDeclaration)*
 
-ConditionalStatement
-    ::= 'if' Expression 'then' statement ('else' 'if' Expression 'then' statement)+ ('else' statement) ? 'end'
+VarDeclarationStatement
+    ::= 'var' VariableDeclaration (',' VariableDeclaration)*
+
+VariableDeclaration
+    ::= Identifier ('=' Expression)?
+
+DoWhileLoopStatement
+    ::= 'do' BlockStatement 'while' Expression
+
+WhileLoopStatement
+    ::= 'while' Expression 'then' BlockStatement 'end'
+
+PrintStatement
+    ::= 'print' '(' Expression ')'
 
 Expression
+    ::= TernaryExpression
+    | LogicalOrExpression
+    | LogicalAndExpression
+    | BitwiseOrExpression
+    | BitwiseXorExpression
+    | BitwiseAndExpression
+    | EqualityExpression
+    | ComparisonExpression
+    | ShiftExpression
+    | AdditiveExpression
+    | MultiplicativeExpression
+    | UnaryExpression
+
+TernaryExpression
+    ::= Expression ('?' Expression ':' Expression)*
+
+LogicalOrExpression
+    ::= Expression ('||' Expression)*
+
+LogicalAndExpression
+    ::= Expression ('&&' Expression)*
+
+BitwiseOrExpression
+    ::= Expression ('|' Expression)*
+
+BitwiseXorExpression
+    ::= Expression ('^' Expression)*
+
+BitwiseAndExpression
+    ::= Expression ('&' Expression)*
+
+EqualityExpression
+    ::= Expression (('==' | '!=') Expression)*
+
+ComparisonExpression
+    ::= Expression (('<' | '<=' | '>' | '>=' | '<=>') Expression)*
+
+ShiftExpression
+    ::= Expression (('<<' | '>>') Expression)*
+
+AdditiveExpression
+    ::= Expression (('+' | '-') Expression)*
+
+MultiplicativeExpression
+    ::= Expression (('*' | '/' | '%') Expression)*
+
+UnaryExpression
+    ::= ('+' | '-' | '!') Expression
+    | PrimaryExpression
+
+PrimaryExpression
     ::= Identifier
     | Number
     | String
+    | StringFormat
     | Boolean
-    | ArithmeticOperatorExpression
-    | ComparisonOperatorExpression
-    | StringOperatorExpression
-    | TernaryExpression
-
-ArithmeticOperatorExpression
-    ::= ( Number | Identifier ) ( '*' | '+' | '-' | '/' | '%' ) ( Number | Identifier )
-
-ComparisonOperatorExpression
-    ::= ( String | Number | Boolean | Identifier ) ( '==' | '>' | '>=' | '<' | '<=' | '!=' ) ( String | Number | Boolean | Identifier )
-
-StringOperatorExpression
-    ::= ( String | Identifier ) ( '+' | '*' ) ( String | Identifier )
-
-TernaryExpression
-    ::= Expression '?' Expression ':' Expression
-    | Expression '?' TernaryExpression ':' TernaryExpression
+    | '(' Expression ')'
 
 Identifier
     ::= [a-zA-Z_] [a-zA-Z0-9_]*
@@ -71,6 +123,9 @@ Number
 String
     ::= '"' [^"]* '"'
     | "'" [^']* "'"
+
+StringFormat
+    ::= '`' [^"]* '`'
 
 Boolean
     ::= 'false'
