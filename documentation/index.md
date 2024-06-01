@@ -43,7 +43,7 @@
    - [Documentation Guidelines](best_practices/documentation_guidelines.md)
    - [Testing Strategies](best_practices/testing_strategies.md)
 
-9. [**Appendix**](appendix.md)
-   - Glossary
-   - FAQs
-   - Troubleshooting
+9. **Appendix**
+   - [Glossary](best_practices/glossary.md)
+   - [FAQs](best_practices/faqs.md)
+   - [Troubleshooting](best_practices/troubleshooting.md)
