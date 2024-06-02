@@ -14,20 +14,6 @@ var x = 10
 var name = "Alice"
 ```
 
-## Functions
-
-- Functions are defined using the `function` keyword.
-- Parameters are enclosed in parentheses `()` and the body is enclosed between `then` and `end`.
-
-Example:
-
-```simple_script
-function greet(name)
-then
-    print(`Hello, ${name}`)
-end
-```
-
 ## Control Structures
 
 - Use `if`, `else if`, and `else` for conditional statements.

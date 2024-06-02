@@ -17,12 +17,3 @@ A: Visit our [issue tracker](https://github.com/themonsterdev/simple-script/issu
 
 **Q: How do I declare a variable?**
 A: Use the `var` keyword. Example: `var x = 10`
-
-**Q: How do I create a function?**
-A: Use the `function` keyword. Example:
-
-```our_language
-function sayHello() then
-    print("Hello, World!")
-end
-```

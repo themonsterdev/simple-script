@@ -4,19 +4,12 @@ Consistent code style makes your code more readable and maintainable. Here are s
 
 ## Naming Conventions
 
-- Use camelCase for variable and function names.
-- Use PascalCase for class names.
+- Use camelCase for variable names.
 
 Example:
 
 ```simple_script
 var firstName = "Alice"
-function calculateTotal() then
-    // ...
-end
-class Person
-    // ...
-end
 ```
 
 ## Indentation
@@ -26,10 +19,8 @@ end
 Example:
 
 ```simple_script
-function exampleFunction() then
-    if true then
-        print("Indented code")
-    end
+if true then
+    print("Indented code")
 end
 ```
 

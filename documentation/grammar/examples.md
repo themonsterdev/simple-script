@@ -10,18 +10,7 @@ var name = "John"
 print(`Name: ${name}, Age: ${age}`)
 ```
 
-## Example 2: Function Definition and Invocation
-
-```simple_script
-function add(a, b) then
-    return a + b
-end
-
-var result = add(5, 3)
-print(`Sum: ${result}`)
-```
-
-## Example 3: Loop and Conditional Statements
+## Example 2: Loop and Conditional Statements
 
 ```simple_script
 var i = 0
