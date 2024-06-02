@@ -9,14 +9,14 @@ Consistent code style makes your code more readable and maintainable. Here are s
 
 Example:
 
-```our_language
-var firstName = "Alice";
-function calculateTotal() {
+```simple_script
+var firstName = "Alice"
+function calculateTotal() then
     // ...
-}
-class Person {
+end
+class Person
     // ...
-}
+end
 ```
 
 ## Indentation
@@ -25,12 +25,12 @@ class Person {
 
 Example:
 
-```our_language
-function exampleFunction() {
-    if (true) {
-        print("Indented code");
-    }
-}
+```simple_script
+function exampleFunction() then
+    if true then
+        print("Indented code")
+    end
+end
 ```
 
 ## Comments
@@ -38,13 +38,15 @@ function exampleFunction() {
 - Write comments to explain the purpose of code.
 - Use single-line comments for short explanations and multi-line comments for detailed descriptions.
 
-- Example:
+Example:
 
-```our_language
+```simple_script
+# This is a single-line comment
+
 // This is a single-line comment
 
-/*
-This is a
-multi-line comment
-*/
+/**
+ * This is a
+ * multi-line comment
+ */
 ```

@@ -4,25 +4,25 @@ Functions can accept parameters, which are variables that you pass into the func
 
 ## Defining Parameters
 
-```our_language
-function greet(name) {
-    print("Hello, " + name);
-}
+```simple_script
+function greet(name) then
+    print(`Hello, ${name}`)
+end
 ```
 
 ## Passing Arguments
 
-```our_language
-greet("Alice"); // Outputs: Hello, Alice
+```simple_script
+greet("Alice") // Outputs: Hello, Alice
 ```
 
 ## Multiple Parameters
 
-```our_language
-function add(a, b) {
-    return a + b;
-}
+```simple_script
+function add(a, b) then
+    return a + b
+end
 
-var result = add(5, 3);
-print(result); // Outputs: 8
+var result = add(5, 3)
+print(result) // Outputs: 8
 ```

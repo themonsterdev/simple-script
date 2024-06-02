@@ -1,6 +1,6 @@
 # Operators
 
-Operators are used to perform operations on variables and values. Our language supports various types of operators:
+Operators are used to perform operations on variables and values. Simple Script supports various types of operators:
 
 ## Arithmetic Operators
 
@@ -12,9 +12,9 @@ Operators are used to perform operations on variables and values. Our language s
 
 Example:
 
-```our_language
-var sum = 5 + 3;        // 8
-var difference = 5 - 3; // 2
+```simple_script
+var sum = 5 + 3        // 8
+var difference = 5 - 3 // 2
 ```
 
 ## Comparison Operators
@@ -28,9 +28,9 @@ var difference = 5 - 3; // 2
 
 Example:
 
-```our_language
-var isEqual = (5 == 5);    // true
-var isNotEqual = (5 != 3); // true
+```simple_script
+var isEqual = (5 == 5)    // true
+var isNotEqual = (5 != 3) // true
 ```
 
 ## Logical Operators
@@ -41,6 +41,6 @@ var isNotEqual = (5 != 3); // true
 
 Example:
 
-```our_language
-var result = (5 > 3 && 2 < 4); // true
+```simple_script
+var result = (5 > 3 && 2 < 4) // true
 ```

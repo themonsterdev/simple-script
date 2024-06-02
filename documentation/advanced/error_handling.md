@@ -4,24 +4,24 @@ Error handling allows your program to deal with unexpected situations gracefully
 
 ## Try-Catch
 
-```our_language
-try {
-    var result = riskyFunction();
-} catch (error) {
-    print("An error occurred: " + error.message);
-}
+```simple_script
+try then
+    var result = riskyFunction()
+catch error then
+    print(`An error occurred: ${error.message}`)
+end
 ```
 
 ## Finally
 
 The finally block is executed regardless of whether an error occurred.
 
-```our_language
-try {
-    var result = riskyFunction();
-} catch (error) {
-    print("An error occurred: " + error.message);
-} finally {
-    print("Cleanup code executed.");
-}
+```simple_script
+try then
+    var result = riskyFunction()
+catch error then
+    print(`An error occurred: ${error.message}`)
+finally then
+    print("Cleanup code executed.")
+end
 ```

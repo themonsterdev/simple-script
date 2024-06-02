@@ -1,14 +1,23 @@
 # Loops
 
-Loops allow you to execute a block of code multiple times. Our language supports `for`, `while`, and `do while` loops.
-
-## For Loop
-
-```our_language
-for (var i = 0; i < 5; i++) {
-    print("Iteration: " + i);
-}
-```
+Loops allow you to execute a block of code multiple times. Simple Script supports `while`, and `do while` loops.
 
 ## While Loop
 
+```simple_script
+var i = 0
+while i < 5 then
+    print(`Iteration: ${i}`)
+    i = i + 1
+end
+```
+
+## Do While Loop
+
+```simple_script
+var i = 0
+do
+    print(`Iteration: ${i}`)
+    i = i + 1
+while i < 5
+```

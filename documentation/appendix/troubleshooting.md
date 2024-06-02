@@ -5,7 +5,7 @@ This section provides solutions to common issues you might encounter.
 ## Installation Issues
 
 **Problem**: The installer fails to run.
-**Solution**: Ensure you have the correct version of Python installed and that your system meets the minimum requirements.
+**Solution**: Ensure you have the correct version of CMake installed and that your system meets the minimum requirements.
 
 ## Runtime Errors
 
@@ -21,6 +21,6 @@ This section provides solutions to common issues you might encounter.
 Example:
 
 ```our_language
-var x = 10;
-print("Value of x: " + x);
+var x = 10
+print(`Value of x: ${x}`)
 ```

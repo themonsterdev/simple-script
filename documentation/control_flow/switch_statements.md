@@ -4,37 +4,32 @@ Switch statements allow you to execute one block of code from multiple options b
 
 ## Syntax
 
-```our_language
-var grade = 'B';
+```simple_script
+var grade = 'B'
 
-switch (grade) {
-    case 'A':
-        print("Excellent");
-        break;
-    case 'B':
-        print("Good");
-        break;
-    case 'C':
-        print("Fair");
-        break;
-    default:
-        print("Poor");
-}
+switch grade then
+    case 'A' then
+        print("Excellent")
+    case 'B' then
+        print("Good")
+    case 'C' then
+        print("Fair")
+    default
+        print("Poor")
+end
 ```
 
 ## Example
 
-```our_language
-var day = "Tuesday";
+```simple_script
+var day = "Tuesday"
 
-switch (day) {
-    case "Monday":
-        print("Start of the week");
-        break;
-    case "Friday":
-        print("End of the work week");
-        break;
-    default:
-        print("Midweek days");
-}
+switch day then
+    case "Monday" then
+        print("Start of the week")
+    case "Friday" then
+        print("End of the work week")
+    default
+        print("Midweek days")
+end
 ```

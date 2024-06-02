@@ -8,17 +8,17 @@ Testing ensures your code works correctly. Here are some strategies for effectiv
 
 Example:
 
-```our_language
-function add(a, b) {
-    return a + b;
+```simple_script
+function add(a, b) then
+    return a + b
 }
 
-function testAdd() {
-    assert(add(2, 3) == 5);
-    assert(add(-1, 1) == 0);
-}
+function testAdd() then
+    assert(add(2, 3) == 5)
+    assert(add(-1, 1) == 0)
+end
 
-testAdd();
+testAdd()
 ```
 
 ## Integration Testing
@@ -27,16 +27,16 @@ Test how different units work together.
 
 Example:
 
-```our_language
-function multiply(a, b) {
-    return a * b;
-}
+```simple_script
+function multiply(a, b) then
+    return a * b
+end
 
-function testMathOperations() {
-    assert(add(multiply(2, 3), 4) == 10);
-}
+function testMathOperations() then
+    assert(add(multiply(2, 3), 4) == 10)
+end
 
-testMathOperations();
+testMathOperations()
 ```
 
 ## Mocking
@@ -45,19 +45,19 @@ Use mocking to test code that depends on external systems or resources.
 
 Example:
 
-```our_language
-function fetchData(api) {
-    return api.getData();
-}
+```simple_script
+function fetchData(api) then
+    return api.getData()
+end
 
-function testFetchData() {
+function testFetchData() then
     var mockApi = {
-        getData: function() {
-            return "mock data";
-        }
-    };
-    assert(fetchData(mockApi) == "mock data");
+        getData: function() then
+            return "mock data"
+        end
+    }
+    assert(fetchData(mockApi) == "mock data")
 }
 
-testFetchData();
+testFetchData()
 ```

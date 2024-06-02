@@ -4,24 +4,24 @@ Functions can return values using the `return` statement. This value can be used
 
 ## Returning a Value
 
-```our_language
-function add(a, b) {
-    return a + b;
-}
+```simple_script
+function add(a, b) then
+    return a + b
+end
 
-var result = add(5, 3);
-print(result); // Outputs: 8
+var result = add(5, 3)
+print(result) // Outputs: 8
 ```
 
 ## Returning No Value
 
 If no return statement is used, the function returns undefined.
 
-```our_language
-function sayHello() {
-    print("Hello, World!");
-}
+```simple_script
+function sayHello() then
+    print("Hello, World!")
+end
 
-var result = sayHello(); // Outputs: Hello, World!
-print(result);           // Outputs: undefined
+var result = sayHello() // Outputs: Hello, World!
+print(result)           // Outputs: undefined
 ```

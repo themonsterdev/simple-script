@@ -4,21 +4,21 @@ Exceptions are a type of error that can be thrown and caught in your code. Use t
 
 ## Throwing Exceptions
 
-```our_language
-function checkAge(age) {
-    if (age < 18) {
-        throw "UnderageError: You must be 18 or older.";
-    }
-    return "Access granted";
-}
+```simple_script
+function checkAge(age) then
+    if age < 18 then
+        throw "UnderageError: You must be 18 or older."
+    end
+    return "Access granted"
+end
 ```
 
 ## Handling Exceptions
 
-```our_language
-try {
-    var result = checkAge(16);
-} catch (error) {
-    print("Error: " + error);
-}
+```simple_script
+try then
+    var result = checkAge(16)
+catch error then
+    print(`Error: ${error.message}`)
+end
 ```

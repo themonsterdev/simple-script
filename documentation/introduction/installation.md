@@ -1,24 +1,32 @@
 # Installation
 
-To get started with our programming language, follow these steps to install it on your system.
+To get started with Simple Script, follow these steps to install it on your system.
 
 ## Prerequisites
 
-- Ensure you have Python 3.6 or later installed on your machine.
+- Ensure you have **[CMake](https://cmake.org)** installed on your machine.
+- Ensure you have **[Visual Studio](https://visualstudio.microsoft.com/fr/downloads)** installed on your machine.
 
 ## Steps
 
-1. **Download the installer:**
-   - Visit our [official download page](https://example.com/download) and download the installer for your operating system.
-
-2. **Run the installer:**
-   - Follow the on-screen instructions to complete the installation.
-
-3. **Verify the installation:**
-   - Open a terminal or command prompt and type:
+1. **Clone the repository:**
+   - Open a terminal or command prompt and run:
      ```sh
-     our_language --version
+     git clone https://github.com/themonsterdev/simple-script.git
      ```
-   - You should see the version number of the installed language.
 
-Congratulations! You have successfully installed our programming language.
+2. **Open the project in Visual Studio:**
+   - Launch Visual Studio.
+   - Open the cloned repository folder.
+
+3. **Build the project:**
+   - Visual Studio will automatically handle the CMake configuration.
+   - Build the project by selecting the appropriate build configuration (Debug/Release) and clicking on the "Build" menu.
+
+6. **Run the project:**
+   - After building, you can run the project directly from Visual Studio or by using a command line:
+     ```sh
+     simple-script\out\build\x64-Debug\main\interpreter\interpreter.exe --version
+     ```
+
+Congratulations! You have successfully installed Simple Script.

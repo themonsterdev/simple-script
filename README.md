@@ -146,6 +146,7 @@ Comment
     | CommentMultiLine
 
 CommentSingleLine
+    ::= '#' [^\n]*
     ::= '//' [^\n]*
 
 CommentMultiLine

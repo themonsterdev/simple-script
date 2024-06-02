@@ -4,25 +4,25 @@ Modules and packages help you organize your code into reusable components. Use t
 
 ## Creating a Module
 
-```our_language
-// math.our
-export function add(a, b) {
-    return a + b;
-}
+```simple_script
+// math.simple_script
+export function add(a, b) then
+    return a + b
+end
 
-export function subtract(a, b) {
-    return a - b;
-}
+export function subtract(a, b) then
+    return a - b
+end
 ```
 
 ## Importing a Module
 
-```our_language
-import { add, subtract } from 'math';
+```simple_script
+import { add, subtract } from 'math'
 
-var sum = add(5, 3);
-var difference = subtract(5, 3);
+var sum = add(5, 3)
+var difference = subtract(5, 3)
 
-print("Sum: " + sum);           // Outputs: Sum: 8
-print("Difference: " + difference); // Outputs: Difference: 2
+print("Sum: " + sum)               // Outputs: Sum: 8
+print(`Difference: ${difference}`) // Outputs: Difference: 2
 ```

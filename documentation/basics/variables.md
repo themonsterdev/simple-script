@@ -5,9 +5,9 @@ Variables are used to store data that can be used and manipulated throughout you
 ## Declaring Variables
 
 ```our_language
-var x;
-var y = 10;
-var name = "Alice";
+var x
+var y = 10
+var name = "Alice"
 ```
 
 ## Variable Naming Rules
@@ -19,6 +19,6 @@ var name = "Alice";
 Example:
 
 ```our_language
-var _age = 30;
-var firstName = "John";
+var _age = 30
+var firstName = "John"
 ```

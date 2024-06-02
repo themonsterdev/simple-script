@@ -4,9 +4,9 @@ Constants are immutable values that cannot be changed once they are assigned. Th
 
 ## Declaring Constants
 
-```our_language
-const PI = 3.14;
-const GREETING = "Hello, World!";
+```simple_script
+const PI = 3.14
+const GREETING = "Hello, World!"
 ```
 
 ## Usage
@@ -15,12 +15,13 @@ Constants can be used in expressions and functions just like variables, but thei
 
 Example:
 
-```our_language
-const MAX_USERS = 100;
+```simple_script
+const MAX_USERS = 100
 
-function getMaxUsers() {
-    return MAX_USERS;
-}
+function getMaxUsers() then
+    return MAX_USERS
+end
 
-print("Maximum users allowed: " + getMaxUsers());
+const maxUsers = getMaxUsers()
+print(`Maximum users allowed: ${maxUsers}`)
 ```

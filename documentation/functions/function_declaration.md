@@ -4,14 +4,14 @@ Functions are reusable blocks of code that perform a specific task. Functions ar
 
 ## Declaring a Function
 
-```our_language
-function sayHello() {
-    print("Hello, World!");
-}
+```simple_script
+function sayHello() then
+    print("Hello, World!")
+end
 ```
 
 ## Calling a Function
 
-```our_language
-sayHello(); // Outputs: Hello, World!
+```simple_script
+sayHello() // Outputs: Hello, World!
 ```

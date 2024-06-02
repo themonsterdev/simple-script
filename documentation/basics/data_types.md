@@ -1,6 +1,6 @@
 # Data Types
 
-Our language supports several data types that allow you to store various kinds of information. Here are the primary data types available:
+Simple Script supports several data types that allow you to store various kinds of information. Here are the primary data types available:
 
 ## Primitive Data Types
 
@@ -11,20 +11,9 @@ Our language supports several data types that allow you to store various kinds o
 
 ## Examples
 
-```our_language
-var age = 25;        // Integer
-var price = 19.99;   // Float
-var name = "Alice";  // String
-var isActive = true; // Boolean
-```
-
-## Type Conversion
-
-You can convert between data types using built-in functions.
-
-Example:
-
-```our_language
-var num = 10;
-var strNum = num.toString(); // Convert integer to string
+```simple_script
+var age = 25        // Integer
+var price = 19.99   // Float
+var name = "Alice"  // String
+var isActive = true // Boolean
 ```
