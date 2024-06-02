@@ -1,11 +1,46 @@
 # Operators
 
-Operators are symbols that perform operations on operands. Our programming language supports various types of operators, including:
+Operators are used to perform operations on variables and values. Our language supports various types of operators:
 
-- Arithmetic Operators: Perform mathematical operations (e.g., `+`, `-`, `*`, `/`).
-- Assignment Operators: Assign values to variables (e.g., `=`, `+=`, `-=`).
-- Comparison Operators: Compare values (e.g., `==`, `!=`, `<`, `>`).
-- Logical Operators: Perform logical operations (e.g., `&&`, `||`, `!`).
-- Bitwise Operators: Perform bitwise operations (e.g., `&`, `|`, `^`).
+## Arithmetic Operators
 
-By understanding how operators work, you can manipulate data and control the flow of your program effectively.
+- `+` (Addition)
+- `-` (Subtraction)
+- `*` (Multiplication)
+- `/` (Division)
+- `%` (Modulus)
+
+Example:
+
+```our_language
+var sum = 5 + 3;        // 8
+var difference = 5 - 3; // 2
+```
+
+## Comparison Operators
+
+- `==` (Equal to)
+- `!=` (Not equal to)
+- `>` (Greater than)
+- `<` (Less than)
+- `>=` (Greater than or equal to)
+- `<=` (Less than or equal to)
+
+Example:
+
+```our_language
+var isEqual = (5 == 5);    // true
+var isNotEqual = (5 != 3); // true
+```
+
+## Logical Operators
+
+- `&&` (Logical AND)
+- `||` (Logical OR)
+- `!` (Logical NOT)
+
+Example:
+
+```our_language
+var result = (5 > 3 && 2 < 4); // true
+```

@@ -1,9 +1,9 @@
 # Documentation
 
 1. **Introduction**
-   - [Overview](overview.md)
-   - [Installation](installation.md)
-   - [Getting Started](getting_started.md)
+   - [Overview](introduction/overview.md)
+   - [Installation](introduction/installation.md)
+   - [Getting Started](introduction/getting_started.md)
 
 2. **Grammar**
    - [Grammar Overview](grammar/overview.md)

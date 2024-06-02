@@ -1,10 +1,30 @@
 # Data Types
 
-Our programming language supports various data types for representing different kinds of values. Here are some of the most common data types:
+Our language supports several data types that allow you to store various kinds of information. Here are the primary data types available:
 
-- Integer: Represents whole numbers (e.g., `42`, `-10`).
-- Float: Represents floating-point numbers (e.g., `3.14`, `-0.5`).
-- String: Represents sequences of characters (e.g., `"hello"`, `'world'`).
-- Boolean: Represents true or false values (`true`, `false`).
+## Primitive Data Types
 
-Additionally, the language provides support for more complex data types such as arrays, dictionaries, and custom data structures.
+- **Integer**: Whole numbers, e.g., `10`, `-3`
+- **Float**: Decimal numbers, e.g., `3.14`, `-0.001`
+- **String**: Sequence of characters, e.g., `"Hello"`
+- **Boolean**: Logical values, `true` or `false`
+
+## Examples
+
+```our_language
+var age = 25;        // Integer
+var price = 19.99;   // Float
+var name = "Alice";  // String
+var isActive = true; // Boolean
+```
+
+## Type Conversion
+
+You can convert between data types using built-in functions.
+
+Example:
+
+```our_language
+var num = 10;
+var strNum = num.toString(); // Convert integer to string
+```

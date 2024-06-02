@@ -1,21 +1,24 @@
-# Variables and Constants
+# Variables
 
-Variables and constants are fundamental concepts in our programming language. Here's how you can declare and use them:
+Variables are used to store data that can be used and manipulated throughout your program. In our language, variables are declared using the `var` keyword.
 
-## Variables
+## Declaring Variables
 
-Variables are used to store data values. You can declare a variable using the `var` keyword followed by the variable name and optional initialization:
-
-```mylang
-var x = 10;
+```our_language
+var x;
+var y = 10;
+var name = "Alice";
 ```
 
-# Constants
+## Variable Naming Rules
 
-Constants are similar to variables, but their values cannot be changed after they are initialized. You can declare a constant using the const keyword followed by the constant name and initialization:
+- Variable names must start with a letter or underscore (_).
+- Subsequent characters can be letters, numbers, or underscores.
+- Variable names are case-sensitive.
 
-```mylang
-const PI = 3.14;
+Example:
+
+```our_language
+var _age = 30;
+var firstName = "John";
 ```
-
-Now that you know how to declare variables and constants, you can start using them in your code!
