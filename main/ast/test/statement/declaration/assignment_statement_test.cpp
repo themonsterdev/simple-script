@@ -4,6 +4,9 @@
 #include "expression/literal/string_expression.hpp"
 #include "statement/declaration/assignment_statement.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 class FAssignmentStatementTest : public ::testing::Test
 {
 protected:

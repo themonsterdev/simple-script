@@ -9,6 +9,9 @@
 // For runtime_error
 #include <stdexcept>
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FBlockStatement::FBlockStatement(StatementList statements)
     // Initialize m_statements with the given list of statements
     : m_statements(std::move(statements))
@@ -22,9 +25,37 @@ const StatementList& FBlockStatement::GetStatements() const
 
 void FBlockStatement::Execute(const FContext& context) const
 {
+    context.EnterScope();
+    context.ResetReturnValue();
+    context.SetContinueFlag(false);
+    context.SetThrowFlag(false);
+
     // Execute each statement in the block sequentially
     for (const auto& statement : m_statements)
     {
         statement->Execute(context);
+
+        // Check if a return value has been set
+        if (context.HasReturnValue())
+        {
+            // Exit the loop if a return statement was executed
+            break;
+        }
+
+        // Check if a continue statement has been encountered
+        if (context.GetContinueFlag())
+        {
+            // Reset the continue flag for the next iteration
+            break; // Move to the next iteration
+        }
+
+        // Check if a throw statement has been encountered
+        if (context.GetThrowFlag())
+        {
+            // Reset the throw flag for the next iteration
+            break; // Move to the next iteration
+        }
     }
+
+    context.LeaveScope();
 }

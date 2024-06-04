@@ -3,6 +3,9 @@
 #include "statement/declaration/const_declaration_statement.hpp"
 #include "expression/literal/number_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 // Test the creation of a variable declaration list statement with valid declarations
 TEST(FVarDeclarationListStatementTest, ConstructorValidDeclarations)
 {

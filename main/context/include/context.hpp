@@ -19,7 +19,12 @@
 class FContext final
 {
     // Deque of scopes
-	std::deque<std::shared_ptr<FScope>> m_scopes;
+    mutable std::deque<std::shared_ptr<FScope>> m_scopes;
+
+    mutable Value m_returnValue;
+    mutable bool m_hasReturnValue;
+    mutable bool m_continueFlag;
+    mutable bool m_throwFlag;
 
 public:
 
@@ -31,12 +36,12 @@ public:
     /**
      * @brief Enters a new scope.
      */
-    void EnterScope();
+    void EnterScope() const;
 
     /**
      * @brief Leaves the current scope.
      */
-    void LeaveScope();
+    void LeaveScope() const;
 
     /**
      * @brief Declares a variable in the current scope.
@@ -71,4 +76,31 @@ public:
      * @return The value of the variable.
      */
     Value GetVariable(const std::string& name) const;
+
+    /**
+     * @brief Registers a function in the current scope.
+     * @param name The name of the function to register.
+     * @param function The invokable function to register.
+     */
+    void RegisterFunction(const std::string& name, std::shared_ptr<FInvokableFunction> function) const;
+
+    /**
+     * @brief Calls a function in the current context.
+     * @param name The name of the function to call.
+     * @param arguments The arguments to pass to the function.
+     * @return The result of the function call.
+     */
+    Value CallFunction(const std::string& name, const std::vector<Value>& arguments) const;
+
+    // New methods for handling return values
+    void SetReturnValue(const Value& returnValue) const;
+    Value GetReturnValue() const;
+    bool HasReturnValue() const;
+    void ResetReturnValue() const;
+
+    void SetContinueFlag(bool flag) const;
+    bool GetContinueFlag() const;
+
+    void SetThrowFlag(bool flag) const;
+    bool GetThrowFlag() const;
 };

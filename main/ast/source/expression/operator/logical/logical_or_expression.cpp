@@ -9,6 +9,9 @@
 // Include for std::runtime_error
 #include <stdexcept>
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FLogicalOrExpression::FLogicalOrExpression(ExpressionPtr left, ExpressionPtr right)
     // Initialize base class with provided expressions
     : AComputeExpression(std::move(left), std::move(right))

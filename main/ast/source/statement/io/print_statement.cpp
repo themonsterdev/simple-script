@@ -4,10 +4,13 @@
  */
 
 // Include the declaration of the FPrintStatement class
-#include "statement/print/print_statement.hpp"
+#include "statement/io/print_statement.hpp"
 
 #include <iostream> // For standard input/output operations
 #include <sstream>	// For string stream operations
+
+// Include declarations for context objects
+#include "context.hpp"
 
 /**
  * @brief Converts a Value variant to a string.

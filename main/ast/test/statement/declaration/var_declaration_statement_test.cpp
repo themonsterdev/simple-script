@@ -4,6 +4,9 @@
 #include "expression/literal/string_expression.hpp"
 #include "statement/declaration/var_declaration_statement.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 class FVarDeclarationStatementTest : public ::testing::Test
 {
 protected:

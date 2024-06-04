@@ -4,6 +4,9 @@
 #include "expression/literal/string_expression.hpp"
 #include "expression/string_operator_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 // Test the creation of a string operator node with valid string concatenation
 TEST(FStringOperatorNodeTest, ConstructorValidConcatenation)
 {

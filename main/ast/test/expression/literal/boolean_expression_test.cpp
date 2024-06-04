@@ -1,6 +1,9 @@
 #include <gtest/gtest.h>
 #include "expression/literal/boolean_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 // Test for the GetValue method of FBooleanExpression
 TEST(FBooleanExpressionTest, GetValue)
 {

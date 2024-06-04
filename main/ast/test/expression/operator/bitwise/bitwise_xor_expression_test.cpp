@@ -2,6 +2,9 @@
 #include "expression/operator/bitwise/bitwise_xor_expression.hpp"
 #include "expression/literal/number_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 // Test for bitwise XOR operation with integers
 TEST(FBitwiseXorExpressionTest, BitwiseXorWithIntegers)
 {

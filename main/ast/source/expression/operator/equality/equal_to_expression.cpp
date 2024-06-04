@@ -9,6 +9,9 @@
 // Include for std::runtime_error
 #include <stdexcept>
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FEqualToExpression::FEqualToExpression(ExpressionPtr left, ExpressionPtr right)
     // Call base class constructor to initialize operands
     : AComputeExpression(std::move(left), std::move(right))

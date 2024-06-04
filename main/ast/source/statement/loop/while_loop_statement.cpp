@@ -7,6 +7,9 @@
 #include "statement/loop/while_loop_statement.hpp"
 #include <stdexcept>
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FWhileLoopStatement::FWhileLoopStatement(ExpressionPtr condition, StatementPtr body)
     : m_condition(std::move(condition))
     , m_body(std::move(body))
@@ -40,6 +43,20 @@ void FWhileLoopStatement::Execute(const FContext& context) const
         if (conditionResult)
         {
             m_body->Execute(context);
+
+            if (context.HasReturnValue())
+            {
+                // Exit the loop if a return statement was executed
+                break;
+            }
+
+            // Check if a continue statement has been encountered
+            if (context.GetContinueFlag())
+            {
+                // Reset the continue flag for the next iteration
+                context.SetContinueFlag(false);
+                continue; // Move to the next iteration
+            }
         }
     }
 }

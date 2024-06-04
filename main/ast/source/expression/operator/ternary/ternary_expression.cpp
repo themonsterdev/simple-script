@@ -9,6 +9,9 @@
 // Include for std::runtime_error
 #include <stdexcept>
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FTernaryExpression::FTernaryExpression(ExpressionPtr condition, ExpressionPtr trueExpr, ExpressionPtr falseExpr)
     // Initialize condition member with the provided condition expression
     : m_condition(std::move(condition))

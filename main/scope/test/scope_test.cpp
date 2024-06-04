@@ -20,11 +20,11 @@ protected:
 };
 
 // Test case for adding a variable to the scope
-TEST_F(FScopeTest, AddVariable)
+TEST_F(FScopeTest, DeclareVariable)
 {
     FScope scope;
-    scope.AddVariable("x");
-    ASSERT_TRUE(scope.HasVariable("x"));
+    scope.DeclareVariable("x");
+    ASSERT_TRUE(scope.IsVariableDeclared("x"));
 }
 
 // Test case for setting and getting a variable in the scope
@@ -39,19 +39,19 @@ TEST_F(FScopeTest, SetAndGetVariable)
 TEST_F(FScopeTest, RemoveVariable)
 {
     FScope scope;
-    scope.AddVariable("x");
-    ASSERT_TRUE(scope.HasVariable("x"));
+    scope.DeclareVariable("x");
+    ASSERT_TRUE(scope.IsVariableDeclared("x"));
     scope.RemoveVariable("x");
-    ASSERT_FALSE(scope.HasVariable("x"));
+    ASSERT_FALSE(scope.IsVariableDeclared("x"));
 }
 
 // Test case for checking if a variable exists in the scope
-TEST_F(FScopeTest, HasVariable)
+TEST_F(FScopeTest, IsVariableDeclared)
 {
     FScope scope;
-    scope.AddVariable("x");
-    ASSERT_TRUE(scope.HasVariable("x"));
-    ASSERT_FALSE(scope.HasVariable("y"));
+    scope.DeclareVariable("x");
+    ASSERT_TRUE(scope.IsVariableDeclared("x"));
+    ASSERT_FALSE(scope.IsVariableDeclared("y"));
 }
 
 // Test case for getting an undefined variable from the scope

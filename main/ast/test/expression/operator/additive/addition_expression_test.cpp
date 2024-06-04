@@ -2,6 +2,9 @@
 #include "expression/operator/additive/addition_expression.hpp"
 #include "expression/literal/number_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 // Test for addition with integers
 TEST(FAdditionExpressionTest, AdditionWithIntegers)
 {

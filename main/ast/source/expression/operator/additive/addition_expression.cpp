@@ -9,6 +9,9 @@
 // Include necessary standard library headers
 #include <stdexcept>
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FAdditionExpression::FAdditionExpression(ExpressionPtr left, ExpressionPtr right)
     // Call base class constructor
     : AComputeExpression(std::move(left), std::move(right))
@@ -35,6 +38,11 @@ Value FAdditionExpression::Evaluate(const FContext& context) const
         // Extract integer values from the variants
         leftInt  = std::get<int>(leftValue);
         rightInt = std::get<int>(rightValue);
+    }
+    else if (std::holds_alternative<std::string>(leftValue) && std::holds_alternative<std::string>(rightValue))
+    {
+        // Extract integer values from the variants
+        return std::get<std::string>(leftValue) + std::get<std::string>(rightValue);
     }
     else // Throw exception for invalid operand types
     {

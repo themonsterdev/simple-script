@@ -5,6 +5,9 @@
 #include "expression/literal/string_expression.hpp"
 #include "expression/identifier_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 // Test when the condition is true
 TEST(FTernaryExpressionTest, EvaluateTrueCondition)
 {

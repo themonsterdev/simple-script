@@ -6,6 +6,7 @@
 #include "interpreter.hpp"  // Include the header file for the interpreter class
 #include "lexer.hpp"        // Include the header file for the lexer class
 #include "parser.hpp"       // Include the header file for the parser class
+#include "context.hpp"      // Include the header file for the context objects
 
 #include <iostream>         // Include the standard input/output stream library
 #include <fstream>          // Include the file stream library

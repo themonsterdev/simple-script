@@ -8,7 +8,10 @@
 
 #include <list>         // For std::list
 #include <memory>       // For std::unique_ptr
-#include "context.hpp"  // Include declarations for context objects
+// #include "context.hpp"  // Include declarations for context objects
+#include "scope.hpp"
+
+class FContext;
 
 /**
  * @brief An interface representing an expression in the abstract syntax tree (AST).

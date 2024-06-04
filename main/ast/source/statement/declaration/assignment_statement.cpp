@@ -9,6 +9,9 @@
 // For runtime_error
 #include <stdexcept>
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FAssignmentStatement::FAssignmentStatement(const std::string& identifier, ExpressionPtr expression)
     // Initialize m_identifier with the given identifier
     : m_identifier(identifier)

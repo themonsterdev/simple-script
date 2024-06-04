@@ -2,6 +2,9 @@
 #include "expression/operator/multiplicative/division_expression.hpp"
 #include "expression/literal/number_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 TEST(FDivisionExpressionTest, DivisionWithIntegers)
 {
     // Create number expressions for division

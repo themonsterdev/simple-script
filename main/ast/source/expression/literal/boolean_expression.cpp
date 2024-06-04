@@ -6,6 +6,9 @@
 // Include the declaration of the boolean expression class
 #include "expression/literal/boolean_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FBooleanExpression::FBooleanExpression(bool value)
 	// Initialize the value member with the provided value
 	: m_value(value)

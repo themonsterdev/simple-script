@@ -16,9 +16,9 @@ end
 ## Handling Exceptions
 
 ```simple_script
-try then
+try
     var result = checkAge(16)
-catch error then
-    print(`Error: ${error.message}`)
+catch error
+    print(`Error: ${error}`)
 end
 ```

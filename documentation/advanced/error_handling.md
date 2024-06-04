@@ -5,9 +5,9 @@ Error handling allows your program to deal with unexpected situations gracefully
 ## Try-Catch
 
 ```simple_script
-try then
+try
     var result = riskyFunction()
-catch error then
+catch error
     print(`An error occurred: ${error.message}`)
 end
 ```
@@ -17,11 +17,11 @@ end
 The finally block is executed regardless of whether an error occurred.
 
 ```simple_script
-try then
+try
     var result = riskyFunction()
-catch error then
+catch error
     print(`An error occurred: ${error.message}`)
-finally then
+finally
     print("Cleanup code executed.")
 end
 ```

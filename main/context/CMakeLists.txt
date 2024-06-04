@@ -1,5 +1,5 @@
 # Add the header files to the library
-file(GLOB CONTEXT_SOURCES "source/*.cpp")
+file(GLOB_RECURSE CONTEXT_SOURCES "source/*.cpp")
 
 # Create a library for the context
 add_library(context ${CONTEXT_SOURCES})
@@ -8,7 +8,7 @@ add_library(context ${CONTEXT_SOURCES})
 target_include_directories(context PUBLIC "include")
 
 # Link with libraries
-target_link_libraries(context scope)
+target_link_libraries(context scope ast)
 
 # Add the test directory
 add_subdirectory(test)

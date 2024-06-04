@@ -6,6 +6,9 @@
  // Include the declaration of the string expression class
 #include "expression/literal/string_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FStringExpression::FStringExpression(const std::string& value)
 	// Initialize the string value
 	: m_value(value)

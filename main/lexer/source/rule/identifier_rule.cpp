@@ -22,12 +22,64 @@ static constexpr auto KEYWORDS =
     "for",
     "while",
 
-    // Print
-    "print",
-
     // Scope
     "then",
     "end",
+
+    // Functions
+    "function",
+
+    // Control Structures
+    "switch",
+    "case",
+    "break",    // unused
+    "default",
+    "continue",
+    "return",
+
+    // Data Types
+    "int",      // unused
+    "float",    // unused
+    "bool",     // unused
+    "string",   // unused
+
+    // Data Structures
+    "array",    // unused
+    "list",     // unused
+    "map",      // unused
+    "set",      // unused
+
+    // Input/Output
+    "input",
+    "output",   // unused
+    "println",  // unused
+    "print",
+
+    // Error Handling
+    "try",
+    "catch",
+    "finally",
+    "throw",
+    "assert",
+
+    // File Operations
+    "open",
+    "close",
+    "read",
+    "write",
+
+    // Memory Management
+    "new",      // unused
+    "delete",   // unused
+
+    // Object-Oriented Programming
+    "class",        // unused
+    "constructor",  // unused
+    "destructor",   // unused
+
+    // String Manipulation
+    "substring",    // unused
+    "concatenate"   // unused
 };
 
 bool FIdentifierRule::Match(const std::string& text, size_t& index, SToken& token) const

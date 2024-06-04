@@ -1,6 +1,9 @@
 #include <gtest/gtest.h>
 #include "expression/literal/number_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 // Test for the GetValue method of FNumberExpression
 TEST(FNumberExpressionTest, GetValue)
 {

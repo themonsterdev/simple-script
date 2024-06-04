@@ -2,6 +2,9 @@
 #include "expression/operator/unary/unary_not_expression.hpp"
 #include "expression/literal/boolean_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 // Test when applying logical NOT to true
 TEST(FUnaryNotExpressionTest, NotTrue)
 {

@@ -50,8 +50,8 @@ SToken FLexer::PeekNextToken(size_t n)
     // Store the current index position
     size_t currentOffset = m_index;
 
-    // Get the next token using GetNextToken
-    SToken nextToken = GetNextToken(n);
+    // Get the next token using GetNextToken with the provided offset
+    const auto& nextToken = GetNextToken(n);
 
     // Restore the index position
     m_index = currentOffset;
@@ -63,16 +63,11 @@ SToken FLexer::PeekNextToken(size_t n)
 SToken FLexer::GetNextToken(size_t n)
 {
     // Advance the index by n characters
-    size_t source_length = m_source.length();
-
     size_t i = 0;
     while (i < n && HasNextToken())
     {
-        if (m_source[m_index] == ' ')
-        {
-            m_index++;
-            continue;
-        }
+        // Skip whitespace characters
+        SkipWhitespace();
 
         m_index++;
         i++;
@@ -101,6 +96,11 @@ SToken FLexer::GetNextToken(size_t n)
             // Update lexer's position and return the matched token
             UpdatePosition(m_index, tempIndex);
             m_index = tempIndex;
+
+            if (token.type == eTokenType::Comment)
+            {
+                return GetNextToken(n);
+            }
             return token;
         }
     }
@@ -108,6 +108,16 @@ SToken FLexer::GetNextToken(size_t n)
     // If no match is found, throw an exception
     std::string lexeme(1, m_source[m_index]);
     throw FLexicalException("Unknown token: " + lexeme);
+}
+
+void FLexer::BeginNextToken()
+{
+    m_begin = m_index;
+}
+
+void FLexer::EndNextToken()
+{
+    m_index = m_begin;
 }
 
 bool FLexer::TryConsumeToken(eTokenType expectedType, const std::string& expectedLexeme)

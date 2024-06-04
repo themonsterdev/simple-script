@@ -2,6 +2,9 @@
 #include "expression/operator/multiplicative/multiply_expression.hpp"
 #include "expression/literal/number_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 TEST(FMultiplyExpressionTest, MultiplyWithIntegers)
 {
     // Create number expressions for multiplication

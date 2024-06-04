@@ -1,6 +1,9 @@
 #include <gtest/gtest.h>
 #include "expression/literal/string_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 // Test for the GetValue method of FStringExpression
 TEST(FStringExpressionTest, GetValue)
 {

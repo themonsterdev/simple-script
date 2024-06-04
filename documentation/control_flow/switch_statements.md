@@ -7,14 +7,14 @@ Switch statements allow you to execute one block of code from multiple options b
 ```simple_script
 var grade = 'B'
 
-switch grade then
-    case 'A' then
+switch grade
+    case 'A':
         print("Excellent")
-    case 'B' then
+    case 'B':
         print("Good")
-    case 'C' then
+    case 'C':
         print("Fair")
-    default
+    default:
         print("Poor")
 end
 ```
@@ -24,12 +24,12 @@ end
 ```simple_script
 var day = "Tuesday"
 
-switch day then
-    case "Monday" then
+switch day
+    case "Monday"
         print("Start of the week")
-    case "Friday" then
+    case "Friday":
         print("End of the work week")
-    default
+    default:
         print("Midweek days")
 end
 ```

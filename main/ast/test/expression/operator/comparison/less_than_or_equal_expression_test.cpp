@@ -2,6 +2,9 @@
 #include "expression/operator/comparison/less_than_or_equal_expression.hpp"
 #include "expression/literal/number_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 TEST(FLessThanOrEqualToExpressionTest, LessThanOrEqualToWithIntegers)
 {
     // Create expressions with integer values

@@ -2,6 +2,9 @@
 #include "expression/operator/comparison/greater_than_or_equal_expression.hpp"
 #include "expression/literal/number_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 TEST(GreaterThanOrEqualToExpressionTest, GreaterThanOrEqualToWithIntegers)
 {
     // Create expressions with integer values

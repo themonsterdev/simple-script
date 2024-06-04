@@ -8,7 +8,7 @@
 #include "statement/declaration/assignment_statement.hpp"
 #include "statement/declaration/var_declaration_list_statement.hpp"
 #include "statement/declaration/var_declaration_statement.hpp"
-#include "statement/print/print_statement.hpp"
+#include "statement/io/print_statement.hpp"
 
 // Expression
 #include "expression/operator/additive/addition_expression.hpp"
@@ -94,7 +94,7 @@ TEST_F(FParserTest, ParseTest)
 {
     std::string input;
     input += "var n = 1 + 2 * 3\n";
-    input += "print n";
+    input += "print(n)";
 
     FLexer lexer(input);
     FParser parser(lexer);

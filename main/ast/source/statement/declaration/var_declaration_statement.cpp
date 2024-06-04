@@ -9,6 +9,9 @@
 // For std::invalid_argument
 #include <stdexcept>
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FVarDeclarationStatement::FVarDeclarationStatement(const std::string& identifier, ExpressionPtr expression)
 	: m_identifier(identifier)
 	// Move the expression into the member variable

@@ -9,6 +9,7 @@
 #include "statement/rule/statement_rule_factory.hpp"    // include the statement  factory header file
 #include "exception/syntax_exception.hpp"               // Include the syntax exception header file
 #include "lexer.hpp"		                            // Include the lexer header file
+#include <format>
 
 FStatementParser::FStatementParser(FLexer& lexer, FExpressionParser& expressionParser)
     : m_lexer(lexer)
@@ -36,7 +37,17 @@ StatementPtr FStatementParser::ParseStatement()
         const auto& token = m_lexer.PeekNextToken();
 
         // If none of the above conditions are met, throw an error
-        throw FSyntaxException("Unexpected token: " + token.lexeme);
+        // std::string message = std::format(
+        //     "Unexpected token: {} at line {}:{}",
+        //     token.lexeme,
+        //     std::to_string(token.line),
+        //     std::to_string(token.column)
+        // );
+        std::string message = std::format(
+            "Unexpected token: {}",
+            token.lexeme
+        );
+        throw FSyntaxException(message);
     }
 
     return nullptr;

@@ -8,7 +8,11 @@
 
 #include <map>          // For std::map
 #include <memory>       // For std::unique_ptr
-#include "context.hpp"  // Include declarations for context objects
+#include <vector>       // For std::vector
+#include <list>         // For std::list
+// #include "context.hpp"  // Include declarations for context objects
+
+class FContext;
 
 /**
  * @brief Interface for language statements.

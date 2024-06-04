@@ -51,8 +51,8 @@ TEST(FParserConditionalStatementTest, ParseIfStatementWithoutStatements)
 TEST(FParserConditionalStatementTest, ParseIfStatementWithThenAndEnd)
 {
     std::string input("if condition then\n"
-        "  print 0\n"
-        "  print 0\n"
+        "  print(0)\n"
+        "  print(0)\n"
         "end");
 
     FLexer lexer(input);
@@ -88,9 +88,9 @@ TEST(FParserConditionalStatementTest, ParseIfStatementWithThenAndEnd)
 TEST(FParserConditionalStatementTest, ParseIfElseIfStatement)
 {
     std::string input("if condition then\n"
-        "  print 0\n"
+        "  print(0)\n"
         "else if other_condition then\n"
-        "  print 1\n"
+        "  print(1)\n"
         "end");
 
     FLexer lexer(input);
@@ -148,11 +148,11 @@ TEST(FParserConditionalStatementTest, ParseIfElseIfStatement)
 TEST(FParserConditionalStatementTest, ParseIfElseIfElseStatement)
 {
     std::string input("if condition then\n"
-        "  print 0\n"
+        "  print(0)\n"
         "else if other_condition then\n"
-        "  print 1\n"
+        "  print(1)\n"
         "else\n"
-        "  print 2\n"
+        "  print(2)\n"
         "end");
 
     FLexer lexer(input);
@@ -223,14 +223,14 @@ TEST(FParserConditionalStatementTest, ParseNestedIfElseIfElseStatement)
 {
     std::string input("if condition1 then\n"
         "  if condition2 then\n"
-        "    print 1\n"
+        "    print(1)\n"
         "  else\n"
-        "    print 2\n"
+        "    print(2)\n"
         "  end\n"
         "else if condition3 then\n"
-        "  print 3\n"
+        "  print(3)\n"
         "else\n"
-        "  print 4\n"
+        "  print(4)\n"
         "end");
 
     FLexer lexer(input);

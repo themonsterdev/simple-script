@@ -1,29 +1,86 @@
 # Variable declaration
-var total = 0
-const max_value = 10
+var total = 0            // Variable to store the sum of even numbers
+const max_value = 10     // Maximum value up to which we will calculate
 
 # Initial values display
-print `Initial total: ${total}`
-print `Max value: ${max_value}`
+print(`Initial total: ${total}`)   // Display the initial value of the variable total
+print(`Max value: ${max_value}`)   // Display the maximum value
 
 # Calculating the sum of even numbers up to max_value
-print "Calculating sum of even numbers up to max_value"
-var i = 0
+print("Calculating sum of even numbers up to max_value")   // Indicate that we are going to calculate the sum of even numbers
+var i = 0               // Initialize the loop variable
 do
-    if (i % 2) == 0 then
-        total = total + i
+    if (i % 2) == 0 then    // Check if the number is even
+        total = total + i   // Add the even number to the sum
     end
-    i = i + 1
-while i <= max_value
+    i = i + 1               // Increment the loop variable
+while i <= max_value        // Continue until i exceeds max_value
 
-print `Sum of even numbers up to max_value: ${total}`
+print(`Sum of even numbers up to max_value: ${total}`)   // Display the sum of even numbers
 
 # Displaying odd numbers up to max_value
-print "Displaying odd numbers up to max_value"
-var j = 1
+print("Displaying odd numbers up to max_value")   // Indicate that we are going to display odd numbers
+var j = 1               // Initialize the loop variable for odd numbers
 while j <= max_value then
-    print j
-    j = j + 2
+    print(j)            // Display the odd number
+    j = j + 2           // Move to the next odd number
 end
 
-print "End of the program"
+# Definition and usage of a greet function
+function greet(name) then
+    print(`Hello, ${name}`)    // Display a greeting message
+    return true                // Return true
+end
+
+var condition = greet("toto")          // Call the greet function with the name "toto"
+var success = condition ? "true" : "false"  // Use the ternary operator to define the success variable
+print(`success: ${success}`)          // Display whether the greet function succeeded
+
+# Using a switch statement to evaluate a grade variable
+var grade = 'B'              // Declare the grade variable
+switch grade
+    case 'A':
+        print("Excellent")   // Print "Excellent" if grade is 'A'
+    case 'B':
+        print("Good")        // Print "Good" if grade is 'B'
+    case 'C':
+        print("Fair")        // Print "Fair" if grade is 'C'
+    default:
+        print("Poor")        // Print "Poor" for all other values of grade
+end
+
+# Definition and usage of a checkAge function
+function checkAge(age) then
+    if age < 18 then
+        throw "UnderageError: You must be 18 or older."   // Throw an exception if the age is less than 18
+    end
+    return "Access granted"   // Return "Access granted" if the age is sufficient
+end
+
+# Using a try-catch block to handle exceptions
+try
+    var result = checkAge(16)          // Call the checkAge function with age 16
+    print(`end: checkAge ${result}!`)  // Display the result if no exception is thrown
+catch error
+    print(`Error: ${error}`)     // Display the error if an exception is thrown
+end
+
+function add(a, b) then
+    return a + b
+end
+
+assert(add(2, 3) == 5)    // Assert that the result of add function is 5 for inputs 2 and 3
+assert(add(-1, 1) == 0)   // Assert that the result of add function is 0 for inputs -1 and 1
+
+function multiply(a, b) then
+    return a * b
+end
+
+assert(multiply(2, 3) == 6)          // Assert that the result of multiply function is 6 for inputs 2 and 3
+assert(add(multiply(3, 3), 4) == 13) // Assert that the result of the expression is 13
+
+var userInput = input("Enter your name: ")  // Get user input for name
+greet(userInput)                            // Display a greeting message with user's input
+
+# Indicate the end of the program
+print("End of the program")

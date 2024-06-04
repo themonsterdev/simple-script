@@ -1,8 +1,11 @@
 #include <gtest/gtest.h>
 #include "statement/conditional/conditional_statement.hpp"
-#include "statement/print/print_statement.hpp"
+#include "statement/io/print_statement.hpp"
 #include "expression/literal/number_expression.hpp"
 #include "expression/literal/string_expression.hpp"
+
+// Include declarations for context objects
+#include "context.hpp"
 
 // Test when the condition is true
 TEST(FConditionalStatementTest, IfConditionTrue)

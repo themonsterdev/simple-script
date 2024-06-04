@@ -2,7 +2,10 @@
 #include "statement/loop/while_loop_statement.hpp"
 #include "expression/literal/number_expression.hpp"
 #include "expression/literal/string_expression.hpp"
-#include "statement/print/print_statement.hpp"
+#include "statement/io/print_statement.hpp"
+
+// Include declarations for context objects
+#include "context.hpp"
 
 // Test the execution of a while loop with a false condition
 TEST(FWhileLoopStatementTest, ExecuteFalseCondition)

@@ -2,6 +2,9 @@
 #include "expression/operator/logical/logical_or_expression.hpp"
 #include "expression/literal/boolean_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 TEST(FLogicalOrExpressionTest, LogicalOrWithBothTrue)
 {
     // Create expressions with true boolean values

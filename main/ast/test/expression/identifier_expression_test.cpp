@@ -1,6 +1,9 @@
 #include <gtest/gtest.h>
 #include "expression/identifier_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 // Test the constructor of FIdentifierExpression
 TEST(FIdentifierExpressionTest, Constructor)
 {

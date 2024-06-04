@@ -2,6 +2,9 @@
 #include "expression/operator/additive/subtraction_expression.hpp"
 #include "expression/literal/number_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 // Test for subtraction with integers
 TEST(FSubtractionExpressionTest, SubtractionWithIntegers)
 {

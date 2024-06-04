@@ -2,6 +2,9 @@
 #include "expression/operator/equality/equal_to_expression.hpp"
 #include "expression/literal/number_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 TEST(FEqualToExpressionTest, EqualToWithIntegers)
 {
     // Create expressions with equal integer values

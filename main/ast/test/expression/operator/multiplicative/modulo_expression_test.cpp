@@ -2,6 +2,9 @@
 #include "expression/operator/multiplicative/modulo_expression.hpp"
 #include "expression/literal/number_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 TEST(FModuloExpressionTest, ModuloWithIntegers)
 {
     // Create number expressions for modulo operation

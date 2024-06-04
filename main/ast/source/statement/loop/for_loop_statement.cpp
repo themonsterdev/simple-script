@@ -7,6 +7,9 @@
 #include "statement/loop/for_loop_statement.hpp"
 #include <stdexcept>
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FForLoopStatement::FForLoopStatement(StatementPtr initialization, ExpressionPtr condition, StatementPtr update, StatementPtr body)
     : m_initialization(std::move(initialization))
     , m_condition(std::move(condition))

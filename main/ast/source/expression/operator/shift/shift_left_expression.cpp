@@ -7,6 +7,9 @@
 #include "expression/operator/shift/shift_left_expression.hpp"
 #include <stdexcept>
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FShiftLeftExpression::FShiftLeftExpression(ExpressionPtr left, ExpressionPtr right)
     : AComputeExpression(std::move(left), std::move(right))
 {}

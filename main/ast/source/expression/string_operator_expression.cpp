@@ -9,6 +9,9 @@
 // For runtime_error
 #include <stdexcept>
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FStringOperatorExpression::FStringOperatorExpression(const std::string& op, ExpressionPtr left, ExpressionPtr right)
     // Initialize the string operator and its operands
     : m_operator(op)

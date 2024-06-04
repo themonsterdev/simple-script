@@ -64,7 +64,14 @@ private:
     ExpressionPtr ParseAdditiveExpression();
     ExpressionPtr ParseMultiplicativeExpression();
     ExpressionPtr ParseUnaryExpression();
+    ExpressionPtr ParsePostfixExpression();
+
     ExpressionPtr ParseAccessExpression();
+    ExpressionPtr ParseSubscriptExpression();
+    ExpressionPtr ParseCallExpression();
+    ExpressionPtr ParseCastExpression();
+    ExpressionPtr ParseSuffixAndPostfixExpression();
+    ExpressionPtr ParseScopeResolutionExpression();
 
     ExpressionPtr ParsePrimaryExpression();
 };

@@ -2,6 +2,9 @@
 #include "expression/operator/shift/shift_left_expression.hpp"
 #include "expression/literal/number_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 TEST(FShiftLeftExpressionTest, ShiftLeftWithIntegers)
 {
     // Create number expressions for left shift operation

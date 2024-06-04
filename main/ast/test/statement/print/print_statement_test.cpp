@@ -2,7 +2,10 @@
 #include "expression/identifier_expression.hpp"
 #include "expression/literal/number_expression.hpp"
 #include "expression/literal/string_expression.hpp"
-#include "statement/print/print_statement.hpp"
+#include "statement/io/print_statement.hpp"
+
+// Include declarations for context objects
+#include "context.hpp"
 
 // Tests the creation of a print statement with a valid expression
 TEST(FPrintStatementTest, ConstructorValidExpression)

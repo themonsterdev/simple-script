@@ -21,6 +21,7 @@ class FLexer final
     size_t m_index;                 // Current index in the source code
     uint32_t m_line;                // Current line number
     uint32_t m_column;              // Current column number
+    size_t m_begin;
 
 public:
 
@@ -55,6 +56,9 @@ public:
      * @return The next token.
      */
     SToken GetNextToken(size_t n = 0);
+
+    void BeginNextToken();
+    void EndNextToken();
 
     bool TryConsumeToken(eTokenType expectedType, const std::string& expectedLexeme);
 

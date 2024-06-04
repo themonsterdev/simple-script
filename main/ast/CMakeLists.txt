@@ -8,7 +8,7 @@ add_library(ast ${AST_SOURCES})
 target_include_directories(ast PUBLIC "include")
 
 # Link the AST library with the context library
-target_link_libraries(ast context)
+target_link_libraries(ast context scope)
 
 # Add the test directory
 add_subdirectory(test)

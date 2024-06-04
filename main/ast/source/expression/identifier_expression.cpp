@@ -6,6 +6,9 @@
 // Include the header file for the FIdentifierExpression class
 #include "expression/identifier_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FIdentifierExpression::FIdentifierExpression(const std::string& name)
     // Initialize the name member with the provided name
     : m_name(name)

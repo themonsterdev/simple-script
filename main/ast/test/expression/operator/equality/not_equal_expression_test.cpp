@@ -2,6 +2,9 @@
 #include "expression/operator/equality/not_equal_expression.hpp"
 #include "expression/literal/number_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 TEST(FNotEqualExpressionTest, NotEqualToWithEqualIntegers)
 {
     // Create expressions with equal integer values

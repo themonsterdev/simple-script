@@ -14,15 +14,3 @@ print(`Hello, ${userInput}`)
 ```simple_script
 print("This is a message to the console.")
 ```
-
-## File Handling
-
-You can read from and write to files using the standard library functions.
-
-Example:
-
-```simple_script
-var file = open("example.txt", "w")
-file.write("Hello, file!")
-file.close()
-```

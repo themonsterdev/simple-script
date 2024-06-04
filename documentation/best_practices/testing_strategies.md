@@ -11,7 +11,7 @@ Example:
 ```simple_script
 function add(a, b) then
     return a + b
-}
+end
 
 function testAdd() then
     assert(add(2, 3) == 5)
@@ -37,27 +37,4 @@ function testMathOperations() then
 end
 
 testMathOperations()
-```
-
-## Mocking
-
-Use mocking to test code that depends on external systems or resources.
-
-Example:
-
-```simple_script
-function fetchData(api) then
-    return api.getData()
-end
-
-function testFetchData() then
-    var mockApi = {
-        getData: function() then
-            return "mock data"
-        end
-    }
-    assert(fetchData(mockApi) == "mock data")
-}
-
-testFetchData()
 ```

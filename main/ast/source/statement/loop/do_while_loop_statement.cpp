@@ -7,6 +7,9 @@
 #include "statement/loop/do_while_loop_statement.hpp"
 #include <stdexcept>
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FDoWhileLoopStatement::FDoWhileLoopStatement(StatementPtr body, ExpressionPtr condition)
     : m_condition(std::move(condition))
     , m_body(std::move(body))
@@ -21,6 +24,20 @@ void FDoWhileLoopStatement::Execute(const FContext& context) const
     {
         // Execute the body of the loop
         m_body->Execute(context);
+
+        if (context.HasReturnValue())
+        {
+            // Exit the loop if a return statement was executed
+            break;
+        }
+
+        // Check if a continue statement has been encountered
+        if (context.GetContinueFlag())
+        {
+            // Reset the continue flag for the next iteration
+            context.SetContinueFlag(false);
+            continue; // Move to the next iteration
+        }
 
         // Evaluate the condition of the loop
         Value conditionValue = m_condition->Evaluate(context);

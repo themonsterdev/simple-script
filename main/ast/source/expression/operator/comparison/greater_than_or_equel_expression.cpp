@@ -9,6 +9,9 @@
 // Include necessary standard library headers
 #include <stdexcept>
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FGreaterThanOrEqualExpression::FGreaterThanOrEqualExpression(ExpressionPtr left, ExpressionPtr right)
 // Call base class constructor to initialize operands
     : AComputeExpression(std::move(left), std::move(right))

@@ -3,7 +3,7 @@
 #include "expression/literal/number_expression.hpp"
 #include "expression/literal/string_expression.hpp"
 #include "expression/identifier_expression.hpp"
-#include "statement/print/print_statement.hpp"
+#include "statement/io/print_statement.hpp"
 #include "statement/declaration/var_declaration_statement.hpp"
 #include "statement/declaration/assignment_statement.hpp"
 

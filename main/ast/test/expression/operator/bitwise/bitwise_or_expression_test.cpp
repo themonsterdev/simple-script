@@ -2,6 +2,9 @@
 #include "expression/operator/bitwise/bitwise_or_expression.hpp"
 #include "expression/literal/number_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 // Test for bitwise OR operation with integers
 TEST(FBitwiseOrExpressionTest, BitwiseOrWithIntegers)
 {

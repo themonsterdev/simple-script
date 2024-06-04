@@ -7,6 +7,9 @@
 #include "expression/operator/unary/unary_not_expression.hpp"
 #include <stdexcept>
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FUnaryNotExpression::FUnaryNotExpression(ExpressionPtr expression)
     : m_expression(std::move(expression))
 {}

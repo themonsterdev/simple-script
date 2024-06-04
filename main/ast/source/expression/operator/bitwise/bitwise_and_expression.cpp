@@ -7,6 +7,9 @@
 #include "expression/operator/bitwise/bitwise_and_expression.hpp"
 #include <stdexcept>
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FBitwiseAndExpression::FBitwiseAndExpression(ExpressionPtr left, ExpressionPtr right)
     // Call base class constructor to initialize operands
     : AComputeExpression(std::move(left), std::move(right))

@@ -9,6 +9,9 @@
 // For runtime_error
 #include <stdexcept>
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FConditionalStatement::FConditionalStatement(ExpressionPtr condition, StatementPtr ifStatement)
     : m_condition(std::move(condition))
     , m_ifStatement(std::move(ifStatement))

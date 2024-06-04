@@ -6,6 +6,9 @@
 // Include the declaration of the number expression class
 #include "expression/literal/number_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FNumberExpression::FNumberExpression(int value)
 	// Initialize the value member with the provided value
 	: m_value(value)

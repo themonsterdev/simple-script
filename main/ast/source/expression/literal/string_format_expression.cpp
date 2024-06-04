@@ -10,6 +10,9 @@
 #include <regex>
 #include <sstream>
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FStringFormatExpression::FStringFormatExpression(const std::string& value)
     : m_value(value)
 {

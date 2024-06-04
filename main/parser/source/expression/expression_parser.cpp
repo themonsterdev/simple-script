@@ -38,6 +38,8 @@
 #include "expression/operator/unary/unary_negate_expression.hpp"
 #include "expression/operator/unary/unary_not_expression.hpp"
 
+#include "expression/invokable/call_expression.hpp"
+
 #include "expression/literal/boolean_expression.hpp"
 #include "expression/literal/number_expression.hpp"
 #include "expression/literal/string_expression.hpp"
@@ -331,20 +333,155 @@ ExpressionPtr FExpressionParser::ParseUnaryExpression()
         //     ExpressionPtr expr = ParseUnaryExpression();
         //     return std::make_unique<FBinaryNotExpression>(std::move(expr));
         // }
-        else
-        {
-            return ParsePrimaryExpression();
-        }
     }
-    else
-    {
-        return ParsePrimaryExpression();
-    }
+    return ParsePostfixExpression();
+}
+
+ExpressionPtr FExpressionParser::ParsePostfixExpression()
+{
+    ExpressionPtr left = ParseAccessExpression();
+
+    // while (m_lexer.HasNextToken())
+    // {
+    //     if (m_lexer.PeekNextToken().type == eTokenType::Operator)
+    //     {
+    //         // Postfix increment or decrement
+    //         if (m_lexer.PeekNextToken().lexeme == "++" || m_lexer.PeekNextToken().lexeme == "--")
+    //         {
+    //             m_lexer.GetNextToken(); // Consume the operator token
+    //             left = std::make_unique<FPostfixIncrementDecrementExpression>(std::move(left), m_lexer.GetCurrentToken().lexeme);
+    //         }
+    //         else
+    //         {
+    //             // No more postfix expressions
+    //             break;
+    //         }
+    //     }
+    //     else
+    //     {
+    //         // No more postfix expressions
+    //         break;
+    //     }
+    // }
+
+    return left;
 }
 
 ExpressionPtr FExpressionParser::ParseAccessExpression()
 {
-    return nullptr;
+    // Implementation for member access
+    ExpressionPtr expr = ParseSubscriptExpression();
+    // while (m_lexer.HasNextToken())
+    // {
+    //     if (m_lexer.PeekNextToken().type == eTokenType::Operator && (m_lexer.PeekNextToken().lexeme == "." || m_lexer.PeekNextToken().lexeme == "->"))
+    //     {
+    //         std::string op = m_lexer.GetNextToken().lexeme; // Consume '.' or '->'
+    //         std::string memberName = m_lexer.GetNextToken().lexeme; // Consume member name
+    //         expr = std::make_unique<FAccessExpression>(std::move(expr), op, memberName);
+    //     }
+    //     else
+    //     {
+    //         break;
+    //     }
+    // }
+    return expr;
+}
+
+ExpressionPtr FExpressionParser::ParseSubscriptExpression()
+{
+    // Implementation for array operators
+    ExpressionPtr expr = ParseCallExpression();
+
+    // if (m_lexer.HasNextToken() && m_lexer.PeekNextToken().type == eTokenType::Delimiter && m_lexer.PeekNextToken().lexeme == "[")
+    // {
+    //     m_lexer.GetNextToken(); // Consume '['
+    //     ExpressionPtr index = ParseExpression();
+    //     if (!m_lexer.TryConsumeToken(eTokenType::Delimiter, "]"))
+    //     {
+    //         throw FSyntaxException("Expected ']' after subscript expression");
+    //     }
+    //     return std::make_unique<FSubscriptExpression>(std::move(expr), std::move(index));
+    // }
+    return expr;
+}
+
+ExpressionPtr FExpressionParser::ParseCallExpression()
+{
+    // Implementation for function calls
+    ExpressionPtr expr = ParseCastExpression();
+
+    while (m_lexer.HasNextToken() && m_lexer.TryConsumeToken(eTokenType::Delimiter, "("))
+    {
+        std::vector<ExpressionPtr> arguments;
+        if (m_lexer.PeekNextToken().type != eTokenType::Delimiter || m_lexer.PeekNextToken().lexeme != ")")
+        {
+            do
+            {
+                arguments.push_back(ParseExpression());
+            } while (m_lexer.TryConsumeToken(eTokenType::Delimiter, ","));
+        }
+        if (!m_lexer.TryConsumeToken(eTokenType::Delimiter, ")"))
+        {
+            throw FSyntaxException("Expected ')' after arguments in function call");
+        }
+
+        expr = std::make_unique<FCallExpression>(std::move(expr), std::move(arguments));
+    }
+    return expr;
+}
+
+ExpressionPtr FExpressionParser::ParseCastExpression()
+{
+    // Implementation for functional casts
+    // if (m_lexer.HasNextToken() && m_lexer.PeekNextToken().type == eTokenType::Operator && m_lexer.PeekNextToken().lexeme == "type")
+    // {
+    //     m_lexer.GetNextToken(); // Consume 'type'
+    //     if (m_lexer.TryConsumeToken(eTokenType::Delimiter, "("))
+    //     {
+    //         ExpressionPtr expr = ParseExpression();
+    //         if (m_lexer.TryConsumeToken(eTokenType::Delimiter, ")"))
+    //         {
+    //             return std::make_unique<FCastExpression>(std::move(expr));
+    //         }
+    //         else
+    //         {
+    //             throw FSyntaxException("Expected ')' after functional cast expression");
+    //         }
+    //     }
+    //     else
+    //     {
+    //         throw FSyntaxException("Expected '(' after 'type' in functional cast expression");
+    //     }
+    // }
+    return ParseSuffixAndPostfixExpression();
+}
+
+ExpressionPtr FExpressionParser::ParseSuffixAndPostfixExpression()
+{
+    // Implementation for suffix and postfix operators
+    ExpressionPtr expr = ParseScopeResolutionExpression();
+    // if (m_lexer.HasNextToken())
+    // {
+    //     if (m_lexer.PeekNextToken().type == eTokenType::Operator && (m_lexer.PeekNextToken().lexeme == "++" || m_lexer.PeekNextToken().lexeme == "--"))
+    //     {
+    //         std::string op = m_lexer.GetNextToken().lexeme; // Consume '++' or '--'
+    //         return std::make_unique<FSuffixPostfixExpression>(std::move(expr), op);
+    //     }
+    // }
+    return expr;
+}
+
+ExpressionPtr FExpressionParser::ParseScopeResolutionExpression()
+{
+    // Implementation for scope resolution
+    ExpressionPtr expr = ParsePrimaryExpression();
+    // if (m_lexer.HasNextToken() && m_lexer.PeekNextToken().type == eTokenType::Operator && m_lexer.PeekNextToken().lexeme == "::")
+    // {
+    //     m_lexer.GetNextToken(); // Consume '::'
+    //     ExpressionPtr right = ParseScopeResolutionExpression();
+    //     return std::make_unique<FScopeResolutionExpression>(std::move(expr), std::move(right));
+    // }
+    return expr;
 }
 
 ExpressionPtr FExpressionParser::ParsePrimaryExpression()
@@ -371,7 +508,7 @@ ExpressionPtr FExpressionParser::ParsePrimaryExpression()
         {
             return std::make_unique<FStringFormatExpression>(token.lexeme);
         }
-        else if (token.type == eTokenType::Identifier)
+        else if (token.type == eTokenType::Identifier || token.type == eTokenType::Keyword)
         {
             return std::make_unique<FIdentifierExpression>(token.lexeme);
         }

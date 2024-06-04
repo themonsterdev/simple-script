@@ -9,6 +9,9 @@
 // For std::invalid_argument
 #include <stdexcept>
 
+// Include declarations for context objects
+#include "context.hpp"
+
 FVarDeclarationListStatement::FVarDeclarationListStatement(StatementVector declarations)
     // Initialize member variable with provided declarations
     : m_declarations(std::move(declarations))

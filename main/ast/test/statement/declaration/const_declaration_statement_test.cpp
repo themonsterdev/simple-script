@@ -3,6 +3,9 @@
 #include "expression/literal/number_expression.hpp"
 #include "expression/literal/string_expression.hpp"
 
+// Include declarations for context objects
+#include "context.hpp"
+
 // Test the creation of a const declaration statement with a valid identifier and expression
 TEST(FConstDeclarationStatementTest, ConstructorValidIdentifierAndExpression)
 {
