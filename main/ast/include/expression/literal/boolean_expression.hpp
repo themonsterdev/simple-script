@@ -45,5 +45,5 @@ public:
 	 * @param context The context in which the evaluation occurs (unused in this case).
 	 * @return The boolean value held by the expression.
 	 */
-	virtual Value Evaluate(const FContext& context) const override;
+	virtual ValuePtr Evaluate(const FContext& context) const override;
 };

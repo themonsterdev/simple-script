@@ -26,7 +26,7 @@ void FIdentifierExpression::SetName(const std::string& name)
     m_name = name;
 }
 
-Value FIdentifierExpression::Evaluate(const FContext& context) const
+ValuePtr FIdentifierExpression::Evaluate(const FContext& context) const
 {
     // Retrieve the value associated with the identifier from the context
     return context.GetVariable(m_name);

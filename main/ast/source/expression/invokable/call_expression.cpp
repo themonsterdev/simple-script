@@ -13,15 +13,15 @@ FCallExpression::FCallExpression(ExpressionPtr identifier, std::vector<Expressio
 	, m_arguments(std::move(arguments))
 {}
 
-Value FCallExpression::Evaluate(const FContext& context) const
+ValuePtr FCallExpression::Evaluate(const FContext& context) const
 {
     const auto& identifier = dynamic_cast<FIdentifierExpression*>(m_identifier.get());
 
-    std::vector<Value> argumentValues;
-    for (const auto& arg : m_arguments)
+    std::vector<ValuePtr> arguments;
+    for (const auto& argument : m_arguments)
     {
-        argumentValues.push_back(arg->Evaluate(context));
+        arguments.push_back(argument->Evaluate(context));
     }
 
-    return context.CallFunction(identifier->GetName(), argumentValues);
+    return context.CallFunction(identifier->GetName(), arguments);
 }

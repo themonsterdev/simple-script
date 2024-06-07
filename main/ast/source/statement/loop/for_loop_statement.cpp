@@ -10,6 +10,8 @@
 // Include declarations for context objects
 #include "context.hpp"
 
+#include "boolean_value.hpp"
+
 FForLoopStatement::FForLoopStatement(StatementPtr initialization, ExpressionPtr condition, StatementPtr update, StatementPtr body)
     : m_initialization(std::move(initialization))
     , m_condition(std::move(condition))
@@ -31,11 +33,13 @@ void FForLoopStatement::Execute(const FContext& context) const
         m_body->Execute(context);
 
         // Evaluate the condition expression at the end of each iteration
-        Value conditionValue = m_condition->Evaluate(context);
+        ValuePtr conditionValue = m_condition->Evaluate(context);
 
-        if (std::holds_alternative<bool>(conditionValue))
+        if (conditionValue->IsBoolean())
         {
-            conditionResult = std::get<bool>(conditionValue);
+            const auto& result = std::dynamic_pointer_cast<FBooleanValue>(conditionValue);
+
+            conditionResult = result->GetValue();
         }
         else
         {

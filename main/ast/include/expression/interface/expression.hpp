@@ -8,8 +8,8 @@
 
 #include <list>         // For std::list
 #include <memory>       // For std::unique_ptr
-// #include "context.hpp"  // Include declarations for context objects
 #include "scope.hpp"
+#include "interface/value.hpp"
 
 class FContext;
 
@@ -39,7 +39,7 @@ public:
      *                during evaluation.
      * @return The evaluated value of the expression.
      */
-    virtual Value Evaluate(const FContext& context) const = 0; 
+    virtual ValuePtr Evaluate(const FContext& context) const = 0; 
 };
 
 // Define a convenient alias for unique pointers to expressions

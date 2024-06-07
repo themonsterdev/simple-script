@@ -8,10 +8,8 @@
 
 // Include the interface for language statements
 #include "statement/interface/statement.hpp"
+#include "statement/function/function_parameter.hpp"
 #include <string>
-
-// Define a type alias for function parameters
-using FunctionParameters = std::vector<std::string>;
 
 /**
  * @brief Represents a function declaration statement in the abstract syntax tree.

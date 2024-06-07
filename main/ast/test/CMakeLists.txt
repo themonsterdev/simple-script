@@ -5,7 +5,7 @@ file(GLOB_RECURSE TEST_SOURCES "*.cpp")
 add_executable(ast_test ${TEST_SOURCES})
 
 # Link Google Test libraries
-target_link_libraries(ast_test gtest gtest_main ast context)
+target_link_libraries(ast_test gtest gtest_main ast context value)
 
 # Include the header directory
 target_include_directories(ast_test PUBLIC "../include")

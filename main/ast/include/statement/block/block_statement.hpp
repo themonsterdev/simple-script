@@ -43,3 +43,5 @@ public:
      */
     virtual void Execute(const FContext& context) const override;
 };
+
+using BlockStatementPtr = std::unique_ptr<FBlockStatement>;

@@ -35,8 +35,8 @@ TEST(FStringExpressionTest, Evaluate)
     // Create a string expression with the value "Hello, world!"
     FStringExpression expr("Hello, world!");
     // Evaluate the expression in the context
-    Value result = expr.Evaluate(context);
+    ValuePtr result = expr.Evaluate(context);
     // Ensure that the result is a string value and it's "Hello, world!"
-    ASSERT_TRUE(std::holds_alternative<std::string>(result));
-    EXPECT_EQ(std::get<std::string>(result), "Hello, world!");
+    ASSERT_TRUE(result->IsString());
+    EXPECT_EQ(result->ToString(), "Hello, world!");
 }

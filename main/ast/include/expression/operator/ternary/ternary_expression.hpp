@@ -31,7 +31,7 @@ public:
      * @param context The context used for evaluation.
      * @return The result of the ternary expression evaluation.
      */
-    virtual Value Evaluate(const FContext& context) const override;
+    virtual ValuePtr Evaluate(const FContext& context) const override;
 
     /**
      * @brief Gets the condition expression.

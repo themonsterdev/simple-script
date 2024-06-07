@@ -75,11 +75,14 @@ TEST_F(FVarDeclarationStatementTest, EvaluateWithExpression)
     // Check if the variable is declared
     ASSERT_TRUE(context.IsVariableDeclared(identifier));
 
-    const ExpressionPtr& expr = varDeclaration.GetExpression();
+    const auto& expr = varDeclaration.GetExpression();
     ASSERT_NE(expr, nullptr);
 
     // Check if the variable value is set correctly
-    ASSERT_EQ(context.GetVariable(identifier), expr->Evaluate(context));
+    ASSERT_EQ(
+        context.GetVariable(identifier)->ToString(),
+        expr->Evaluate(context)->ToString()
+    );
 }
 
 // Test Evaluate method without expression
@@ -94,5 +97,6 @@ TEST_F(FVarDeclarationStatementTest, EvaluateWithoutExpression)
     ASSERT_TRUE(context.IsVariableDeclared(identifier));
 
     // Check if the variable value is default (empty)
-    ASSERT_EQ(context.GetVariable(identifier), Value());
+    ValuePtr value = context.GetVariable(identifier);
+    ASSERT_EQ(value, nullptr);
 }

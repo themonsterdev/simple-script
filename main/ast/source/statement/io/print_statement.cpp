@@ -12,25 +12,6 @@
 // Include declarations for context objects
 #include "context.hpp"
 
-/**
- * @brief Converts a Value variant to a string.
- * @param value The Value variant to convert.
- * @return The string representation of the value.
- */
-static std::string ToString(const Value& value)
-{
-	std::stringstream ss;
-
-	// Use std::visit to handle the different types of the variant
-	std::visit([&](const auto& val) {
-		// Convert the value to a string and append it to the stream
-		ss << val;
-		}, value);
-
-	// Return the resulting string
-	return ss.str();
-}
-
 FPrintStatement::FPrintStatement(ExpressionPtr expression)
 	// Initialize m_expression with the given expression
 	: m_expression(std::move(expression))
@@ -51,8 +32,8 @@ const ExpressionPtr& FPrintStatement::GetExpression() const
 void FPrintStatement::Execute(const FContext& context) const
 {
 	// Evaluate the expression to be printed
-	Value value = m_expression->Evaluate(context);
+	ValuePtr value = m_expression->Evaluate(context);
 
 	// Print the string representation of the value
-	std::cout << ToString(value) << std::endl;
+	std::cout << value->ToString() << std::endl;
 }

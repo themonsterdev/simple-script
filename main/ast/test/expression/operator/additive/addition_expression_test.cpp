@@ -17,7 +17,8 @@ TEST(FAdditionExpressionTest, AdditionWithIntegers)
     FContext context;
 
     // Check that the evaluation returns the expected sum
-    EXPECT_EQ(addition.Evaluate(context), Value(8));
+    ValuePtr value = addition.Evaluate(context);
+    EXPECT_EQ(value->ToString(), "8");
 }
 
 // Test for addition with negative integers
@@ -32,7 +33,7 @@ TEST(FAdditionExpressionTest, AdditionWithNegativeIntegers)
     FContext context;
 
     // Check that the evaluation returns the expected sum
-    EXPECT_EQ(addition.Evaluate(context), Value(-8));
+    EXPECT_EQ(addition.Evaluate(context)->ToString(), "-8");
 }
 
 // Test for addition with mixed integers
@@ -47,7 +48,7 @@ TEST(FAdditionExpressionTest, AdditionWithMixedIntegers)
     FContext context;
 
     // Check that the evaluation returns the expected sum
-    EXPECT_EQ(addition.Evaluate(context), Value(2));
+    EXPECT_EQ(addition.Evaluate(context)->ToString(), "2");
 }
 
 // Test for addition with missing operands

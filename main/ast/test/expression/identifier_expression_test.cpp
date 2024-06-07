@@ -4,6 +4,8 @@
 // Include declarations for context objects
 #include "context.hpp"
 
+#include "number_value.hpp"
+
 // Test the constructor of FIdentifierExpression
 TEST(FIdentifierExpressionTest, Constructor)
 {
@@ -45,14 +47,14 @@ TEST(FIdentifierExpressionTest, EvaluateValid)
 
     // Create a context with a variable "x"
     FContext context;
-    context.SetVariable("x", 42);
+    context.SetVariable("x", std::make_shared<FNumberValue>(42));
 
     // Evaluate the identifier expression in the context
-    Value result = identifier.Evaluate(context);
+    ValuePtr result = identifier.Evaluate(context);
 
     // Check if the result is as expected
-    EXPECT_TRUE(std::holds_alternative<int>(result));
-    EXPECT_EQ(std::get<int>(result), 42);
+    EXPECT_TRUE(result->IsNumber());
+    EXPECT_EQ(result->ToString(), "42");
 }
 
 // Test the Evaluate method of FIdentifierExpression with an undefined variable in the context

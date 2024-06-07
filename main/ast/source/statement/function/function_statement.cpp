@@ -12,6 +12,8 @@
 // Include declarations for context objects
 #include "context.hpp"
 
+#include "function_value.hpp"
+
 // Constructor definition
 FFunctionStatement::FFunctionStatement(std::string name, FunctionParameters parameters, StatementPtr body)
     // Initialize m_name with the given name
@@ -25,10 +27,13 @@ FFunctionStatement::FFunctionStatement(std::string name, FunctionParameters para
 // Execute method definition
 void FFunctionStatement::Execute(const FContext& context) const
 {
-    const auto function = std::make_shared<FInvokableFunction>(m_name, m_parameters, m_body.get());
-    
+    const auto function = std::make_shared<CFunctionValue>(m_name);
+
     if (function)
     {
+        function->SetParameters(m_parameters);
+        function->SetBody(m_body.get());
+
         context.RegisterFunction(m_name, function);
     }
 }

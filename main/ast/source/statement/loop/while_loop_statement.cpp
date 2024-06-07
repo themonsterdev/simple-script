@@ -10,6 +10,9 @@
 // Include declarations for context objects
 #include "context.hpp"
 
+#include "boolean_value.hpp"
+#include "number_value.hpp"
+
 FWhileLoopStatement::FWhileLoopStatement(ExpressionPtr condition, StatementPtr body)
     : m_condition(std::move(condition))
     , m_body(std::move(body))
@@ -23,15 +26,19 @@ void FWhileLoopStatement::Execute(const FContext& context) const
     while (conditionResult)
     {
         // Evaluate the condition of the loop
-        Value conditionValue = m_condition->Evaluate(context);
+        ValuePtr conditionValue = m_condition->Evaluate(context);
 
-        if (std::holds_alternative<bool>(conditionValue))
+        if (conditionValue->IsBoolean())
         {
-            conditionResult = std::get<bool>(conditionValue);
+            const auto& result = std::dynamic_pointer_cast<FBooleanValue>(conditionValue);
+
+            conditionResult = result->GetValue();
         }
-        else if (std::holds_alternative<int>(conditionValue))
+        else if (conditionValue->IsNumber())
         {
-            conditionResult = std::get<int>(conditionValue) > 0;
+            const auto& result = std::dynamic_pointer_cast<FNumberValue>(conditionValue);
+
+            conditionResult = result->GetValue() > 0;
         }
         else
         {

@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "expression/literal/number_expression.hpp"
+#include "number_value.hpp"
 
 // Include declarations for context objects
 #include "context.hpp"
@@ -23,6 +24,7 @@ TEST(FNumberExpressionTest, SetValue)
 
     // Set the value of the expression to 10
     expr.SetValue(10);
+
     // Ensure that the GetValue method now returns 10
     EXPECT_EQ(expr.GetValue(), 10);
 }
@@ -35,9 +37,11 @@ TEST(FNumberExpressionTest, Evaluate)
 
     // Create a number expression with the value 42
     FNumberExpression expr(42);
+
     // Evaluate the expression in the context
-    Value result = expr.Evaluate(context);
+    ValuePtr result = expr.Evaluate(context);
+
     // Ensure that the result is an integer value and it's 42
-    ASSERT_TRUE(std::holds_alternative<int>(result));
-    EXPECT_EQ(std::get<int>(result), 42);
+    ASSERT_TRUE(result->IsNumber());
+    EXPECT_EQ(result->ToString(), "42");
 }

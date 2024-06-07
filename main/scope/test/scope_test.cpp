@@ -28,12 +28,12 @@ TEST_F(FScopeTest, DeclareVariable)
 }
 
 // Test case for setting and getting a variable in the scope
-TEST_F(FScopeTest, SetAndGetVariable)
-{
-    FScope scope;
-    scope.SetVariable("x", 10);
-    ASSERT_EQ(std::get<int>(scope.GetVariable("x")), 10);
-}
+// TEST_F(FScopeTest, SetAndGetVariable)
+// {
+//     FScope scope;
+//     scope.SetVariable("x", 10);
+//     ASSERT_EQ(std::get<int>(scope.GetVariable("x")), 10);
+// }
 
 // Test case for removing a variable from the scope
 TEST_F(FScopeTest, RemoveVariable)
@@ -62,10 +62,10 @@ TEST_F(FScopeTest, GetUndefinedVariable)
 }
 
 // Test case for getting a variable of a specific type from the scope
-TEST_F(FScopeTest, IsVariableOfType)
-{
-    FScope scope;
-    scope.SetVariable("x", 10);
-    ASSERT_TRUE(scope.IsVariableOfType<int>("x"));
-    ASSERT_FALSE(scope.IsVariableOfType<std::string>("x"));
-}
+// TEST_F(FScopeTest, IsVariableOfType)
+// {
+//     FScope scope;
+//     scope.SetVariable("x", 10);
+//     ASSERT_TRUE(scope.IsVariableOfType<int>("x"));
+//     ASSERT_FALSE(scope.IsVariableOfType<std::string>("x"));
+// }

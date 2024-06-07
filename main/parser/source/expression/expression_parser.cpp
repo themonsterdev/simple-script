@@ -8,6 +8,9 @@
 #include "lexer.hpp"                        // Include the tokenizer header file
 
 // Expressions
+#include "expression/access/access_expression.hpp"
+#include "expression/access/access_method_expression.hpp"
+
 #include "expression/operator/additive/addition_expression.hpp"
 #include "expression/operator/additive/subtraction_expression.hpp"
 
@@ -45,7 +48,6 @@
 #include "expression/literal/string_expression.hpp"
 #include "expression/literal/string_format_expression.hpp"
 
-#include "expression/string_operator_expression.hpp"
 #include "expression/identifier_expression.hpp"
 
 FExpressionParser::FExpressionParser(FLexer& lexer)
@@ -61,21 +63,30 @@ ExpressionPtr FExpressionParser::ParseTernaryExpression()
 {
     ExpressionPtr condition = ParseLogicalOrExpression();
 
-    while (m_lexer.HasNextToken() && m_lexer.PeekNextToken().type == eTokenType::Operator && m_lexer.PeekNextToken().lexeme == "?")
+    while (m_lexer.HasNextToken())
     {
-        // Consume the ternary operator token '?'
-        m_lexer.GetNextToken();
+        const auto& token = m_lexer.PeekNextToken();
 
-        ExpressionPtr trueExpr = ParseExpression();
-
-        if (!m_lexer.TryConsumeToken(eTokenType::Delimiter, ":")) // delimiter
+        if (token.type == eTokenType::Operator && token.lexeme == "?")
         {
-            throw FSyntaxException("Expected ':' in ternary expression after '?'");
+            // Consume the ternary operator token '?'
+            m_lexer.GetNextToken();
+
+            ExpressionPtr trueExpr = ParseExpression();
+
+            if (!m_lexer.TryConsumeToken(eTokenType::Delimiter, ":")) // delimiter
+            {
+                throw FSyntaxException("Expected ':' in ternary expression after '?'");
+            }
+
+            ExpressionPtr falseExpr = ParseExpression();
+
+            condition = std::make_unique<FTernaryExpression>(std::move(condition), std::move(trueExpr), std::move(falseExpr));
         }
-
-        ExpressionPtr falseExpr = ParseExpression();
-
-        condition = std::make_unique<FTernaryExpression>(std::move(condition), std::move(trueExpr), std::move(falseExpr));
+        else
+        {
+            break;
+        }
     }
 
     return condition;
@@ -369,21 +380,65 @@ ExpressionPtr FExpressionParser::ParsePostfixExpression()
 
 ExpressionPtr FExpressionParser::ParseAccessExpression()
 {
-    // Implementation for member access
     ExpressionPtr expr = ParseSubscriptExpression();
-    // while (m_lexer.HasNextToken())
-    // {
-    //     if (m_lexer.PeekNextToken().type == eTokenType::Operator && (m_lexer.PeekNextToken().lexeme == "." || m_lexer.PeekNextToken().lexeme == "->"))
-    //     {
-    //         std::string op = m_lexer.GetNextToken().lexeme; // Consume '.' or '->'
-    //         std::string memberName = m_lexer.GetNextToken().lexeme; // Consume member name
-    //         expr = std::make_unique<FAccessExpression>(std::move(expr), op, memberName);
-    //     }
-    //     else
-    //     {
-    //         break;
-    //     }
-    // }
+
+    while (m_lexer.HasNextToken())
+    {
+        std::string op = "";
+
+        if (m_lexer.TryConsumeToken(eTokenType::Operator, "."))
+        {
+            op = ".";
+        }
+        else if (m_lexer.TryConsumeToken(eTokenType::Operator, "->"))
+        {
+            op = "->";
+        }
+        else
+        {
+            break;
+        }
+
+        // Consume member name
+        const auto& memberToken = m_lexer.GetNextToken();
+        if (memberToken.type != eTokenType::Identifier)
+        {
+            throw FSyntaxException("Expected 'identifier' after '" + op + "' operator");
+        }
+        std::string memberName = memberToken.lexeme;
+
+        // Check if it's a function call
+        if (m_lexer.TryConsumeToken(eTokenType::Delimiter, "("))
+        {
+            // Parse function arguments
+            ExpressionList arguments;
+            if (!m_lexer.TryConsumeToken(eTokenType::Delimiter, ")"))
+            {
+                do
+                {
+                    arguments.push_back(ParseExpression());
+                } while (m_lexer.TryConsumeToken(eTokenType::Delimiter, ","));
+                if (!m_lexer.TryConsumeToken(eTokenType::Delimiter, ")"))
+                {
+                    throw FSyntaxException("Expected ')' after function arguments");
+                }
+            }
+
+            // Create access method expression
+            expr = std::make_unique<FAccessMethodExpression>(std::move(expr), op, memberName);
+
+            if (auto accessMethod = dynamic_cast<FAccessMethodExpression*>(expr.get()))
+            {
+                accessMethod->SetArguments(std::move(arguments));
+            }
+        }
+        else
+        {
+            // Create access expression
+            expr = std::make_unique<FAccessExpression>(std::move(expr), op, memberName);
+        }
+    }
+
     return expr;
 }
 
@@ -407,7 +462,6 @@ ExpressionPtr FExpressionParser::ParseSubscriptExpression()
 
 ExpressionPtr FExpressionParser::ParseCallExpression()
 {
-    // Implementation for function calls
     ExpressionPtr expr = ParseCastExpression();
 
     while (m_lexer.HasNextToken() && m_lexer.TryConsumeToken(eTokenType::Delimiter, "("))
@@ -486,33 +540,29 @@ ExpressionPtr FExpressionParser::ParseScopeResolutionExpression()
 
 ExpressionPtr FExpressionParser::ParsePrimaryExpression()
 {
-    SToken token;
-
-    if (m_lexer.HasNextToken())
+    if (!m_lexer.HasNextToken())
     {
-        token = m_lexer.GetNextToken();
+        throw FSyntaxException("Unexpected end of expression");
+    }
 
-        if (token.type == eTokenType::Number)
-        {
-            return std::make_unique<FNumberExpression>(std::stoi(token.lexeme));
-        }
-        else if (token.type == eTokenType::Boolean)
-        {
-            return std::make_unique<FBooleanExpression>(token.lexeme == "true");
-        }
-        else if (token.type == eTokenType::String)
-        {
-            return std::make_unique<FStringExpression>(token.lexeme);
-        }
-        else if (token.type == eTokenType::StringFormatLiteral)
-        {
-            return std::make_unique<FStringFormatExpression>(token.lexeme);
-        }
-        else if (token.type == eTokenType::Identifier || token.type == eTokenType::Keyword)
-        {
-            return std::make_unique<FIdentifierExpression>(token.lexeme);
-        }
-        else if (token.type == eTokenType::Delimiter && token.lexeme == "(")
+    SToken token = m_lexer.GetNextToken();
+
+    switch (token.type)
+    {
+    case eTokenType::Number:
+        return std::make_unique<FNumberExpression>(std::stoi(token.lexeme));
+    case eTokenType::Boolean:
+        return std::make_unique<FBooleanExpression>(token.lexeme == "true");
+    case eTokenType::String:
+        return std::make_unique<FStringExpression>(token.lexeme);
+    case eTokenType::StringFormatLiteral:
+        return std::make_unique<FStringFormatExpression>(token.lexeme);
+    case eTokenType::Identifier:
+    case eTokenType::Keyword:
+        return std::make_unique<FIdentifierExpression>(token.lexeme);
+    case eTokenType::Delimiter:
+    {
+        if (token.lexeme == "(")
         {
             ExpressionPtr expr = ParseExpression();
             if (!m_lexer.TryConsumeToken(eTokenType::Delimiter, ")"))
@@ -521,7 +571,9 @@ ExpressionPtr FExpressionParser::ParsePrimaryExpression()
             }
             return expr;
         }
+        break;
+    }
     }
 
-    throw FSyntaxException("Unexpected end of expression: " + token.lexeme);
+    throw FSyntaxException("Unexpected token: " + token.lexeme);
 }

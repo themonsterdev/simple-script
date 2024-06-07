@@ -23,19 +23,21 @@ FSwitchStatement::FSwitchStatement(ExpressionPtr condition, CaseStatementVector 
 void FSwitchStatement::Execute(const FContext& context) const
 {
     // Retrieve the value of the switch condition
-    Value switchValue = m_condition->Evaluate(context);
+    ValuePtr switchValue = m_condition->Evaluate(context);
 
     // Determine which case to execute based on the value of the condition
     bool caseExecuted = false;
     for (const auto& caseStatement : m_cases)
     {
-        Value caseValue = caseStatement->GetCondition()->Evaluate(context);
-        if (switchValue == caseValue)
+        ValuePtr caseValue = caseStatement->GetCondition()->Evaluate(context);
+        if (switchValue->ToString() == caseValue->ToString())
         {
             // Execute the body of the corresponding case
             caseStatement->GetBody()->Execute(context);
             caseExecuted = true;
-            break; // Exit the loop once the matching case is executed
+
+            // Exit the loop once the matching case is executed
+            break;
         }
     }
 

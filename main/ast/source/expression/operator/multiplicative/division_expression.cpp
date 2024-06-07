@@ -12,12 +12,14 @@
 // Include declarations for context objects
 #include "context.hpp"
 
+#include "number_value.hpp"
+
 FDivisionExpression::FDivisionExpression(ExpressionPtr left, ExpressionPtr right)
     // Call base class constructor to initialize operands
     : AComputeExpression(std::move(left), std::move(right))
 {}
 
-Value FDivisionExpression::Evaluate(const FContext& context) const
+ValuePtr FDivisionExpression::Evaluate(const FContext& context) const
 {
     // Check if both operands are valid
     if (!m_left || !m_right)
@@ -27,18 +29,21 @@ Value FDivisionExpression::Evaluate(const FContext& context) const
     }
 
     // Evaluate the left and right operands
-    Value leftValue  = m_left->Evaluate(context);
-    Value rightValue = m_right->Evaluate(context);
+    ValuePtr leftValue  = m_left->Evaluate(context);
+    ValuePtr rightValue = m_right->Evaluate(context);
 
     // Extract int values from the variants
     int leftInt, rightInt;
 
     // Check if both operands are integers
-    if (std::holds_alternative<int>(leftValue) && std::holds_alternative<int>(rightValue))
+    if (leftValue->IsNumber() && rightValue->IsNumber())
     {
+        const auto& leftVal = std::dynamic_pointer_cast<FNumberValue>(leftValue);
+        const auto& rightVal = std::dynamic_pointer_cast<FNumberValue>(rightValue);
+
         // Extract integer values from the variants
-        leftInt  = std::get<int>(leftValue);
-        rightInt = std::get<int>(rightValue);
+        leftInt  = leftVal->GetValue();
+        rightInt = rightVal->GetValue();
     }
     else // Throw exception for invalid operand types
     {
@@ -53,5 +58,5 @@ Value FDivisionExpression::Evaluate(const FContext& context) const
     }
 
     // Return result of division operation
-    return leftInt / rightInt;
+    return std::make_shared<FNumberValue>(leftInt / rightInt);
 }

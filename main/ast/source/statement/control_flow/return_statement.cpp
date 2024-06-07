@@ -29,7 +29,7 @@ void FReturnStatement::Execute(const FContext& context) const
     }
 
     // Evaluate the return value expression in the given context
-    Value returnValue = m_returnValue->Evaluate(context);
+    ValuePtr returnValue = m_returnValue->Evaluate(context);
 
     // Set the return value in the context
     context.SetReturnValue(returnValue);

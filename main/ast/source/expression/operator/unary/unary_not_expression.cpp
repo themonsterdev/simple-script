@@ -10,22 +10,24 @@
 // Include declarations for context objects
 #include "context.hpp"
 
+#include "boolean_value.hpp"
+
 FUnaryNotExpression::FUnaryNotExpression(ExpressionPtr expression)
     : m_expression(std::move(expression))
 {}
 
-Value FUnaryNotExpression::Evaluate(const FContext& context) const
+ValuePtr FUnaryNotExpression::Evaluate(const FContext& context) const
 {
     // Evaluate the inner expression
-    Value innerValue = m_expression->Evaluate(context);
+    ValuePtr innerValue = m_expression->Evaluate(context);
 
     // Check if the value is a boolean
-    if (!std::holds_alternative<bool>(innerValue)) {
+    if (!innerValue->IsBoolean()) {
         throw std::runtime_error("Operand of unary negate must be boolean");
     }
 
     // Negate the boolean value
-    bool result = !std::get<bool>(innerValue);
+    const auto& value = std::dynamic_pointer_cast<FBooleanValue>(innerValue);
 
-    return result;
+    return std::make_shared<FBooleanValue>(!value->GetValue());
 }

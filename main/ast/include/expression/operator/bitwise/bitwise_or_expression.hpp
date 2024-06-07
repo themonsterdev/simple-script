@@ -28,5 +28,5 @@ public:
      * @param context The evaluation context.
      * @return The value of the bitwise OR expression.
      */
-    virtual Value Evaluate(const FContext& context) const override;
+    virtual ValuePtr Evaluate(const FContext& context) const override;
 };

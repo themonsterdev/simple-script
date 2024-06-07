@@ -12,6 +12,9 @@
 // Include declarations for context objects
 #include "context.hpp"
 
+#include "boolean_value.hpp"
+#include "number_value.hpp"
+
 FTernaryExpression::FTernaryExpression(ExpressionPtr condition, ExpressionPtr trueExpr, ExpressionPtr falseExpr)
     // Initialize condition member with the provided condition expression
     : m_condition(std::move(condition))
@@ -21,23 +24,27 @@ FTernaryExpression::FTernaryExpression(ExpressionPtr condition, ExpressionPtr tr
     , m_falseExpr(std::move(falseExpr))
 {}
 
-Value FTernaryExpression::Evaluate(const FContext& context) const
+ValuePtr FTernaryExpression::Evaluate(const FContext& context) const
 {
     // Evaluate the condition
-    Value conditionValue = m_condition->Evaluate(context);
+    ValuePtr conditionValue = m_condition->Evaluate(context);
 
     bool conditionResult = false;
 
     // Check if both operands are integer/boolean
-    if (std::holds_alternative<int>(conditionValue))
+    if (conditionValue->IsNumber())
     {
+        const auto& value = std::dynamic_pointer_cast<FNumberValue>(conditionValue);
+
         // Extract boolean value from the variants
-        conditionResult = std::get<int>(conditionValue) > 0;
+        conditionResult = value->GetValue() > 0;
     }
-    else if (std::holds_alternative<bool>(conditionValue))
+    else if (conditionValue->IsBoolean())
     {
+        const auto& value = std::dynamic_pointer_cast<FBooleanValue>(conditionValue);
+
         // Extract boolean value from the variants
-        conditionResult = std::get<bool>(conditionValue);
+        conditionResult = value->GetValue();
     }
     else // Throw exception for invalid operand types
     {

@@ -22,9 +22,6 @@ StatementPtr FReturnStatementRule::Parse(FLexer& lexer, FStatementParser& statem
     // Parse the expression after 'return'
     ExpressionPtr returnExpression = expressionParser.ParseExpression();
 
-    // Ensure the statement is terminated with a semicolon
-    // lexer.ConsumeToken(eTokenType::SEMICOLON);
-
     // Create and return the ReturnStatement object
     return std::make_unique<FReturnStatement>(std::move(returnExpression));
 }

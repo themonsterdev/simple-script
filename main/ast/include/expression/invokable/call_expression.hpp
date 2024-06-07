@@ -29,5 +29,5 @@ public:
      * @param context The context in which to evaluate the expression.
      * @return The result of the function call.
      */
-    Value Evaluate(const FContext& context) const override;
+    ValuePtr Evaluate(const FContext& context) const override;
 };

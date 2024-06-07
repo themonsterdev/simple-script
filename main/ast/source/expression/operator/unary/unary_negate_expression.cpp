@@ -10,23 +10,25 @@
 // Include declarations for context objects
 #include "context.hpp"
 
+#include "number_value.hpp"
+
 FUnaryNegateExpression::FUnaryNegateExpression(ExpressionPtr expression)
     : m_expression(std::move(expression))
 {}
 
-Value FUnaryNegateExpression::Evaluate(const FContext& context) const
+ValuePtr FUnaryNegateExpression::Evaluate(const FContext& context) const
 {
     // Evaluate the inner expression
-    Value innerValue = m_expression->Evaluate(context);
+    ValuePtr innerValue = m_expression->Evaluate(context);
 
     // Check if the value is an integer
-    if (!std::holds_alternative<int>(innerValue))
+    if (!innerValue->IsNumber())
     {
         throw std::runtime_error("Operand of unary negate must be integer");
     }
 
     // Negate the integer value
-    int result = -std::get<int>(innerValue);
+    const auto& value = std::dynamic_pointer_cast<FNumberValue>(innerValue);
 
-    return result;
+    return std::make_shared<FNumberValue>(-value->GetValue());
 }

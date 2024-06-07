@@ -73,9 +73,19 @@ static constexpr auto KEYWORDS =
     "delete",   // unused
 
     // Object-Oriented Programming
-    "class",        // unused
+    "class",
+    "abstract",
+    "interface",
+    "final",
+    "extends",
+    "implements",
+    "trait",
     "constructor",  // unused
     "destructor",   // unused
+    "private",
+    "protected",
+    "public",
+    "use",
 
     // String Manipulation
     "substring",    // unused

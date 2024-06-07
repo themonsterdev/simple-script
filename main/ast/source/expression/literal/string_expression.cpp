@@ -9,6 +9,8 @@
 // Include declarations for context objects
 #include "context.hpp"
 
+#include "string_value.hpp"
+
 FStringExpression::FStringExpression(const std::string& value)
 	// Initialize the string value
 	: m_value(value)
@@ -26,8 +28,8 @@ void FStringExpression::SetValue(const std::string& value)
 	m_value = value;
 }
 
-Value FStringExpression::Evaluate(const FContext& context) const
+ValuePtr FStringExpression::Evaluate(const FContext& context) const
 {
 	// Evaluate to the string value
-	return m_value;
+	return std::make_shared<FStringValue>(m_value);
 }

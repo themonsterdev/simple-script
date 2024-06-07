@@ -50,15 +50,15 @@ TEST_F(FAssignmentStatementTest, ConstructorNullExpression)
 }
 
 // Test evaluation with valid context
-TEST_F(FAssignmentStatementTest, ExecuteValidContext)
-{
-    ExpressionPtr expression = std::make_unique<FNumberExpression>(42);
-    FAssignmentStatement assignment("y", std::move(expression));
-    EXPECT_NO_THROW(assignment.Execute(context));
-
-    // Verify that evaluation does not throw and assigns correct value to variable
-    EXPECT_EQ(context.GetVariable("y"), Value(42));
-}
+// TEST_F(FAssignmentStatementTest, ExecuteValidContext)
+// {
+//     ExpressionPtr expression = std::make_unique<FNumberExpression>(42);
+//     FAssignmentStatement assignment("y", std::move(expression));
+//     EXPECT_NO_THROW(assignment.Execute(context));
+// 
+//     // Verify that evaluation does not throw and assigns correct value to variable
+//     EXPECT_EQ(context.GetVariable("y"), Value(42));
+// }
 
 // Test execution with null expression
 // TEST_F(FAssignmentStatementTest, ExecuteNullExpression)

@@ -12,12 +12,15 @@
 // Include declarations for context objects
 #include "context.hpp"
 
+#include "number_value.hpp"
+#include "string_value.hpp"
+
 FAdditionExpression::FAdditionExpression(ExpressionPtr left, ExpressionPtr right)
     // Call base class constructor
     : AComputeExpression(std::move(left), std::move(right))
 {}
 
-Value FAdditionExpression::Evaluate(const FContext& context) const
+ValuePtr FAdditionExpression::Evaluate(const FContext& context) const
 {
     // Check if left and right operands exist
     if (!m_left || !m_right)
@@ -26,29 +29,25 @@ Value FAdditionExpression::Evaluate(const FContext& context) const
     }
 
     // Evaluate the left and right operands
-    Value leftValue  = m_left->Evaluate(context);
-    Value rightValue = m_right->Evaluate(context);
-
-    // Extract integer values from the variants
-    int leftInt, rightInt;
+    ValuePtr leftValue  = m_left->Evaluate(context);
+    ValuePtr rightValue = m_right->Evaluate(context);
 
     // Check if both operands are integers
-    if (std::holds_alternative<int>(leftValue) && std::holds_alternative<int>(rightValue))
+    if (leftValue->IsNumber() && rightValue->IsNumber())
     {
-        // Extract integer values from the variants
-        leftInt  = std::get<int>(leftValue);
-        rightInt = std::get<int>(rightValue);
+        const auto& leftInt = std::dynamic_pointer_cast<FNumberValue>(leftValue);
+        const auto& rightInt = std::dynamic_pointer_cast<FNumberValue>(rightValue);
+        const int value = leftInt->GetValue() + rightInt->GetValue();
+        return std::make_shared<FNumberValue>(value);
     }
-    else if (std::holds_alternative<std::string>(leftValue) && std::holds_alternative<std::string>(rightValue))
+    else if (leftValue->IsString() && rightValue->IsString())
     {
-        // Extract integer values from the variants
-        return std::get<std::string>(leftValue) + std::get<std::string>(rightValue);
-    }
-    else // Throw exception for invalid operand types
-    {
-        throw std::runtime_error("Invalid operand types for addition operation");
+        const auto& leftString = std::dynamic_pointer_cast<FStringValue>(leftValue);
+        const auto& rightString = std::dynamic_pointer_cast<FStringValue>(rightValue);
+        const std::string value = leftString->GetValue() + rightString->GetValue();
+        return std::make_shared<FStringValue>(value);
     }
 
-    // Return the sum of the left and right integer values
-    return leftInt + rightInt;
+    // Throw exception for invalid operand types
+    throw std::runtime_error("Invalid operand types for addition operation");
 }

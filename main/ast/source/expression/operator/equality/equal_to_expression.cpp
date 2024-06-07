@@ -12,12 +12,15 @@
 // Include declarations for context objects
 #include "context.hpp"
 
+#include "number_value.hpp"
+#include "boolean_value.hpp"
+
 FEqualToExpression::FEqualToExpression(ExpressionPtr left, ExpressionPtr right)
     // Call base class constructor to initialize operands
     : AComputeExpression(std::move(left), std::move(right))
 {}
 
-Value FEqualToExpression::Evaluate(const FContext& context) const
+ValuePtr FEqualToExpression::Evaluate(const FContext& context) const
 {
     // Check if both operands are valid
     if (!m_left || !m_right)
@@ -27,20 +30,29 @@ Value FEqualToExpression::Evaluate(const FContext& context) const
     }
 
     // Evaluate the left and right operands
-    Value leftValue  = m_left->Evaluate(context);
-    Value rightValue = m_right->Evaluate(context);
+    ValuePtr leftValue  = m_left->Evaluate(context);
+    ValuePtr rightValue = m_right->Evaluate(context);
+
+    // Extract integer values from the variants
+    int leftInt = 0;
+    int rightInt = 0;
 
     // Check if both operands are integers
-    if (!std::holds_alternative<int>(leftValue) || !std::holds_alternative<int>(rightValue))
+    if (leftValue->IsNumber() && rightValue->IsNumber())
+    {
+        const auto& leftVal = std::dynamic_pointer_cast<FNumberValue>(leftValue);
+        const auto& rightVal = std::dynamic_pointer_cast<FNumberValue>(rightValue);
+
+        // Extract integer values from the variants
+        leftInt = leftVal->GetValue();
+        rightInt = rightVal->GetValue();
+    }
+    else
     {
         // Throw exception for invalid operand types
         throw std::runtime_error("Invalid operand types for equal operation");
     }
 
-    // Extract integer values from the variants
-    int leftInt  = std::get<int>(leftValue);
-    int rightInt = std::get<int>(rightValue);
-
     // Return result of equal-to comparison
-    return leftInt == rightInt;
+    return std::make_shared<FBooleanValue>(leftInt == rightInt);
 }

@@ -7,7 +7,7 @@ Object-oriented programming (OOP) is a programming paradigm based on the concept
 A class is a blueprint for creating objects.
 
 ```simple_script
-class Person {
+class Person
     constructor(name, age) then
         this.name = name
         this.age = age

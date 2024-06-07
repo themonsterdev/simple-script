@@ -1,5 +1,6 @@
 #include "statement/try_catch_finally/try_catch_finally_statement.hpp"
 #include "context.hpp"
+#include "string_value.hpp"
 
 FTryCatchFinallyStatement::FTryCatchFinallyStatement(
     StatementPtr tryBlock,
@@ -25,7 +26,10 @@ void FTryCatchFinallyStatement::Execute(const FContext& context) const
     }
     catch (const std::exception& e) {
         // Assign error to the error variable
-        context.SetVariable(m_catchStatement.GetErrorVariable(), e.what());
+        context.SetVariable(
+            m_catchStatement.GetErrorVariable(),
+            std::make_shared<FStringValue>(e.what())
+        );
 
         // Execute the catch block
         m_catchStatement.Execute(context);

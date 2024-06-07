@@ -10,11 +10,13 @@
 // Include declarations for context objects
 #include "context.hpp"
 
+#include "number_value.hpp"
+
 FShiftLeftExpression::FShiftLeftExpression(ExpressionPtr left, ExpressionPtr right)
     : AComputeExpression(std::move(left), std::move(right))
 {}
 
-Value FShiftLeftExpression::Evaluate(const FContext& context) const
+ValuePtr FShiftLeftExpression::Evaluate(const FContext& context) const
 {
     // Check if left or right expressions are null pointers
     if (!m_left || !m_right)
@@ -23,17 +25,26 @@ Value FShiftLeftExpression::Evaluate(const FContext& context) const
     }
 
     // Evaluate left and right expressions
-    Value leftValue  = m_left->Evaluate(context);
-    Value rightValue = m_right->Evaluate(context);
+    ValuePtr leftValue  = m_left->Evaluate(context);
+    ValuePtr rightValue = m_right->Evaluate(context);
+
+    // Extract int values from the variants
+    int leftInt, rightInt;
 
     // Check if both values are integers
-    if (!std::holds_alternative<int>(leftValue) || !std::holds_alternative<int>(rightValue))
+    if (leftValue->IsNumber() && rightValue->IsNumber())
+    {
+        const auto& leftVal = std::dynamic_pointer_cast<FNumberValue>(leftValue);
+        const auto& rightVal = std::dynamic_pointer_cast<FNumberValue>(rightValue);
+
+        // Extract integer values from the variants
+        leftInt = leftVal->GetValue();
+        rightInt = rightVal->GetValue();
+    }
+    else
     {
         throw std::runtime_error("Shift left operator must have integer operands");
     }
 
-    // Left shift the left integer by the number of bits specified by the right integer
-    int result = std::get<int>(leftValue) << std::get<int>(rightValue);
-
-    return Value(result);
+    return std::make_shared<FNumberValue>(leftInt << rightInt);
 }

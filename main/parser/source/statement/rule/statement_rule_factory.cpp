@@ -20,6 +20,9 @@
 #include "statement/rule/loop/for_loop_statement_rule.hpp"
 #include "statement/rule/loop/while_loop_statement_rule.hpp"
 
+#include "statement/rule/oop/interface_declaration_rule.hpp"
+#include "statement/rule/oop/class_declaration_rule.hpp"
+
 #include "statement/rule/switch/switch_statement_rule.hpp"
 
 #include "statement/rule/io/print_statement_rule.hpp"
@@ -60,6 +63,10 @@ StatementRuleVector FStatementRuleFactory::CreateRules()
 
     // IO statement rule
     // rules.push_back(std::make_unique<FPrintStatementRule>());
+
+    // OOP statement rule
+    rules.push_back(std::make_unique<FInterfaceDeclarationRule>());
+    rules.push_back(std::make_unique<FClassDeclarationRule>());
 
     // Switch statement rule
     rules.push_back(std::make_unique<FSwitchStatementRule>());

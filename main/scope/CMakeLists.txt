@@ -1,5 +1,5 @@
 # Add the header files to the library
-file(GLOB SCOPE_SOURCES "source/*.cpp")
+file(GLOB_RECURSE SCOPE_SOURCES "source/*.cpp")
 
 # Create a library for the scope
 add_library(scope ${SCOPE_SOURCES})

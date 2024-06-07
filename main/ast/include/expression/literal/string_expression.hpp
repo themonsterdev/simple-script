@@ -45,5 +45,5 @@ public:
 	 * @param context The context in which the evaluation occurs.
 	 * @return The string value.
 	 */
-	virtual Value Evaluate(const FContext& context) const override;
+	virtual ValuePtr Evaluate(const FContext& context) const override;
 };

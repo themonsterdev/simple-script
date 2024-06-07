@@ -9,6 +9,8 @@
 // Include declarations for context objects
 #include "context.hpp"
 
+#include "boolean_value.hpp"
+
 FBooleanExpression::FBooleanExpression(bool value)
 	// Initialize the value member with the provided value
 	: m_value(value)
@@ -26,8 +28,8 @@ void FBooleanExpression::SetValue(bool value)
 	m_value = value;
 }
 
-Value FBooleanExpression::Evaluate(const FContext& context) const
+ValuePtr FBooleanExpression::Evaluate(const FContext& context) const
 {
 	// Return the boolean value held by the expression
-	return m_value;
+	return std::make_shared<FBooleanValue>(m_value);
 }

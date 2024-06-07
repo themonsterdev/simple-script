@@ -8,7 +8,7 @@ add_library(context ${CONTEXT_SOURCES})
 target_include_directories(context PUBLIC "include")
 
 # Link with libraries
-target_link_libraries(context scope ast)
+target_link_libraries(context scope ast value)
 
 # Add the test directory
 add_subdirectory(test)

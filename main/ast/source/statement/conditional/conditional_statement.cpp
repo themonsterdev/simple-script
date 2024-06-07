@@ -12,6 +12,9 @@
 // Include declarations for context objects
 #include "context.hpp"
 
+#include "boolean_value.hpp"
+#include "number_value.hpp"
+
 FConditionalStatement::FConditionalStatement(ExpressionPtr condition, StatementPtr ifStatement)
     : m_condition(std::move(condition))
     , m_ifStatement(std::move(ifStatement))
@@ -55,18 +58,22 @@ void FConditionalStatement::Execute(const FContext& context) const
 bool FConditionalStatement::EvaluateCondition(const FContext& context) const
 {
     // Evaluate the condition expression
-    Value conditionValue = m_condition->Evaluate(context);
+    ValuePtr conditionValue = m_condition->Evaluate(context);
 
     bool conditionResult = false;
 
     // Check if the condition value is an integer or a boolean
-    if (std::holds_alternative<int>(conditionValue))
+    if (conditionValue->IsNumber())
     {
-        conditionResult = std::get<int>(conditionValue) > 0;
+        const auto& result = std::dynamic_pointer_cast<FNumberValue>(conditionValue);
+
+        conditionResult = result->GetValue() > 0;
     }
-    else if (std::holds_alternative<bool>(conditionValue))
+    else if (conditionValue->IsBoolean())
     {
-        conditionResult = std::get<bool>(conditionValue);
+        const auto& result = std::dynamic_pointer_cast<FBooleanValue>(conditionValue);
+
+        conditionResult = result->GetValue();
     }
     else // Throw an exception for invalid condition types
     {

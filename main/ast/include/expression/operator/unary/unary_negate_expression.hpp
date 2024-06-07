@@ -29,7 +29,7 @@ public:
      * @param context The context used for evaluation.
      * @return The result of the unary negate expression evaluation.
      */
-    virtual Value Evaluate(const FContext& context) const override;
+    virtual ValuePtr Evaluate(const FContext& context) const override;
 
 private:
 

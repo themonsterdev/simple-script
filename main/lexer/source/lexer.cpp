@@ -143,6 +143,21 @@ bool FLexer::TryConsumeToken(eTokenType expectedType, const std::string& expecte
     return false;
 }
 
+bool FLexer::MatchToken(eTokenType expectedType, const std::string& expectedLexeme)
+{
+    // Check if there is a next token available
+    if (!HasNextToken())
+    {
+        return false;
+    }
+
+    // Get the next token
+    const SToken& token = PeekNextToken();
+
+    // Checks if the type and lexeme of the token match those expected
+    return token.type == expectedType && token.lexeme == expectedLexeme;
+}
+
 void FLexer::SkipWhitespace()
 {
     // Continue skipping whitespace characters while there are more tokens and the current character is whitespace

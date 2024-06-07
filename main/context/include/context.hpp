@@ -8,7 +8,7 @@
 
 #include <deque>        // For std::deque
 #include <memory>       // For std::shared_ptr
-#include "scope.hpp"    // Include declarations for scope objects
+#include "scope.hpp"
 
 /**
  * @brief Represents the context for variable declarations and assignments.
@@ -19,12 +19,13 @@
 class FContext final
 {
     // Deque of scopes
-    mutable std::deque<std::shared_ptr<FScope>> m_scopes;
+    mutable ScopeDeque m_scopes;
 
-    mutable Value m_returnValue;
+    mutable ValuePtr m_returnValue;
     mutable bool m_hasReturnValue;
     mutable bool m_continueFlag;
     mutable bool m_throwFlag;
+    mutable ObjectValuePtr m_currentClass; // current declaration class
 
 public:
 
@@ -43,6 +44,16 @@ public:
      */
     void LeaveScope() const;
 
+    //////////////////////////////////////////////////////
+    // Current Scope /////////////////////////////////////
+    //////////////////////////////////////////////////////
+
+    /**
+     * @brief Gets the current scope.
+     * @return A pointer to the current scope.
+     */
+    ScopePtr GetCurrentScope() const;
+
     /**
      * @brief Declares a variable in the current scope.
      * @param name The name of the variable to declare.
@@ -50,11 +61,36 @@ public:
     void DeclareVariable(const std::string& name) const;
 
     /**
+     * @brief Sets the value of a variable in the current scope.
+     * @param name The name of the variable to set.
+     * @param value The value to set for the variable.
+     */
+    void SetVariable(const std::string& name, const ValuePtr& value) const;
+
+    /**
+     * @brief Registers a function in the current scope.
+     * @param name The name of the function to register.
+     * @param function The invokable function to register.
+     */
+    void RegisterFunction(const std::string& name, FunctionValuePtr function) const;
+
+    /**
+     * @brief Registers a class in the current scope.
+     * @param name The name of the class to register.
+     * @param object The object class to register.
+     */
+    void RegisterClass(const std::string& name, ObjectValuePtr object) const;
+
+    //////////////////////////////////////////////////////
+    // Current to top scope //////////////////////////////
+    //////////////////////////////////////////////////////
+
+    /**
      * @brief Assigns a value to a variable in the current scope.
      * @param name The name of the variable to assign.
      * @param value The value to assign to the variable.
      */
-    void AssignVariable(const std::string& name, const Value& value) const;
+    void AssignVariable(const std::string& name, const ValuePtr& value) const;
 
     /**
      * @brief Checks if a variable is declared in any of the scopes.
@@ -64,25 +100,14 @@ public:
     bool IsVariableDeclared(const std::string& name) const;
 
     /**
-     * @brief Sets the value of a variable in the current scope.
-     * @param name The name of the variable to set.
-     * @param value The value to set for the variable.
-     */
-    void SetVariable(const std::string& name, const Value& value) const;
-
-    /**
      * @brief Gets the value of a variable from the current scope.
      * @param name The name of the variable to retrieve.
      * @return The value of the variable.
      */
-    Value GetVariable(const std::string& name) const;
+    ValuePtr GetVariable(const std::string& name) const;
 
-    /**
-     * @brief Registers a function in the current scope.
-     * @param name The name of the function to register.
-     * @param function The invokable function to register.
-     */
-    void RegisterFunction(const std::string& name, std::shared_ptr<FInvokableFunction> function) const;
+    bool IsFunctionDeclared(const std::string& name) const;
+    FunctionValuePtr GetFunction(const std::string& name) const;
 
     /**
      * @brief Calls a function in the current context.
@@ -90,11 +115,19 @@ public:
      * @param arguments The arguments to pass to the function.
      * @return The result of the function call.
      */
-    Value CallFunction(const std::string& name, const std::vector<Value>& arguments) const;
+    ValuePtr CallFunction(const std::string& name, const std::vector<ValuePtr>& arguments) const;
+
+    bool IsClassDeclared(const std::string& name) const;
+    ObjectValuePtr GetClass(const std::string& name) const;
+
+    void DeclareMethod(const std::string& name, FunctionValuePtr method) const;
+    bool IsClassContext() const;
+    bool IsMethodDeclared(const std::string& name) const;
+    FunctionValuePtr GetMethod(const std::string& name) const;
 
     // New methods for handling return values
-    void SetReturnValue(const Value& returnValue) const;
-    Value GetReturnValue() const;
+    void SetReturnValue(const ValuePtr& returnValue) const;
+    ValuePtr GetReturnValue() const;
     bool HasReturnValue() const;
     void ResetReturnValue() const;
 
@@ -103,4 +136,12 @@ public:
 
     void SetThrowFlag(bool flag) const;
     bool GetThrowFlag() const;
+
+    // Declarations
+    void SetCurrentClass(ObjectValuePtr object) const;
+    ObjectValuePtr GetCurrentClass() const;
+
+    // Access
+    bool IsDerivedFromClass(const FObjectValue* object) const;
+    bool IsSameClass(const FObjectValue* object) const;
 };

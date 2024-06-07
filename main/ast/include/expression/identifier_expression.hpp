@@ -45,7 +45,7 @@ public:
      * @param context The context in which to evaluate the identifier.
      * @return The value associated with the identifier.
      */
-    virtual Value Evaluate(const FContext& context) const override;
+    virtual ValuePtr Evaluate(const FContext& context) const override;
 
 private:
 

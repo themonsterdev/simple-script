@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "expression/operator/comparison/less_than_expression.hpp"
 #include "expression/literal/number_expression.hpp"
+#include "boolean_value.hpp"
 
 // Include declarations for context objects
 #include "context.hpp"
@@ -15,12 +16,15 @@ TEST(FLessThanExpressionTest, LessThanWithIntegers)
 
     // Create an execution context
     FContext context;
+
     // Evaluate the expression
-    Value result = comparison.Evaluate(context);
+    ValuePtr result = comparison.Evaluate(context);
+
     // Verify that the result is a boolean value
-    EXPECT_TRUE(std::holds_alternative<bool>(result));
+    EXPECT_TRUE(result->IsBoolean());
+
     // Verify that the result is true (3 < 5)
-    EXPECT_TRUE(std::get<bool>(result));
+    EXPECT_EQ(result->ToString(), "true");
 }
 
 TEST(FLessThanExpressionTest, LessThanWithNegativeIntegers)
@@ -33,12 +37,15 @@ TEST(FLessThanExpressionTest, LessThanWithNegativeIntegers)
 
     // Create an execution context
     FContext context;
+
     // Evaluate the expression
-    Value result = comparison.Evaluate(context);
+    ValuePtr result = comparison.Evaluate(context);
+
     // Verify that the result is a boolean value
-    EXPECT_TRUE(std::holds_alternative<bool>(result));
+    EXPECT_TRUE(result->IsBoolean());
+
     // Verify that the result is false (-3 is not less than -5)
-    EXPECT_FALSE(std::get<bool>(result));
+    EXPECT_EQ(result->ToString(), "false");
 }
 
 TEST(FLessThanExpressionTest, LessThanWithMixedIntegers)
@@ -51,12 +58,15 @@ TEST(FLessThanExpressionTest, LessThanWithMixedIntegers)
 
     // Create an execution context
     FContext context;
+
     // Evaluate the expression
-    Value result = comparison.Evaluate(context);
+    ValuePtr result = comparison.Evaluate(context);
+
     // Verify that the result is a boolean value
-    EXPECT_TRUE(std::holds_alternative<bool>(result));
+    EXPECT_TRUE(result->IsBoolean());
+
     // Verify that the result is true (-3 < 5)
-    EXPECT_TRUE(std::get<bool>(result));
+    EXPECT_EQ(result->ToString(), "true");
 }
 
 TEST(FLessThanExpressionTest, MissingOperands)

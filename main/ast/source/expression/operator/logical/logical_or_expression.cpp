@@ -12,12 +12,15 @@
 // Include declarations for context objects
 #include "context.hpp"
 
+#include "number_value.hpp"
+#include "boolean_value.hpp"
+
 FLogicalOrExpression::FLogicalOrExpression(ExpressionPtr left, ExpressionPtr right)
     // Initialize base class with provided expressions
     : AComputeExpression(std::move(left), std::move(right))
 {}
 
-Value FLogicalOrExpression::Evaluate(const FContext& context) const
+ValuePtr FLogicalOrExpression::Evaluate(const FContext& context) const
 {
     // Check if both operands are valid
     if (!m_left || !m_right)
@@ -27,26 +30,32 @@ Value FLogicalOrExpression::Evaluate(const FContext& context) const
     }
 
     // Evaluate the left and right operands
-    Value leftValue  = m_left->Evaluate(context);
-    Value rightValue = m_right->Evaluate(context);
+    ValuePtr leftValue  = m_left->Evaluate(context);
+    ValuePtr rightValue = m_right->Evaluate(context);
 
-    if (std::holds_alternative<int>(leftValue) && std::holds_alternative<int>(rightValue))
+    if (leftValue->IsNumber() && rightValue->IsNumber())
     {
-        // Extract integer values from the variants
-        int leftInt = std::get<int>(leftValue);
-        int rightInt = std::get<int>(rightValue);
+        const auto& leftVal = std::dynamic_pointer_cast<FNumberValue>(leftValue);
+        const auto& rightVal = std::dynamic_pointer_cast<FNumberValue>(rightValue);
 
-        // Return result of logical OR operation
-        return leftInt || rightInt;
+        // Extract integer values from the variants
+        int leftInt = leftVal->GetValue();
+        int rightInt = rightVal->GetValue();
+
+        // Return result of logical AND operation
+        return std::make_shared<FBooleanValue>(leftInt && rightInt);
     }
-    else if (std::holds_alternative<bool>(leftValue) && std::holds_alternative<bool>(rightValue))
+    else if (leftValue->IsBoolean() || rightValue->IsBoolean())
     {
-        // Extract integer values from the variants
-        bool leftInt = std::get<bool>(leftValue);
-        bool rightInt = std::get<bool>(rightValue);
+        const auto& leftVal = std::dynamic_pointer_cast<FBooleanValue>(leftValue);
+        const auto& rightVal = std::dynamic_pointer_cast<FBooleanValue>(rightValue);
 
-        // Return result of logical OR operation
-        return leftInt || rightInt;
+        // Extract integer values from the variants
+        bool leftInt = leftVal->GetValue();
+        bool rightInt = rightVal->GetValue();
+
+        // Return result of logical AND operation
+        return std::make_shared<FBooleanValue>(leftInt || rightInt);
     }
     else // Throw exception for invalid operand types
     {

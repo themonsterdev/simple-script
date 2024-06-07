@@ -61,6 +61,7 @@ public:
     void EndNextToken();
 
     bool TryConsumeToken(eTokenType expectedType, const std::string& expectedLexeme);
+    bool MatchToken(eTokenType expectedType, const std::string& expectedLexeme);
 
 private:
 

@@ -13,6 +13,10 @@
 // Include declarations for context objects
 #include "context.hpp"
 
+#include "boolean_value.hpp"
+#include "number_value.hpp"
+#include "string_value.hpp"
+
 FStringFormatExpression::FStringFormatExpression(const std::string& value)
     : m_value(value)
 {
@@ -32,7 +36,7 @@ void FStringFormatExpression::SetValue(const std::string& value)
     m_value = value;
 }
 
-Value FStringFormatExpression::Evaluate(const FContext& context) const
+ValuePtr FStringFormatExpression::Evaluate(const FContext& context) const
 {
     // Evaluate the template expression
     std::ostringstream oss;
@@ -45,19 +49,29 @@ Value FStringFormatExpression::Evaluate(const FContext& context) const
         else
         {
             // Retrieve the variable value from the context and append it to the result
-            Value value = context.GetVariable(segment.value);
-            if (std::holds_alternative<std::string>(value))
+            ValuePtr value = context.GetVariable(segment.value);
+            if (value->IsString())
             {
-                oss << std::get<std::string>(value);
+                const auto& result = std::dynamic_pointer_cast<FStringValue>(value);
+
+                oss << result->GetValue();
             }
-            else if (std::holds_alternative<int>(value))
+            else if (value->IsNumber())
             {
-                oss << std::get<int>(value);
+                const auto& result = std::dynamic_pointer_cast<FNumberValue>(value);
+
+                oss << result->GetValue();
+            }
+            else if (value->IsBoolean())
+            {
+                const auto& result = std::dynamic_pointer_cast<FBooleanValue>(value);
+
+                oss << result->GetValue();
             }
             // Add more type checks if needed
         }
     }
-    return oss.str();
+    return std::make_shared<FStringValue>(oss.str());
 }
 
 void FStringFormatExpression::ParseTemplate()

@@ -7,6 +7,8 @@
 // Include declarations for context objects
 #include "context.hpp"
 
+#include "string_value.hpp"
+
 // Tests the creation of a print statement with a valid expression
 TEST(FPrintStatementTest, ConstructorValidExpression)
 {
@@ -93,7 +95,7 @@ TEST(FPrintStatementTest, ExecuteIdentifierExpression)
     FContext context;
 
     // Set the value of the identifier in the context
-    context.SetVariable("x", Value("OpenAI"));
+    context.SetVariable("x", std::make_shared<FStringValue>("OpenAI"));
 
     // Capture standard output
     testing::internal::CaptureStdout();

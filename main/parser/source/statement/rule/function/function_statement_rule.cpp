@@ -46,7 +46,7 @@ StatementPtr FFunctionStatementRule::Parse(FLexer& lexer, FStatementParser& stat
         {
             lexer.GetNextToken();
 
-            parameters.push_back(nextToken.lexeme);
+            parameters.push_back({ nextToken.lexeme, "void" });
         }
         else if (nextToken.lexeme == ",")
         {
@@ -82,6 +82,10 @@ StatementPtr FFunctionStatementRule::Parse(FLexer& lexer, FStatementParser& stat
         if (statement)
         {
             statements.push_back(std::move(statement));
+        }
+        else
+        {
+            break;
         }
     }
 

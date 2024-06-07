@@ -35,25 +35,25 @@ void FBlockStatement::Execute(const FContext& context) const
     {
         statement->Execute(context);
 
-        // Check if a return value has been set
+        // Check if a 'return' value has been set
         if (context.HasReturnValue())
         {
-            // Exit the loop if a return statement was executed
+            // Exit the loop if a 'return' statement was executed
             break;
         }
 
-        // Check if a continue statement has been encountered
+        // Check if a 'continue' statement has been encountered
         if (context.GetContinueFlag())
         {
-            // Reset the continue flag for the next iteration
-            break; // Move to the next iteration
+            // Exit the loop if a 'continue' statement was executed
+            break;
         }
 
-        // Check if a throw statement has been encountered
+        // Check if a 'throw' statement has been encountered
         if (context.GetThrowFlag())
         {
-            // Reset the throw flag for the next iteration
-            break; // Move to the next iteration
+            // Exit the loop if a 'throw' statement was executed
+            break;
         }
     }
 
