@@ -13,13 +13,13 @@
 #include <memory>           // Include for memory
 #include <deque>            // Include for deque
 
-#include "statement/function/function_parameter.hpp"
-#include "function_value.hpp"
-#include "object_value.hpp"
+#include "interface/value.hpp"
+#include "function/function_definition.hpp"
+#include "oop/class_definition.hpp"
 
 using VariableMap = std::unordered_map<std::string, ValuePtr>;
-using FunctionMap = std::unordered_map<std::string, FunctionValuePtr>;
-using ClassMap    = std::unordered_map<std::string, ObjectValuePtr>;
+using FunctionMap = std::unordered_map<std::string, FunctionDefinitionPtr>;
+using ClassMap    = std::unordered_map<std::string, ClassDefinitionPtr>;
 
 /**
  * @brief Represents a scope for storing variables and their values.
@@ -30,11 +30,8 @@ class FScope final
 {
     VariableMap m_variables;
     FunctionMap m_functions;
-    FunctionMap m_methods;
     ClassMap m_classes;
-
-    // Indicates if the current scope is a class context
-    bool m_isClassContext = false;
+    std::string m_lastClass;
 
 public:
 
@@ -78,35 +75,15 @@ public:
      */
     void RemoveVariable(const std::string& name);
 
-    /**
-     * @brief Registers a function in the current scope.
-     * @param name The name of the function to register.
-     * @param function The invokable function to register.
-     */
-    void RegisterFunction(const std::string& name, FunctionValuePtr function);
-
-    /**
-     * @brief Checks if a function is declared in the current scope.
-     * @param name The name of the function to check.
-     * @return True if the function is declared, false otherwise.
-     */
+    void DeclareFunction(FunctionDefinitionPtr function);
     bool IsFunctionDeclared(const std::string& name) const;
+    FunctionDefinitionPtr GetFunction(const std::string& name) const;
 
-    /**
-     * @brief Gets the invokable function from the current scope.
-     * @param name The name of the function to retrieve.
-     * @return The invokable function.
-     */
-    FunctionValuePtr GetFunction(const std::string& name) const;
-
-    void RegisterClass(const std::string& name, ObjectValuePtr object);
-    bool IsClassDeclared(const std::string& name) const; 
-    ObjectValuePtr GetClass(const std::string& name) const;
-
-    void DeclareMethod(const std::string& name, FunctionValuePtr method);
-    bool IsClassContext() const;
-    bool IsMethodDeclared(const std::string& name) const;
-    FunctionValuePtr GetMethod(const std::string& name) const;
+    void DeclareClass(Visibility visibility, ClassDefinitionPtr classDefinition);
+    void DeclareClassProperty(Visibility visibility, ClassPropertyDefinitionPtr propertyDefinition) const;
+    void DeclareClassMethod(Visibility visibility, ClassMethodDefinitionPtr methodDefinition) const;
+    ClassDefinitionPtr GetClassDefinition(const std::string& name) const;
+    bool IsClassDeclared(const std::string& name) const;
 };
 
 using ScopePtr   = std::shared_ptr<FScope>;

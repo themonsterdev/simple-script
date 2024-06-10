@@ -1,54 +1,32 @@
 #include "statement/oop/class/class_method_declaration_statement.hpp"
 
 #include "context.hpp"
-#include "function_value.hpp"
 
 FClassMethodDeclarationStatement::FClassMethodDeclarationStatement(
-    const std::string methodVisibility,
-    const std::string methodName,
-    FunctionParameters methodParameters,
-    StatementPtr methodBody)
-    : m_methodVisibility(methodVisibility)
-    , m_methodName(methodName)
-    , m_methodParameters(methodParameters)
-    , m_methodBody(std::move(methodBody))
+    Visibility visibility,
+    ClassMethodDefinitionPtr methodDefinition,
+    StatementPtr body)
+    : m_visibility(visibility)
+    , m_methodDefinition(methodDefinition)
+    , m_body(std::move(body))
 {}
 
 void FClassMethodDeclarationStatement::Execute(const FContext& context) const
 {
-    const auto& functionValue = std::make_shared<CFunctionValue>(m_methodName);
+    context.DeclareClassMethod(m_visibility, m_methodDefinition);
 
-    functionValue->SetParameters(m_methodParameters);
-    functionValue->SetBody(m_methodBody.get());
-
-    AccessSpecifier accessMethod = AccessSpecifier::Private;
-    if (m_methodVisibility == "protected")
+    if (m_body)
     {
-        accessMethod = AccessSpecifier::Protected;
+        m_body->Execute(context);
     }
-    else if (m_methodVisibility == "public")
-    {
-        accessMethod = AccessSpecifier::Public;
-    }
-    context.GetCurrentClass()->AddMethod(m_methodName, accessMethod, functionValue);
 }
 
-const std::string& FClassMethodDeclarationStatement::GetMethodVisibility() const
+const Visibility& FClassMethodDeclarationStatement::GetVisibility() const
 {
-    return m_methodVisibility;
+    return m_visibility;
 }
 
-const std::string& FClassMethodDeclarationStatement::GetMethodName() const
+const StatementPtr& FClassMethodDeclarationStatement::GetBody() const
 {
-    return m_methodName;
-}
-
-FunctionParameters FClassMethodDeclarationStatement::GetMethodParameters() const
-{
-    return m_methodParameters;
-}
-
-const StatementPtr& FClassMethodDeclarationStatement::GetMethodBody() const
-{
-    return m_methodBody;
+    return m_body;
 }

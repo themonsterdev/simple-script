@@ -137,10 +137,10 @@ bool FObjectValue::IsAccessible(AccessSpecifier access, const FContext& context)
         return true;
     case AccessSpecifier::Protected:
         // Add logic to check if the context is a derived class
-        return context.IsDerivedFromClass(this) || context.IsSameClass(this);
+        return false;
     case AccessSpecifier::Private:
         // Add logic to check if the context is the same class
-        return context.IsSameClass(this);
+        return false;
     }
 
     return false;

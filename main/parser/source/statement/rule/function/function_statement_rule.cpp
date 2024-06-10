@@ -1,5 +1,5 @@
 #include "statement/rule/function/function_statement_rule.hpp"
-#include "statement/function/function_statement.hpp"
+#include "statement/function/function_declaration_statement.hpp"
 
 #include "statement/block/block_statement.hpp"
 
@@ -89,8 +89,17 @@ StatementPtr FFunctionStatementRule::Parse(FLexer& lexer, FStatementParser& stat
         }
     }
 
-    StatementPtr body = std::make_unique<FBlockStatement>(std::move(statements));
+    auto body = std::make_unique<FBlockStatement>(std::move(statements));
+
+    const auto& returnType = std::make_shared<FType>("void");
+
+    const auto& functionDefinition = std::make_shared<CFunctionDefinition>(
+        functionName,
+        returnType,
+        parameters,
+        std::move(body)
+    );
 
     // Create and return a FunctionDeclaration statement
-    return std::make_unique<FFunctionStatement>(functionName, parameters, std::move(body));
+    return std::make_unique<FFunctionDeclarationStatement>(functionDefinition);
 }

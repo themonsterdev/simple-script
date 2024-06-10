@@ -6,6 +6,26 @@
 // Include the header file for the operator rule
 #include "rule/operator_rule.hpp"
 
+// Define the list of assignments
+static constexpr auto ASSIGNMENTS =
+{
+    "=",                // Direct assignment
+    "+=", "-=",         // Compound assignment by sum and difference
+    "*=", "/=", "%=",   // Compound assignment by product, quotient, and remainder
+    "<<=", ">>=",       // Compound assignment by bitwise left shift and right shift
+    "&=", "^=", "|=",   // Compound assignment by bitwise AND, XOR, and OR
+};
+
+// Define the list of comparisons
+static constexpr auto COMPARISONS =
+{
+    "==",
+    "!=",
+    "<=",
+    ">=",
+    "<=>",
+};
+
 bool FOperatorRule::Match(const std::string& text, size_t& index, SToken& token) const
 {
     // Define a string containing the operators
@@ -20,33 +40,38 @@ bool FOperatorRule::Match(const std::string& text, size_t& index, SToken& token)
         // Set token lexeme to the current character
         token.lexeme = text.substr(index, 1);
 
-        if (token.lexeme == "=" && text.substr(index + 1, 1) == "=")
+        for (const auto& assignment : ASSIGNMENTS)
         {
-            token.lexeme = "==";
+            if (token.lexeme[0] != assignment[0])
+            {
+                continue;
+            }
 
-            // Move to the next character
-            index++;
+            size_t size = strlen(assignment);
+
+            if (text.substr(index, size) == assignment)
+            {
+                token.lexeme = assignment;
+                index += size - 1;
+                break;
+            }
         }
-        else if (token.lexeme == "!" && text.substr(index + 1, 1) == "=")
-        {
-            token.lexeme = "!=";
 
-            // Move to the next character
-            index++;
-        }
-        else if (token.lexeme == "<" && text.substr(index + 1, 1) == "=")
+        for (const auto& comparison : COMPARISONS)
         {
-            token.lexeme = "<=";
+            if (token.lexeme[0] != comparison[0])
+            {
+                continue;
+            }
 
-            // Move to the next character
-            index++;
-        }
-        else if (token.lexeme == ">" && text.substr(index + 1, 1) == "=")
-        {
-            token.lexeme = ">=";
+            size_t size = strlen(comparison);
 
-            // Move to the next character
-            index++;
+            if (text.substr(index, size) == comparison)
+            {
+                token.lexeme = comparison;
+                index += size - 1;
+                break;
+            }
         }
 
         // Move to the next character

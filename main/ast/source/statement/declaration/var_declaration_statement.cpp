@@ -23,6 +23,22 @@ FVarDeclarationStatement::FVarDeclarationStatement(const std::string& identifier
 	}
 }
 
+void FVarDeclarationStatement::Execute(const FContext& context) const
+{
+	// Check if an expression is provided
+	if (m_expression)
+	{
+		const auto& value = m_expression->Evaluate(context);
+
+		// Evaluate the expression and assign its value to the variable in the context
+		context.SetVariable(m_identifier, value);
+	}
+	else // If no expression is provided, declare the variable in the context
+	{
+		context.DeclareVariable(m_identifier);
+	}
+}
+
 std::string FVarDeclarationStatement::GetIdentifier() const
 {
 	// Return the identifier associated with this variable declaration
@@ -33,18 +49,4 @@ const ExpressionPtr& FVarDeclarationStatement::GetExpression() const
 {
 	// Return the expression associated with this variable declaration
 	return m_expression;
-}
-
-void FVarDeclarationStatement::Execute(const FContext& context) const
-{
-	// Check if an expression is provided
-	if (m_expression)
-	{
-		// Evaluate the expression and assign its value to the variable in the context
-		context.SetVariable(m_identifier, m_expression->Evaluate(context));
-	}
-	else // If no expression is provided, declare the variable in the context
-	{
-		context.DeclareVariable(m_identifier);
-	}
 }

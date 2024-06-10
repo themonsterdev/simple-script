@@ -20,8 +20,10 @@ ValuePtr FCallExpression::Evaluate(const FContext& context) const
     std::vector<ValuePtr> arguments;
     for (const auto& argument : m_arguments)
     {
-        arguments.push_back(argument->Evaluate(context));
+        const auto& value = argument->Evaluate(context);
+
+        arguments.push_back(value);
     }
 
-    return context.CallFunction(identifier->GetName(), arguments);
+    return context.Call(identifier->GetName(), arguments);
 }

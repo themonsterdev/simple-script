@@ -11,6 +11,7 @@ add_subdirectory(lexer)
 add_subdirectory(parser)
 add_subdirectory(scope)
 add_subdirectory(value)
+add_subdirectory(type)
 
 # Declaration of source files for tests
 file(GLOB_RECURSE TEST_SOURCES "*_test.cpp")

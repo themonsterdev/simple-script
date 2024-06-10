@@ -1,7 +1,5 @@
 #include "statement/rule/statement_rule_factory.hpp"
 
-#include "statement/rule/assert/assert_statement_rule.hpp"
-
 #include "statement/rule/block/block_statement_rule.hpp"
 
 #include "statement/rule/conditional/conditional_statement_rule.hpp"
@@ -12,8 +10,9 @@
 #include "statement/rule/declaration/const_declaration_statement_rule.hpp"
 #include "statement/rule/declaration/var_declaration_statement_rule.hpp"
 
+#include "statement/rule/expression/expression_statement_rule.hpp"
+
 #include "statement/rule/function/function_statement_rule.hpp"
-#include "statement/rule/invokable/call_statement_rule.hpp"
 
 #include "statement/rule/loop/continue_statement_rule.hpp"
 #include "statement/rule/loop/do_while_loop_statement_rule.hpp"
@@ -25,17 +24,11 @@
 
 #include "statement/rule/switch/switch_statement_rule.hpp"
 
-#include "statement/rule/io/print_statement_rule.hpp"
-
-#include "statement/rule/try_catch_finally/throw_statement_rule.hpp"
 #include "statement/rule/try_catch_finally/try_catch_finally_statement_rule.hpp"
 
 StatementRuleVector FStatementRuleFactory::CreateRules()
 {
     StatementRuleVector rules;
-
-    // Assert statement rule
-    // rules.push_back(std::make_unique<FAssertStatementRule>());
 
     // Block statement rule
     rules.push_back(std::make_unique<FBlockStatementRule>());
@@ -48,10 +41,8 @@ StatementRuleVector FStatementRuleFactory::CreateRules()
 
     // Function statement rule
     rules.push_back(std::make_unique<FFunctionStatementRule>());
-    rules.push_back(std::make_unique<FCallStatementRule>());
 
     // Declaration statement rule
-    rules.push_back(std::make_unique<FAssignmentStatementRule>());
     rules.push_back(std::make_unique<FConstDeclarationStatementRule>());
     rules.push_back(std::make_unique<FVarDeclarationStatementRule>());
 
@@ -61,9 +52,6 @@ StatementRuleVector FStatementRuleFactory::CreateRules()
     // rules.push_back(std::make_unique<FForLoopStatementRule>());
     rules.push_back(std::make_unique<FWhileLoopStatementRule>());
 
-    // IO statement rule
-    // rules.push_back(std::make_unique<FPrintStatementRule>());
-
     // OOP statement rule
     rules.push_back(std::make_unique<FInterfaceDeclarationRule>());
     rules.push_back(std::make_unique<FClassDeclarationRule>());
@@ -72,8 +60,9 @@ StatementRuleVector FStatementRuleFactory::CreateRules()
     rules.push_back(std::make_unique<FSwitchStatementRule>());
 
     // Try Catch Finally statement rule
-    rules.push_back(std::make_unique<FThrowStatementRule>());
     rules.push_back(std::make_unique<FTryCatchFinallyStatementRule>());
+
+    rules.push_back(std::make_unique<FExpressionStatementRule>());
 
     return rules;
 }

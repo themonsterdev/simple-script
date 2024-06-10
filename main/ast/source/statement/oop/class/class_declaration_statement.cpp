@@ -5,87 +5,44 @@
 
 // Include the header file for the class declaration statement class
 #include "statement/oop/class/class_declaration_statement.hpp"
+#include "statement/block/block_statement.hpp"
 
 // Include declarations for context objects
 #include "context.hpp"
+
 #include <stdexcept>
 
 // Constructor definition
 FClassDeclarationStatement::FClassDeclarationStatement(
-    const std::string& className,
-    BlockStatementPtr classBody,
-    const std::string& parentClassName,
-    const std::vector<std::string>& interfaces,
-    const std::vector<std::string>& traits)
-    : m_className(className)
+    ClassDefinitionPtr classDefinition,
+    StatementPtr classBody)
+    : m_classDefinition(classDefinition)
     , m_classBody(std::move(classBody))
-    , m_parentClassName(parentClassName)
-    , m_interfaces(interfaces)
-    , m_traits(traits)
 {}
 
 // Execute method definition
 void FClassDeclarationStatement::Execute(const FContext& context) const
 {
-    const auto& parentClass = GetParentClass(context);
+    context.DeclareClass(Visibility::Public, m_classDefinition);
 
-    const auto& objectValue = std::make_shared<FObjectValue>(m_className, parentClass);
+    const auto& classBody = dynamic_cast<FBlockStatement*>(m_classBody.get());
 
-    // Execute the block containing class attributes and methods
-    // within the context
-    if (m_classBody)
+    if (classBody)
     {
-        // store current class
-        const auto& previousObject = context.GetCurrentClass();
-
-        context.SetCurrentClass(objectValue);
-
-        m_classBody->Execute(context);
-
-        // reset current class for the continue statements with
-        // previous classe if not ending
-        context.SetCurrentClass(previousObject);
+        // Execute each statement in the block sequentially
+        for (const auto& statement : classBody->GetStatements())
+        {
+            statement->Execute(context);
+        }
     }
-
-    context.RegisterClass(m_className, objectValue);
 }
 
-const std::string& FClassDeclarationStatement::GetClassName() const
+ClassDefinitionPtr FClassDeclarationStatement::GetClassDefinition() const
 {
-    return m_className;
+    return m_classDefinition;
 }
 
-const std::string& FClassDeclarationStatement::GetParentClassName() const
-{
-    return m_parentClassName;
-}
-
-const std::vector<std::string>& FClassDeclarationStatement::GetInterfaces() const
-{
-    return m_interfaces;
-}
-
-const std::vector<std::string>& FClassDeclarationStatement::GetTraits() const
-{
-    return m_traits;
-}
-
-const BlockStatementPtr& FClassDeclarationStatement::GetClassBody() const
+const StatementPtr& FClassDeclarationStatement::GetClassBody() const
 {
     return m_classBody;
-}
-
-ObjectValuePtr FClassDeclarationStatement::GetParentClass(const FContext& context) const
-{
-    if (m_parentClassName.empty())
-    {
-        return nullptr;
-    }
-
-    if (!context.IsClassDeclared(m_parentClassName))
-    {
-        throw std::runtime_error("Parent class is not declared");
-    }
-
-    return context.GetClass(m_parentClassName);
 }

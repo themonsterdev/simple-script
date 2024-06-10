@@ -43,13 +43,17 @@ public:
 
 private:
 
+    ExpressionPtr ParseCommaExpression();
+    ExpressionPtr ParseAssignmentExpression();
+    ExpressionPtr ParseThrowOperatorExpression();
+
     /**
      * @brief Parse a ternary expression.
      *
      * @param condition The condition of the ternary expression.
      * @return ExpressionPtr A pointer to the parsed expression object.
      */
-    ExpressionPtr ParseTernaryExpression();
+    ExpressionPtr ParseTernaryConditionalExpression();
 
     ExpressionPtr ParseLogicalOrExpression();
     ExpressionPtr ParseLogicalAndExpression();
@@ -60,16 +64,26 @@ private:
 
     ExpressionPtr ParseEqualityExpression();
     ExpressionPtr ParseComparisonExpression();
+    ExpressionPtr ParseThreeWayExpression();
+
     ExpressionPtr ParseShiftExpression();
     ExpressionPtr ParseAdditiveExpression();
     ExpressionPtr ParseMultiplicativeExpression();
+
+    ExpressionPtr ParseDeleteExpression();
+    ExpressionPtr ParseNewExpression();
+    ExpressionPtr ParseSizeofExpression();
+    ExpressionPtr ParseAddressOfExpression();
+    ExpressionPtr ParseDereferenceExpression();
+    ExpressionPtr ParseCastExpression();
+
     ExpressionPtr ParseUnaryExpression();
     ExpressionPtr ParsePostfixExpression();
 
     ExpressionPtr ParseAccessExpression();
     ExpressionPtr ParseSubscriptExpression();
-    ExpressionPtr ParseCallExpression();
-    ExpressionPtr ParseCastExpression();
+    ExpressionPtr ParseFunctionCallExpression();
+
     ExpressionPtr ParseSuffixAndPostfixExpression();
     ExpressionPtr ParseScopeResolutionExpression();
 

@@ -5,6 +5,7 @@
 
 // Include the header file for the FIdentifierExpression class
 #include "expression/identifier_expression.hpp"
+#include "function_value.hpp"
 
 // Include declarations for context objects
 #include "context.hpp"
@@ -28,6 +29,12 @@ void FIdentifierExpression::SetName(const std::string& name)
 
 ValuePtr FIdentifierExpression::Evaluate(const FContext& context) const
 {
+    if (context.IsFunctionDeclared(m_name))
+    {
+        const auto& functionDefinition = context.GetFunction(m_name);
+        return std::make_unique<CFunctionValue>(functionDefinition);
+    }
+
     // Retrieve the value associated with the identifier from the context
     return context.GetVariable(m_name);
 }

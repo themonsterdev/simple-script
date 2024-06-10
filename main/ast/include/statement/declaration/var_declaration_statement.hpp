@@ -36,6 +36,16 @@ public:
 	FVarDeclarationStatement(const std::string& identifier, ExpressionPtr expression);
 
 	/**
+	 * @brief Evaluates this variable declaration node within the given context.
+	 *
+	 * This method declares a variable with the specified identifier in the context
+	 * and optionally assigns the result of the expression to it.
+	 *
+	 * @param context The context in which to evaluate the node.
+	 */
+	void Execute(const FContext& context) const override;
+
+	/**
 	 * @brief Returns the identifier of this variable declaration node.
 	 * @return The identifier of this variable declaration node.
 	 */
@@ -46,14 +56,4 @@ public:
 	 * @return The expression associated with this variable declaration node.
 	 */
 	const ExpressionPtr& GetExpression() const;
-
-	/**
-	 * @brief Evaluates this variable declaration node within the given context.
-	 *
-	 * This method declares a variable with the specified identifier in the context
-	 * and optionally assigns the result of the expression to it.
-	 *
-	 * @param context The context in which to evaluate the node.
-	 */
-	virtual void Execute(const FContext& context) const override;
 };

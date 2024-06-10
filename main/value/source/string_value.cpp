@@ -14,6 +14,11 @@ const std::string FStringValue::ToString() const
     return m_value;
 }
 
+void FStringValue::SetValue(const std::string value)
+{
+    m_value = value;
+}
+
 const std::string& FStringValue::GetValue() const
 {
     return m_value;

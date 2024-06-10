@@ -20,8 +20,7 @@ FTraitDeclarationStatement::FTraitDeclarationStatement(
 // Execute method definition
 void FTraitDeclarationStatement::Execute(const FContext& context) const
 {
-    context.RegisterTrait(m_traitName);
-    m_traitBody->Execute(context);
+
 }
 
 // GetTraitName method definition

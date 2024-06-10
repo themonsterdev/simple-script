@@ -1,25 +1,25 @@
 #pragma once
 
 #include "expression/interface/expression.hpp"
-#include <string>
+#include "oop/class_property_definition.hpp"
 
 class FPropertyDeclarationStatement final : public IStatement
 {
-    std::string m_visibility;
-    std::string m_name;
+    Visibility m_visibility;
+    ClassPropertyDefinitionPtr m_propertyDefinition;
     ExpressionPtr m_expression;
 
 public:
 
     FPropertyDeclarationStatement(
-        std::string visibility,
-        std::string name,
+        Visibility visibility,
+        ClassPropertyDefinitionPtr propertyDefinition,
         ExpressionPtr expression
     );
 
     void Execute(const FContext& context) const override;
 
-    const std::string& GetVisibility() const;
-    const std::string& GetName() const;
+    Visibility GetVisibility() const;
+    ClassPropertyDefinitionPtr GetPropertyDefinition() const;
     const ExpressionPtr& GetExpression() const;
 };

@@ -14,6 +14,11 @@ const std::string FNumberValue::ToString() const
     return std::to_string(m_value);
 }
 
+void FNumberValue::SetValue(int value)
+{
+    m_value = value;
+}
+
 int FNumberValue::GetValue() const
 {
     return m_value;

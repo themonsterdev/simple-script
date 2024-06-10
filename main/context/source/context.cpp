@@ -8,6 +8,7 @@
 
 // Include the invokable function header file
 #include "builtin_function/builtin_function_registry.hpp"
+#include "function_value.hpp"
 
 FContext::FContext()
     // Create a new scope and append it to the end of the deque
@@ -16,7 +17,6 @@ FContext::FContext()
     , m_hasReturnValue(false)
     , m_continueFlag(false)
     , m_throwFlag(false)
-    , m_currentClass(nullptr)
 {
     EnterScope();
     RegisterBuiltinFunctions(*this);
@@ -82,7 +82,7 @@ void FContext::SetVariable(const std::string& name, const ValuePtr& value) const
     currentScope->SetVariable(name, value);
 }
 
-void FContext::RegisterFunction(const std::string& name, FunctionValuePtr function) const
+void FContext::DeclareFunction(FunctionDefinitionPtr function) const
 {
     auto currentScope = GetCurrentScope();
 
@@ -91,10 +91,80 @@ void FContext::RegisterFunction(const std::string& name, FunctionValuePtr functi
         throw std::runtime_error("No scope available to register function");
     }
 
-    currentScope->RegisterFunction(name, std::move(function));
+    currentScope->DeclareFunction(function);
 }
 
-void FContext::RegisterClass(const std::string& name, ObjectValuePtr object) const
+bool FContext::IsFunctionDeclared(const std::string& name) const
+{
+    // Traverse the scopes from the most recent to the oldest
+    for (auto it = m_scopes.rbegin(); it != m_scopes.rend(); ++it)
+    {
+        // Check if the function exists in the current scope
+        if ((*it)->IsFunctionDeclared(name))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+FunctionDefinitionPtr FContext::GetFunction(const std::string& name) const
+{
+    // Traverse the scopes from the most recent to the oldest
+    for (auto it = m_scopes.rbegin(); it != m_scopes.rend(); ++it)
+    {
+        // Check if the function exists in the current scope
+        if ((*it)->IsFunctionDeclared(name))
+        {
+            return (*it)->GetFunction(name);
+        }
+    }
+
+    throw std::runtime_error("Undefined function: " + name);
+}
+
+ValuePtr FContext::Call(const std::string& name, const std::vector<ValuePtr>& arguments) const
+{
+    // Traverse the scopes from the most recent to the oldest
+    for (auto it = m_scopes.rbegin(); it != m_scopes.rend(); ++it)
+    {
+        const auto& scope = *it;
+
+        // Check if the function exists in the current scope
+        if (scope->IsVariableDeclared(name))
+        {
+            const auto& variable = scope->GetVariable(name);
+            const auto& function = dynamic_cast<CFunctionValue*>(variable.get());
+            if (function)
+            {
+                return function->Invoke(arguments, *this);
+            }
+            else
+            {
+                // throw
+            }
+        }
+
+        // Check if the function exists in the current scope
+        if (scope->IsFunctionDeclared(name))
+        {
+            const auto& function = scope->GetFunction(name);
+            return function->Invoke(*this, arguments);
+        }
+
+        // Check if the class exists in the current scope
+        if (scope->IsClassDeclared(name))
+        {
+            const auto& classDefinition = scope->GetClassDefinition(name);
+            return classDefinition->NewInstance(*this, arguments);
+        }
+    }
+
+    throw std::runtime_error("Function not declared: " + name);
+}
+
+void FContext::DeclareClass(Visibility visibility, ClassDefinitionPtr classDefinition) const
 {
     auto currentScope = GetCurrentScope();
 
@@ -103,7 +173,43 @@ void FContext::RegisterClass(const std::string& name, ObjectValuePtr object) con
         throw std::runtime_error("No scope available to register class");
     }
 
-    currentScope->RegisterClass(name, std::move(object));
+    currentScope->DeclareClass(visibility, classDefinition);
+}
+
+void FContext::DeclareClassProperty(Visibility visibility, ClassPropertyDefinitionPtr propertyDefinition) const
+{
+    auto currentScope = GetCurrentScope();
+
+    if (currentScope == nullptr)
+    {
+        throw std::runtime_error("No scope available to declare property definition");
+    }
+
+    currentScope->DeclareClassProperty(visibility, propertyDefinition);
+}
+
+void FContext::DeclareClassMethod(Visibility visibility, ClassMethodDefinitionPtr methodDefinition) const
+{
+    auto currentScope = GetCurrentScope();
+
+    if (currentScope == nullptr)
+    {
+        throw std::runtime_error("No scope available to declare method definition");
+    }
+
+    currentScope->DeclareClassMethod(visibility, methodDefinition);
+}
+
+ClassDefinitionPtr FContext::GetClassDefinition(const std::string& name) const
+{
+    auto currentScope = GetCurrentScope();
+
+    if (currentScope == nullptr)
+    {
+        throw std::runtime_error("No scope available to get class definition");
+    }
+
+    return currentScope->GetClassDefinition(name);
 }
 
 //////////////////////////////////////////////////////
@@ -158,57 +264,6 @@ ValuePtr FContext::GetVariable(const std::string& name) const
     throw std::runtime_error("Undefined variable: " + name);
 }
 
-bool FContext::IsFunctionDeclared(const std::string& name) const
-{
-    // Traverse the scopes from the most recent to the oldest
-    for (auto it = m_scopes.rbegin(); it != m_scopes.rend(); ++it)
-    {
-        // Check if the function exists in the current scope
-        if ((*it)->IsFunctionDeclared(name))
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-FunctionValuePtr FContext::GetFunction(const std::string& name) const
-{
-    // Traverse the scopes from the most recent to the oldest
-    for (auto it = m_scopes.rbegin(); it != m_scopes.rend(); ++it)
-    {
-        // Check if the function exists in the current scope
-        if ((*it)->IsFunctionDeclared(name))
-        {
-            return (*it)->GetFunction(name);
-        }
-    }
-
-    throw std::runtime_error("Undefined function: " + name);
-}
-
-ValuePtr FContext::CallFunction(const std::string& name, const std::vector<ValuePtr>& arguments) const
-{
-    // Traverse the scopes from the most recent to the oldest
-    for (auto it = m_scopes.rbegin(); it != m_scopes.rend(); ++it)
-    {
-        // Check if the function exists in the current scope
-        if ((*it)->IsFunctionDeclared(name))
-        {
-            auto function = (*it)->GetFunction(name);
-            return function->Invoke(arguments, *this);
-        }
-        // Check if the class exists in the current scope
-        else if ((*it)->IsClassDeclared(name))
-        {
-            return (*it)->GetClass(name);
-        }
-    }
-
-    throw std::runtime_error("Function not declared: " + name);
-}
-
 bool FContext::IsClassDeclared(const std::string& name) const
 {
     for (auto it = m_scopes.rbegin(); it != m_scopes.rend(); ++it)
@@ -220,45 +275,6 @@ bool FContext::IsClassDeclared(const std::string& name) const
     }
 
     return false;
-}
-
-ObjectValuePtr FContext::GetClass(const std::string& name) const
-{
-    // Traverse the scopes from the most recent to the oldest
-    for (auto it = m_scopes.rbegin(); it != m_scopes.rend(); ++it)
-    {
-        // Check if the class exists in the current scope
-        if ((*it)->IsClassDeclared(name))
-        {
-            return (*it)->GetClass(name);
-        }
-    }
-
-    throw std::runtime_error("Class not declared: " + name);
-}
-
-//////////////////////////////////////////////////////
-// Method class statement ////////////////////////////
-//////////////////////////////////////////////////////
-
-void FContext::DeclareMethod(const std::string& name, FunctionValuePtr method) const
-{
-    
-}
-
-bool FContext::IsClassContext() const
-{
-    return false;
-}
-
-bool FContext::IsMethodDeclared(const std::string& name) const
-{
-    return false;
-}
-
-FunctionValuePtr FContext::GetMethod(const std::string& name) const
-{
-    return nullptr;
 }
 
 //////////////////////////////////////////////////////
@@ -313,39 +329,4 @@ void FContext::SetThrowFlag(bool flag) const
 bool FContext::GetThrowFlag() const
 {
     return m_throwFlag;
-}
-
-//////////////////////////////////////////////////////
-// Declaration class statement ///////////////////////
-//////////////////////////////////////////////////////
-
-void FContext::SetCurrentClass(ObjectValuePtr object) const
-{
-    m_currentClass = object;
-}
-ObjectValuePtr FContext::GetCurrentClass() const
-{
-    return m_currentClass;
-}
-
-//////////////////////////////////////////////////////
-// Access class //////////////////////////////////////
-//////////////////////////////////////////////////////
-
-bool FContext::IsDerivedFromClass(const FObjectValue* object) const
-{
-    if (!object || !m_currentClass)
-    {
-        return false;
-    }
-
-    return m_currentClass->IsDerivedFromClass(object);
-}
-bool FContext::IsSameClass(const FObjectValue* object) const
-{
-    if (m_currentClass)
-    {
-        return m_currentClass->IsSameClass(object);
-    }
-    return false;
 }

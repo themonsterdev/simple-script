@@ -4,6 +4,9 @@
  */
 
 #include "scope.hpp"    // Include for the FScope class declaration
+
+#include "function_value.hpp"
+
 #include <stdexcept>    // Include for std::runtime_error
 
 void FScope::DeclareVariable(const std::string& name)
@@ -58,14 +61,16 @@ void FScope::RemoveVariable(const std::string& name)
     m_variables.erase(name);
 }
 
-void FScope::RegisterFunction(const std::string& name, FunctionValuePtr function)
+void FScope::DeclareFunction(FunctionDefinitionPtr function)
 {
+    const auto& name = function->GetName();
+
     if (IsFunctionDeclared(name))
     {
         throw std::runtime_error("Function already declared: " + name);
     }
 
-    m_functions[name] = std::move(function);
+    m_functions[name] = function;
 }
 
 bool FScope::IsFunctionDeclared(const std::string& name) const
@@ -73,7 +78,7 @@ bool FScope::IsFunctionDeclared(const std::string& name) const
     return m_functions.find(name) != m_functions.end();
 }
 
-FunctionValuePtr FScope::GetFunction(const std::string& name) const
+FunctionDefinitionPtr FScope::GetFunction(const std::string& name) const
 {
     auto it = m_functions.find(name);
     if (it != m_functions.end())
@@ -84,59 +89,42 @@ FunctionValuePtr FScope::GetFunction(const std::string& name) const
     throw std::runtime_error("Function not declared: " + name);
 }
 
-void FScope::RegisterClass(const std::string& name, ObjectValuePtr object)
+void FScope::DeclareClass(Visibility visibility, ClassDefinitionPtr classDefinition)
 {
-    if (IsClassDeclared(name))
+    auto& className = classDefinition->GetName();
+
+    if (IsClassDeclared(className))
     {
-        throw std::runtime_error("Class '" + name + "' is already declared in this scope");
+        throw std::runtime_error("Class '" + className + "' is already declared in this scope");
     }
 
-    m_classes[name] = std::move(object);
+    m_classes[className] = classDefinition;
+    m_lastClass          = className;
 }
 
-bool FScope::IsClassDeclared(const std::string& name) const
+void FScope::DeclareClassProperty(Visibility visibility, ClassPropertyDefinitionPtr propertyDefinition) const
 {
-    return m_classes.find(name) != m_classes.end();
+    const auto& lastClassDefinition = GetClassDefinition(m_lastClass);
+    lastClassDefinition->AddProperty(visibility, propertyDefinition);
 }
 
-ObjectValuePtr FScope::GetClass(const std::string& name) const
+void FScope::DeclareClassMethod(Visibility visibility, ClassMethodDefinitionPtr methodDefinition) const
+{
+    const auto& lastClassDefinition = GetClassDefinition(m_lastClass);
+    lastClassDefinition->AddMethod(visibility, methodDefinition);
+}
+
+ClassDefinitionPtr FScope::GetClassDefinition(const std::string& name) const
 {
     auto it = m_classes.find(name);
     if (it != m_classes.end())
     {
         return it->second;
     }
-
-    throw std::runtime_error("Class '" + name + "' not found in this scope");
+    throw std::runtime_error("Class not declared: " + name);
 }
 
-bool FScope::IsClassContext() const
+bool FScope::IsClassDeclared(const std::string& name) const
 {
-    return m_isClassContext;
-}
-
-void FScope::DeclareMethod(const std::string& name, FunctionValuePtr method)
-{
-    if (IsMethodDeclared(name))
-    {
-        throw std::runtime_error("Method '" + name + "' is already declared in this scope");
-    }
-
-    m_methods[name] = method;
-    m_isClassContext = true;
-}
-
-bool FScope::IsMethodDeclared(const std::string& name) const
-{
-    return m_methods.find(name) != m_methods.end();
-}
-
-FunctionValuePtr FScope::GetMethod(const std::string& name) const
-{
-    auto it = m_methods.find(name);
-    if (it != m_methods.end())
-    {
-        return it->second;
-    }
-    throw std::runtime_error("Method not declared: " + name);
+    return m_classes.find(name) != m_classes.end();
 }

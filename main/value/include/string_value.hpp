@@ -13,5 +13,8 @@ public:
     bool IsString() const override;
     const std::string ToString() const override;
 
+    void SetValue(const std::string value);
     const std::string& GetValue() const;
 };
+
+using StringValuePtr = std::shared_ptr<FStringValue>;

@@ -44,7 +44,7 @@ StatementPtr FStatementParser::ParseStatement()
         //     std::to_string(token.column)
         // );
         std::string message = std::format(
-            "Unexpected token: {}",
+            "Unexpected statement token: {}",
             token.lexeme
         );
         throw FSyntaxException(message);

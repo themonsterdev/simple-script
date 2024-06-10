@@ -52,3 +52,5 @@ private:
     // The name of the identifier.
     std::string m_name;
 };
+
+using IdentifierExpressionPtr = std::unique_ptr<FIdentifierExpression>;

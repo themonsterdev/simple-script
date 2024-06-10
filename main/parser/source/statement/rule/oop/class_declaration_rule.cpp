@@ -4,13 +4,19 @@
 #include "statement/oop/class/class_method_declaration_statement.hpp"
 #include "statement/oop/property_declaration_statement.hpp"
 
+#include "oop/class_definition.hpp"
+#include "oop/class_property_definition.hpp"
+#include "oop/class_method_definition.hpp"
+
+#include "statement/block/block_statement.hpp"
+
 #include "statement/statement_parser.hpp"
 #include "expression/expression_parser.hpp"
 #include "exception/syntax_exception.hpp"
 
 #include "lexer.hpp"
 
-static StatementPtr ParseProperty(std::string& visibility, FLexer& lexer, FStatementParser& statementParser, FExpressionParser& expressionParser)
+static StatementPtr ParseProperty(Visibility visibility, FLexer& lexer, FStatementParser& statementParser, FExpressionParser& expressionParser)
 {
     lexer.GetNextToken(); // Consume 'var' or 'const' keyword
 
@@ -28,28 +34,38 @@ static StatementPtr ParseProperty(std::string& visibility, FLexer& lexer, FState
         expression = expressionParser.ParseExpression();
     }
 
+    const auto& propertyType       = std::make_shared<FType>("any");
+    const auto& propertyDefinition = std::make_shared<FClassPropertyDefinition>(
+        propertyName,
+        propertyType
+    );
+
     return std::make_unique<FPropertyDeclarationStatement>(
         visibility,
-        propertyName,
+        propertyDefinition,
         std::move(expression)
     );
 }
 
-static StatementPtr ParseMethod(std::string& visibility, FLexer& lexer, FStatementParser& statementParser, FExpressionParser& expressionParser)
+static StatementPtr ParseMethod(Visibility visibility, FLexer& lexer, FStatementParser& statementParser, FExpressionParser& expressionParser)
 {
-    lexer.GetNextToken(); // Consume 'function' keyword
+    // Consume 'function' keyword
+    lexer.GetNextToken();
 
+    // Consume 'identifier'
     const auto& methodNameToken = lexer.GetNextToken();
     if (methodNameToken.type != eTokenType::Identifier)
     {
         throw FSyntaxException("Expected method name after 'function' keyword.");
     }
 
+    // Consume '(' delimiter
     if (!lexer.TryConsumeToken(eTokenType::Delimiter, "("))
     {
         throw FSyntaxException("Expected '(' after method name.");
     }
 
+    // Consume 'identifiers'
     FunctionParameters parameters;
     while (lexer.HasNextToken())
     {
@@ -76,16 +92,19 @@ static StatementPtr ParseMethod(std::string& visibility, FLexer& lexer, FStateme
         }
     }
 
+    // Consume ')' delimiter
     if (!lexer.TryConsumeToken(eTokenType::Delimiter, ")"))
     {
         throw FSyntaxException("Expected ')' keyword after method name parameters.");
     }
 
+    // Consume 'then' keyword
     if (!lexer.TryConsumeToken(eTokenType::Keyword, "then"))
     {
         throw FSyntaxException("Expected 'then' keyword after method parameters.");
     }
 
+    // Consume 'statements'
     StatementList statements;
     while (lexer.HasNextToken() && !lexer.MatchToken(eTokenType::Keyword, "end"))
     {
@@ -106,12 +125,18 @@ static StatementPtr ParseMethod(std::string& visibility, FLexer& lexer, FStateme
         throw FSyntaxException("Expected keyword 'end' after method.");
     }
 
+    const auto& returnType       = std::make_shared<FType>("any");
+    const auto& methodDefinition = std::make_shared<FClassMethodDefinition>(
+        methodNameToken.lexeme,
+        returnType,
+        parameters
+    );
+
     auto methodBody = std::make_unique<FBlockStatement>(std::move(statements));
     
     auto statement = std::make_unique<FClassMethodDeclarationStatement>(
         visibility,
-        methodNameToken.lexeme,
-        parameters,
+        methodDefinition,
         std::move(methodBody)
     );
 
@@ -124,19 +149,21 @@ static BlockStatementPtr ParseClassBody(FLexer& lexer, FStatementParser& stateme
 
     while (lexer.HasNextToken())
     {
-        std::string visibility = "private"; // Default visibility
+        // Default visibility
+        Visibility visibility = Visibility::Private;
 
         if (lexer.TryConsumeToken(eTokenType::Keyword, "private"))
         {
-            visibility = "private";
+            // default private !
+            // visibility = Visibility::Private;
         }
         else if (lexer.TryConsumeToken(eTokenType::Keyword, "protected"))
         {
-            visibility = "protected";
+            visibility = Visibility::Protected;
         }
         else if (lexer.TryConsumeToken(eTokenType::Keyword, "public"))
         {
-            visibility = "public";
+            visibility = Visibility::Public;
         }
 
         const auto& token = lexer.PeekNextToken();
@@ -207,10 +234,11 @@ static StatementPtr ParseClassDeclaration(FLexer& lexer, FStatementParser& state
         throw FSyntaxException("Expected class name after 'class' keyword.");
     }
 
-    std::string className = classNameToken.lexeme;
+    const auto& className = classNameToken.lexeme;
+
+    const auto& classDefinition = std::make_shared<FClassDefinition>(className);
 
     // Consume the 'extends' keyword
-    std::string parentClassName;
     if (lexer.TryConsumeToken(eTokenType::Keyword, "extends"))
     {
         const auto& parentClassToken = lexer.GetNextToken();
@@ -219,11 +247,10 @@ static StatementPtr ParseClassDeclaration(FLexer& lexer, FStatementParser& state
             throw FSyntaxException("Expected class name after 'extends' keyword.");
         }
 
-        parentClassName = parentClassToken.lexeme;
+        classDefinition->SetParent(parentClassToken.lexeme);
     }
 
     // Consume the 'implements' keyword
-    std::vector<std::string> interfaces;
     if (lexer.TryConsumeToken(eTokenType::Keyword, "implements"))
     {
         const auto& interfaceToken = lexer.GetNextToken();
@@ -232,7 +259,7 @@ static StatementPtr ParseClassDeclaration(FLexer& lexer, FStatementParser& state
             throw FSyntaxException("Expected interface name after 'implements' keyword.");
         }
 
-        interfaces.push_back(interfaceToken.lexeme);
+        classDefinition->AddInterface(interfaceToken.lexeme);
 
         while (lexer.TryConsumeToken(eTokenType::Delimiter, ","))
         {
@@ -242,17 +269,15 @@ static StatementPtr ParseClassDeclaration(FLexer& lexer, FStatementParser& state
                 throw FSyntaxException("Expected interface name after ',' keyword.");
             }
 
-            interfaces.push_back(interfaceToken.lexeme);
+            classDefinition->AddInterface(interfaceToken.lexeme);
         }
     }
 
     auto classBody = ParseClassBody(lexer, statementParser, expressionParser);
 
     return std::make_unique<FClassDeclarationStatement>(
-        className,
-        std::move(classBody),
-        parentClassName,
-        interfaces
+        classDefinition,
+        std::move(classBody)
     );
 }
 

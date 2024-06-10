@@ -20,12 +20,10 @@ class FContext final
 {
     // Deque of scopes
     mutable ScopeDeque m_scopes;
-
     mutable ValuePtr m_returnValue;
     mutable bool m_hasReturnValue;
     mutable bool m_continueFlag;
     mutable bool m_throwFlag;
-    mutable ObjectValuePtr m_currentClass; // current declaration class
 
 public:
 
@@ -67,19 +65,16 @@ public:
      */
     void SetVariable(const std::string& name, const ValuePtr& value) const;
 
-    /**
-     * @brief Registers a function in the current scope.
-     * @param name The name of the function to register.
-     * @param function The invokable function to register.
-     */
-    void RegisterFunction(const std::string& name, FunctionValuePtr function) const;
+    void DeclareFunction(FunctionDefinitionPtr function) const;
+    bool IsFunctionDeclared(const std::string& name) const;
+    FunctionDefinitionPtr GetFunction(const std::string& name) const;
 
-    /**
-     * @brief Registers a class in the current scope.
-     * @param name The name of the class to register.
-     * @param object The object class to register.
-     */
-    void RegisterClass(const std::string& name, ObjectValuePtr object) const;
+    void DeclareClass(Visibility visibility, ClassDefinitionPtr classDefinition) const;
+    void DeclareClassProperty(Visibility visibility, ClassPropertyDefinitionPtr propertyDefinition) const;
+    void DeclareClassMethod(Visibility visibility, ClassMethodDefinitionPtr methodDefinition) const;
+    ClassDefinitionPtr GetClassDefinition(const std::string& name) const;
+
+    ValuePtr Call(const std::string& name, const std::vector<ValuePtr>& arguments) const;
 
     //////////////////////////////////////////////////////
     // Current to top scope //////////////////////////////
@@ -106,24 +101,7 @@ public:
      */
     ValuePtr GetVariable(const std::string& name) const;
 
-    bool IsFunctionDeclared(const std::string& name) const;
-    FunctionValuePtr GetFunction(const std::string& name) const;
-
-    /**
-     * @brief Calls a function in the current context.
-     * @param name The name of the function to call.
-     * @param arguments The arguments to pass to the function.
-     * @return The result of the function call.
-     */
-    ValuePtr CallFunction(const std::string& name, const std::vector<ValuePtr>& arguments) const;
-
     bool IsClassDeclared(const std::string& name) const;
-    ObjectValuePtr GetClass(const std::string& name) const;
-
-    void DeclareMethod(const std::string& name, FunctionValuePtr method) const;
-    bool IsClassContext() const;
-    bool IsMethodDeclared(const std::string& name) const;
-    FunctionValuePtr GetMethod(const std::string& name) const;
 
     // New methods for handling return values
     void SetReturnValue(const ValuePtr& returnValue) const;
@@ -136,12 +114,4 @@ public:
 
     void SetThrowFlag(bool flag) const;
     bool GetThrowFlag() const;
-
-    // Declarations
-    void SetCurrentClass(ObjectValuePtr object) const;
-    ObjectValuePtr GetCurrentClass() const;
-
-    // Access
-    bool IsDerivedFromClass(const FObjectValue* object) const;
-    bool IsSameClass(const FObjectValue* object) const;
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "expression/interface/expression.hpp"
+#include "object_value.hpp"
 
 class FAccessExpression final : public IExpression
 {
@@ -19,5 +20,4 @@ public:
     ValuePtr Evaluate(const FContext& context) const override;
 
     ValuePtr EvaluateDotOperator(const ObjectValuePtr& object, const FContext& context) const;
-    ValuePtr CallObjectMethod(const ObjectValuePtr& object, const FContext& context) const;
 };

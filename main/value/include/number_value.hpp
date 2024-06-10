@@ -13,6 +13,7 @@ public:
     bool IsNumber() const override;
     const std::string ToString() const override;
 
+    void SetValue(int value);
     int GetValue() const;
 };
 
