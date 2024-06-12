@@ -2,7 +2,7 @@
 
 Strings are sequences of characters enclosed in single or double quotes. Here's how you can use strings in your code:
 
-```mylang
+```ts
 var message = "Hello, world!";
 var name = 'Alice';
 ```

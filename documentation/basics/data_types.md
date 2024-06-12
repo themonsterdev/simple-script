@@ -11,7 +11,7 @@ Simple Script supports several data types that allow you to store various kinds 
 
 ## Examples
 
-```simple_script
+```ts
 var age = 25        // Integer
 var price = 19.99   // Float
 var name = "Alice"  // String

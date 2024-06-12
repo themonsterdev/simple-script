@@ -6,7 +6,7 @@ Collections are data structures that hold multiple values. Our language provides
 
 Arrays are ordered collections of items.
 
-```simple_script
+```ts
 var numbers = [1, 2, 3, 4, 5]
 print(numbers[0]) // Outputs: 1
 ```
@@ -15,7 +15,7 @@ print(numbers[0]) // Outputs: 1
 
 Dictionaries are collections of key-value pairs.
 
-```simple_script
+```ts
 var student = {
     "name": "Alice",
     "age": 21,
@@ -27,7 +27,7 @@ print(student["name"]) // Outputs: Alice
 
 ## Iterating Over Collections
 
-```simple_script
+```ts
 var fruits = ["apple", "banana", "cherry"]
 
 for (var i = 0; i < fruits.length; i++) {

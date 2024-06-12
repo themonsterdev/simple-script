@@ -4,7 +4,7 @@ Functions can return values using the `return` statement. This value can be used
 
 ## Returning a Value
 
-```simple_script
+```ts
 function add(a, b) then
     return a + b
 end
@@ -17,7 +17,7 @@ print(result) // Outputs: 8
 
 If no return statement is used, the function returns undefined.
 
-```simple_script
+```ts
 function sayHello() then
     print("Hello, World!")
 end

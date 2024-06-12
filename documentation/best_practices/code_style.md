@@ -8,7 +8,7 @@ Consistent code style makes your code more readable and maintainable. Here are s
 
 Example:
 
-```simple_script
+```ts
 var firstName = "Alice"
 ```
 
@@ -18,7 +18,7 @@ var firstName = "Alice"
 
 Example:
 
-```simple_script
+```ts
 if true then
     print("Indented code")
 end
@@ -31,7 +31,7 @@ end
 
 Example:
 
-```simple_script
+```ts
 # This is a single-line comment
 
 // This is a single-line comment

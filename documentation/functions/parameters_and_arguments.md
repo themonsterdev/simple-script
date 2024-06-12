@@ -4,7 +4,7 @@ Functions can accept parameters, which are variables that you pass into the func
 
 ## Defining Parameters
 
-```simple_script
+```ts
 function greet(name) then
     print(`Hello, ${name}`)
 end
@@ -12,13 +12,13 @@ end
 
 ## Passing Arguments
 
-```simple_script
+```ts
 greet("Alice") // Outputs: Hello, Alice
 ```
 
 ## Multiple Parameters
 
-```simple_script
+```ts
 function add(a, b) then
     return a + b
 end

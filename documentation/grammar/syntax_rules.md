@@ -9,7 +9,7 @@ Simple Script has a set of rules that define its syntax. Here are some of the mo
 
 Example:
 
-```simple_script
+```ts
 var x = 10
 var name = "Alice"
 ```
@@ -21,7 +21,7 @@ var name = "Alice"
 
 Example:
 
-```simple_script
+```ts
 if x > 0 then
     print("Positive")
 else

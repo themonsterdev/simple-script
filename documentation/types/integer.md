@@ -2,7 +2,7 @@
 
 Integers are another fundamental data type in our programming language, representing whole numbers. Here's how you can use integers in your code:
 
-```mylang
+```ts
 var count = 10;
 var temperature = -5;
 ```

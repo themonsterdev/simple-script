@@ -20,7 +20,7 @@ This section provides solutions to common issues you might encounter.
 
 Example:
 
-```our_language
+```ts
 var x = 10
 print(`Value of x: ${x}`)
 ```

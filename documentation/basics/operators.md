@@ -12,7 +12,7 @@ Operators are used to perform operations on variables and values. Simple Script 
 
 Example:
 
-```simple_script
+```ts
 var sum = 5 + 3        // 8
 var difference = 5 - 3 // 2
 ```
@@ -28,7 +28,7 @@ var difference = 5 - 3 // 2
 
 Example:
 
-```simple_script
+```ts
 var isEqual = (5 == 5)    // true
 var isNotEqual = (5 != 3) // true
 ```
@@ -41,6 +41,6 @@ var isNotEqual = (5 != 3) // true
 
 Example:
 
-```simple_script
+```ts
 var result = (5 > 3 && 2 < 4) // true
 ```

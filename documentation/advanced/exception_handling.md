@@ -4,7 +4,7 @@ Exceptions are a type of error that can be thrown and caught in your code. Use t
 
 ## Throwing Exceptions
 
-```simple_script
+```ts
 function checkAge(age) then
     if age < 18 then
         throw "UnderageError: You must be 18 or older."
@@ -15,7 +15,7 @@ end
 
 ## Handling Exceptions
 
-```simple_script
+```ts
 try
     var result = checkAge(16)
 catch error

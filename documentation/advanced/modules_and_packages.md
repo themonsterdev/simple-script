@@ -4,7 +4,7 @@ Modules and packages help you organize your code into reusable components. Use t
 
 ## Creating a Module
 
-```simple_script
+```ts
 // math.simple_script
 export function add(a, b) then
     return a + b
@@ -17,7 +17,7 @@ end
 
 ## Importing a Module
 
-```simple_script
+```ts
 import { add, subtract } from 'math'
 
 var sum = add(5, 3)

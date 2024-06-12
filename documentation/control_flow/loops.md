@@ -4,7 +4,7 @@ Loops allow you to execute a block of code multiple times. Simple Script support
 
 ## While Loop
 
-```simple_script
+```ts
 var i = 0
 while i < 5 then
     print(`Iteration: ${i}`)
@@ -14,7 +14,7 @@ end
 
 ## Do While Loop
 
-```simple_script
+```ts
 var i = 0
 do
     print(`Iteration: ${i}`)

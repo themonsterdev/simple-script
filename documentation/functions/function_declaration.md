@@ -4,7 +4,7 @@ Functions are reusable blocks of code that perform a specific task. Functions ar
 
 ## Declaring a Function
 
-```simple_script
+```ts
 function sayHello() then
     print("Hello, World!")
 end
@@ -12,6 +12,6 @@ end
 
 ## Calling a Function
 
-```simple_script
+```ts
 sayHello() // Outputs: Hello, World!
 ```

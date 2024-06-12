@@ -4,7 +4,7 @@ Constants are immutable values that cannot be changed once they are assigned. Th
 
 ## Declaring Constants
 
-```simple_script
+```ts
 const PI = 3.14
 const GREETING = "Hello, World!"
 ```

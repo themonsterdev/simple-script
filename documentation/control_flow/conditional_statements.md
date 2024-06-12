@@ -4,7 +4,7 @@ Conditional statements allow you to execute different blocks of code based on ce
 
 ## If Statement
 
-```simple_script
+```ts
 var age = 18
 
 if age >= 18 then
@@ -14,7 +14,7 @@ end
 
 ## If-Else Statement
 
-```simple_script
+```ts
 var age = 16
 
 if age >= 18 then
@@ -26,7 +26,7 @@ end
 
 ## Else-If Statement
 
-```simple_script
+```ts
 var score = 85
 
 if score >= 90 then

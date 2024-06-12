@@ -4,7 +4,7 @@ Error handling allows your program to deal with unexpected situations gracefully
 
 ## Try-Catch
 
-```simple_script
+```ts
 try
     var result = riskyFunction()
 catch error
@@ -16,7 +16,7 @@ end
 
 The finally block is executed regardless of whether an error occurred.
 
-```simple_script
+```ts
 try
     var result = riskyFunction()
 catch error

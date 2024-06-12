@@ -4,7 +4,7 @@ Switch statements allow you to execute one block of code from multiple options b
 
 ## Syntax
 
-```simple_script
+```ts
 var grade = 'B'
 
 switch grade
@@ -21,7 +21,7 @@ end
 
 ## Example
 
-```simple_script
+```ts
 var day = "Tuesday"
 
 switch day

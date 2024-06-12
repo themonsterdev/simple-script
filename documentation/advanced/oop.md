@@ -6,7 +6,7 @@ Object-oriented programming (OOP) is a programming paradigm based on the concept
 
 A class is a blueprint for creating objects.
 
-```simple_script
+```ts
 class Person
     constructor(name, age) then
         this.name = name
@@ -26,7 +26,7 @@ alice.greet() // Outputs: Hello, my name is Alice
 
 Classes can inherit properties and methods from other classes.
 
-```simple_script
+```ts
 class Employee extends Person {
     constructor(name, age, jobTitle) then
         super(name, age)

@@ -8,7 +8,7 @@ Testing ensures your code works correctly. Here are some strategies for effectiv
 
 Example:
 
-```simple_script
+```ts
 function add(a, b) then
     return a + b
 end
@@ -27,7 +27,7 @@ Test how different units work together.
 
 Example:
 
-```simple_script
+```ts
 function multiply(a, b) then
     return a * b
 end

@@ -6,10 +6,10 @@ and understand key concepts related to the creation and interpretation of script
 
 ## Table of Contents
 
-1. Grammar (EBNF)
-2. Lexical Analysis (Lexer)
-3. Syntax Analysis (Parser)
-4. Interpretation or Code Generation
+1. Grammar (**EBNF**)
+2. Lexical Analysis
+3. Syntax Analysis
+4. Interpreter
 
 ## Grammar (EBNF)
 

@@ -9,7 +9,7 @@ Good documentation helps others understand your code. Here are some guidelines f
 
 Example:
 
-```simple_script
+```ts
 /**
  * Calculates the factorial of a number.
  *

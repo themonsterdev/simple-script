@@ -4,7 +4,7 @@ Variables are used to store data that can be used and manipulated throughout you
 
 ## Declaring Variables
 
-```our_language
+```ts
 var x
 var y = 10
 var name = "Alice"
@@ -18,7 +18,7 @@ var name = "Alice"
 
 Example:
 
-```our_language
+```ts
 var _age = 30
 var firstName = "John"
 ```

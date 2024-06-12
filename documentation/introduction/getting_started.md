@@ -6,7 +6,7 @@ This section will help you write your first program and understand the basic con
 
 Let's start with a simple program that prints "Hello, World!" to the console.
 
-```our_language
+```ts
 print("Hello, World!")
 ```
 
@@ -17,7 +17,7 @@ print("Hello, World!")
 3. Navigate to the directory where you saved the file.
 4. Run the program using the command:
 
-```our_language
+```bash
 interpreter.exe hello_world.txt
 ```
 
