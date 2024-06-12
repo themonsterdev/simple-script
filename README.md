@@ -154,7 +154,7 @@ CommentMultiLine
 ```
 
 For detailed information on the syntax and structure of Simple Script, please refer
-to the [Grammar](documentation/grammar/index.md) documentation.
+to the [Grammar](documentation/grammar/overview.md) documentation.
 
 ## Lexical Analysis (Lexer)
 
@@ -188,9 +188,9 @@ syntax. The parser constructs a syntax tree representing the grammatical structu
 
 For the following code :
 
-```
+```ts
 var n = 1 + 2 * 3
-print n
+print(n)
 ```
 
 The generated syntax tree would be :
@@ -228,8 +228,8 @@ To run a script with `Simple Script`, follow these steps :
 
 1. Create a script file, for example, script.txt, with the following content :
 
-```c
-print "Hello, world"
+```ts
+print("Hello, world")
 ```
 
 2. Compile the program :
