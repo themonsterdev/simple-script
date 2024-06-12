@@ -166,7 +166,7 @@ elements such as keywords, identifiers, numbers, and operators.
 
 For the code var n = 1 + 2 * 3, the lexer generates the following tokens :
 
-```
+```ts
 FToken(Token::KEYWORD,     "var")
 FToken(Token::IDENTIFIER,  "n")
 FToken(Token::OPERATOR,    "=")
@@ -195,7 +195,7 @@ print(n)
 
 The generated syntax tree would be :
 
-```
+```ts
      root
     /    \ 
  var     print
