@@ -15,27 +15,8 @@ StatementPtr FBlockStatementRule::Parse(FLexer& lexer, FStatementParser& stateme
 {
     StatementList statements;
 
-    while (lexer.HasNextToken())
+    while (!lexer.MatchToken(eTokenType::Keyword, "end"))
     {
-        const auto& token = lexer.PeekNextToken();
-
-        if (token.IsSameType(eTokenType::End))
-        {
-            break;
-        }
-
-        if (token.IsSameType(eTokenType::Keyword))
-        {
-            if (token.IsSameLexeme("end"))
-            {
-                break;
-            }
-            else if (token.IsSameLexeme("else"))
-            {
-                break;
-            }
-        }
-
         StatementPtr statement = statementParser.ParseStatement();
 
         if (statement)
