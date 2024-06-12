@@ -1,0 +1,40 @@
+abstract class ACar
+
+    protected var name = "AbstractCar"
+    
+    protected function test() then
+        # var carName = self.name
+        # print(`carName: ${carName}`)
+    end
+
+end
+
+interface IMovable
+
+    function move()
+    function stop()
+
+end
+
+interface IInspectable
+
+    function inspect()
+
+end
+
+class Car extends ACar implements IMovable, IInspectable
+
+    public function pretty() then
+        # var a = self.test() # protected is accesible in method scope class
+    end
+
+end
+
+var instance = new Car()
+var name = instance.name
+print(name)
+
+# print(instance)
+
+# var r = instance.pretty()
+# var rr = instance.test() # protected no accesible

@@ -1,0 +1,10 @@
+function greet(name) then
+	return `Hello, ${name}`
+end
+
+var hello = greet("toto")
+print(hello)
+
+var func      = greet
+var funcHello = func("cosmos")
+print(funcHello)
