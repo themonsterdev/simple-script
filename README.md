@@ -167,15 +167,15 @@ elements such as keywords, identifiers, numbers, and operators.
 For the code var n = 1 + 2 * 3, the lexer generates the following tokens :
 
 ```
-SToken(Token::KEYWORD,     "var")
-SToken(Token::IDENTIFIER,  "n")
-SToken(Token::OPERATOR,    "=")
-SToken(Token::NUMBER,      "1")
-SToken(Token::OPERATOR,    "+")
-SToken(Token::NUMBER,      "2")
-SToken(Token::OPERATOR,    "*")
-SToken(Token::NUMBER,      "3")
-SToken(Token::END,         "")
+FToken(Token::KEYWORD,     "var")
+FToken(Token::IDENTIFIER,  "n")
+FToken(Token::OPERATOR,    "=")
+FToken(Token::NUMBER,      "1")
+FToken(Token::OPERATOR,    "+")
+FToken(Token::NUMBER,      "2")
+FToken(Token::OPERATOR,    "*")
+FToken(Token::NUMBER,      "3")
+FToken(Token::END,         "")
 ```
 
 ## Syntax Analysis (Parser)
