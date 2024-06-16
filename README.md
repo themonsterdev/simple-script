@@ -224,6 +224,11 @@ the resulting code.
 
 ## Usage
 
+```bash
+cmake --preset mac-os-debug
+cmake --build --preset mac-os-debug
+```
+
 To run a script with `Simple Script`, follow these steps :
 
 1. Create a script file, for example, script.txt, with the following content :

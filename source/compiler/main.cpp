@@ -3,6 +3,9 @@
 #include <vector>
 #include <cstring>
 
+
+#ifdef WINDOWS
+
 #include <windows.h>
 
 std::vector<uint8_t> GetDosHeader()
@@ -361,9 +364,11 @@ void PrintExecutable(const std::string& filename)
     CloseHandle(hFile);
 }
 
-// int main()
-// {
+#endif
+
+int main()
+{
 //     // PrintExecutable("C:\\Users\\PC-Gamer\\Documents\\Projects\\simple-script\\asm\\var_print.exe");
 //     Compile("output.exe");
-//     return EXIT_SUCCESS;
-// }
+    return EXIT_SUCCESS;
+}

@@ -1,0 +1,6 @@
+var identifier
+identifier = 1
+print(identifier)
+
+var id : Number = 0
+print(id)

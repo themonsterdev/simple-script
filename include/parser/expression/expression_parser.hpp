@@ -77,7 +77,7 @@ private:
     ExpressionPtr ParseSubscriptExpression();
     ExpressionPtr ParseFunctionCallExpression();
 
-    ExpressionPtr ParseSuffixAndPostfixExpression();
+    ExpressionPtr ParsePrefixAndPostfixExpression();
     ExpressionPtr ParseScopeResolutionExpression();
 
     ExpressionPtr ParsePrimaryExpression();

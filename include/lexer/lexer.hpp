@@ -21,7 +21,10 @@ class FLexer final
     size_t m_index;                 // Current index in the source code
     uint32_t m_line;                // Current line number
     uint32_t m_column;              // Current column number
-    size_t m_begin;
+
+    size_t m_lastIndex;
+    uint32_t m_lastLine;
+    uint32_t m_lastColumn;
 
 public:
 
@@ -39,17 +42,15 @@ public:
 
     /**
      * @brief Peeks at the next token without consuming it.
-     * @param n The number of tokens to skip (default is 0)
      * @return The next token.
      */
-    FToken PeekNextToken(size_t n = 0);
+    FToken PeekNextToken();
 
     /**
      * @brief Gets the next token and advances the lexer's position.
-     * @param n The number of tokens to skip (default is 0).
      * @return The next token.
      */
-    FToken GetNextToken(size_t n = 0);
+    FToken GetNextToken();
 
     void BeginNextToken();
     void EndNextToken();

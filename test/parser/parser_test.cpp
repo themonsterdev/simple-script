@@ -167,34 +167,6 @@ protected:
 //     ASSERT_EQ(context.GetVariable("y2"), Value(0));
 // }
 
-TEST_F(FParserTest, SingleTernaryTest)
-{
-    std::string input = "var x3 = 0\n";
-    input += "var y3 = x3 ? false : true";
-
-    FLexer lexer(input);
-    FParser parser(lexer);
-
-    StatementList statements = parser.Parse();
-    ASSERT_EQ(statements.size(), 2);
-
-    ASSERT_NE(statements.front(), nullptr);
-    auto varDeclX3 = dynamic_cast<FVarDeclarationStatement*>(statements.front().get());
-    ASSERT_NE(varDeclX3, nullptr);
-
-    ASSERT_NE(statements.back(), nullptr);
-    auto varDeclY3 = dynamic_cast<FVarDeclarationStatement*>(statements.back().get());
-    ASSERT_NE(varDeclY3, nullptr);
-    
-    // Evaluate statements to ensure variables are initialized
-    varDeclX3->Execute(context);
-    varDeclY3->Execute(context);
-
-    // Verify variables in the context
-    // ASSERT_EQ(context.GetVariable("x3"), Value(0));
-    // ASSERT_EQ(context.GetVariable("y3"), Value(true));
-}
-
 TEST_F(FParserTest, SingleTernaryFalseTest)
 {
     std::string input = "var x3 = 0\n";

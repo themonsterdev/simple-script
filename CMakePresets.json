@@ -1,0 +1,86 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 23,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "default-debug",
+            "displayName": "Default Debug Config",
+            "description": "Default Debug build using Ninja generator",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/default",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "windows-debug",
+            "binaryDir": "${sourceDir}/build/windows",
+            "inherits": "default-debug",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe",
+                "CMAKE_MAKE_PROGRAM": "Ninja.exe"
+            }
+        },
+        {
+            "name": "mac-os-debug",
+            "binaryDir": "${sourceDir}/build/macos",
+            "inherits": "default-debug",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_MAKE_PROGRAM": "ninja"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "default-debug",
+            "configurePreset": "default-debug"
+        },
+        {
+            "name": "windows-debug",
+            "configurePreset": "windows-debug"
+        },
+        {
+            "name": "mac-os-debug",
+            "configurePreset": "mac-os-debug"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "default-debug",
+            "configurePreset": "default-debug",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "stopOnFailure": true
+            }
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "default-debug",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "default-debug"
+                },
+                {
+                    "type": "build",
+                    "name": "default-debug"
+                },
+                {
+                    "type": "test",
+                    "name": "default-debug"
+                }
+            ]
+        }
+    ]
+}

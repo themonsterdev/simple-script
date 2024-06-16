@@ -141,7 +141,9 @@ void FInterpreter::InterpretText(const std::string& input)
         for (const auto& statement : statements)
         {
             // Execute the statement with the context
-            statement->Execute(context);
+            // statement->Execute(context);
+
+            statement->Accept(*this);
         }
     }
     // Catch any exceptions thrown during parsing or execution

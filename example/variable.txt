@@ -1,3 +1,0 @@
-var identifier
-identifier = 0
-print(identifier)

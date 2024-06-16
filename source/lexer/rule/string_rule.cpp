@@ -1,5 +1,3 @@
-#pragma once
-
 #include "lexer/rule/string_rule.hpp"
 #include "lexer/exception/lexical_exception.hpp"
 

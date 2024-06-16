@@ -212,6 +212,19 @@ ClassDefinitionPtr FContext::GetClassDefinition(const std::string& name) const
     return currentScope->GetClassDefinition(name);
 }
 
+bool FContext::IsClassDeclared(const std::string& name) const
+{
+    for (auto it = m_scopes.rbegin(); it != m_scopes.rend(); ++it)
+    {
+        if ((*it)->IsClassDeclared(name))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 //////////////////////////////////////////////////////
 // Current to top scope //////////////////////////////
 //////////////////////////////////////////////////////
@@ -264,19 +277,6 @@ ValuePtr FContext::GetVariable(const std::string& name) const
     throw std::runtime_error("Undefined variable: " + name);
 }
 
-bool FContext::IsClassDeclared(const std::string& name) const
-{
-    for (auto it = m_scopes.rbegin(); it != m_scopes.rend(); ++it)
-    {
-        if ((*it)->IsClassDeclared(name))
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 //////////////////////////////////////////////////////
 // Return value statement ////////////////////////////
 //////////////////////////////////////////////////////
@@ -286,6 +286,7 @@ void FContext::SetReturnValue(const ValuePtr& returnValue) const
     m_returnValue    = returnValue;
     m_hasReturnValue = true;
 }
+
 ValuePtr FContext::GetReturnValue() const
 {
     if (!m_hasReturnValue)
@@ -295,10 +296,12 @@ ValuePtr FContext::GetReturnValue() const
 
     return m_returnValue;
 }
+
 bool FContext::HasReturnValue() const
 {
     return m_hasReturnValue;
 }
+
 void FContext::ResetReturnValue() const
 {
     m_returnValue = nullptr;    // Reset the return value
@@ -313,6 +316,7 @@ void FContext::SetContinueFlag(bool flag) const
 {
     m_continueFlag = flag;
 }
+
 bool FContext::GetContinueFlag() const
 {
     return m_continueFlag;
@@ -326,6 +330,7 @@ void FContext::SetThrowFlag(bool flag) const
 {
     m_throwFlag = flag;
 }
+
 bool FContext::GetThrowFlag() const
 {
     return m_throwFlag;

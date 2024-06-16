@@ -69,7 +69,7 @@ bool FToken::IsSameTypeAndLexeme(eTokenType type, const std::string& lexeme) con
 std::string FToken::ToString() const
 {
 	return "Type: " + std::to_string(static_cast<int>(m_type)) + 
-               ", Lexeme: " + m_lexeme + 
-               ", Line: " + std::to_string(m_line) + 
-               ", Column: " + std::to_string(m_column);
+		", Lexeme: " + m_lexeme + 
+		", Line: " + std::to_string(m_line) + 
+		", Column: " + std::to_string(m_column);
 }

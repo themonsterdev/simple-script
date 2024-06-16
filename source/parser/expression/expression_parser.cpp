@@ -3,16 +3,21 @@
  * @brief Implementation of the FExpressionParser class.
  */
 
-#include "parser/expression/expression_parser.hpp"  // Include the expression parser header file
-#include "parser/exception/syntax_exception.hpp"    // Include the syntax exception header file
-#include "lexer/lexer.hpp"                          // Include the tokenizer header file
+#include "parser/expression/expression_parser.hpp"
+#include "parser/exception/syntax_exception.hpp"
+#include "lexer/lexer.hpp"
 
 // Expressions
 #include "ast/expression/access/access_expression.hpp"
 #include "ast/expression/access/access_method_expression.hpp"
 
+#include "ast/expression/addressof/address_of_expression.hpp"
+
 #include "ast/expression/assignment/assignment_expression.hpp"
 #include "ast/expression/assignment/compound_assignment_expression.hpp"
+
+#include "ast/expression/cast/cast_expression.hpp"
+#include "ast/expression/dereference/dereference_expression.hpp"
 
 #include "ast/expression/exception/throw_expression.hpp"
 
@@ -52,6 +57,13 @@
 
 #include "ast/expression/operator/comma_expression.hpp"
 
+#include "ast/expression/postfix/postfix_expression.hpp"
+#include "ast/expression/prefix/prefix_expression.hpp"
+
+#include "ast/expression/scope/scope_expression.hpp"
+#include "ast/expression/sizeof/sizeof_expression.hpp"
+#include "ast/expression/subscript/subscript_expression.hpp"
+
 #include "ast/expression/invokable/call_expression.hpp"
 
 #include "ast/expression/literal/boolean_expression.hpp"
@@ -60,6 +72,8 @@
 #include "ast/expression/literal/string_format_expression.hpp"
 
 #include "ast/expression/identifier_expression.hpp"
+
+#include <iostream>
 
 FExpressionParser::FExpressionParser(FLexer& lexer)
     : m_lexer(lexer)
@@ -399,31 +413,37 @@ ExpressionPtr FExpressionParser::ParseNewExpression()
 
 ExpressionPtr FExpressionParser::ParseSizeofExpression()
 {
-    // if (m_lexer.TryConsumeToken(eTokenType::Keyword, "sizeof"))
-    // {
-    //     ExpressionPtr operand = ParseAddressOfExpression();
-    //     return std::make_unique<FSizeofExpression>(std::move(operand));
-    // }
+    if (m_lexer.TryConsumeToken(eTokenType::Keyword, "sizeof"))
+    {
+        ExpressionPtr left = ParseAddressOfExpression();
+
+        return std::make_unique<FSizeofExpression>(std::move(left));
+    }
+
     return ParseAddressOfExpression();
 }
 
 ExpressionPtr FExpressionParser::ParseAddressOfExpression()
 {
-    // if (m_lexer.TryConsumeToken(eTokenType::Operator, "&"))
-    // {
-    //     ExpressionPtr operand = ParseDereferenceExpression();
-    //     return std::make_unique<FAddressOfExpression>(std::move(operand));
-    // }
+    if (m_lexer.TryConsumeToken(eTokenType::Operator, "&"))
+    {
+        ExpressionPtr operand = ParseDereferenceExpression();
+
+        return std::make_unique<FAddressOfExpression>(std::move(operand));
+    }
+
     return ParseDereferenceExpression();
 }
 
 ExpressionPtr FExpressionParser::ParseDereferenceExpression()
 {
-    // if (m_lexer.TryConsumeToken(eTokenType::Operator, "*"))
-    // {
-    //     ExpressionPtr operand = ParseCastExpression();
-    //     return std::make_unique<FDereferenceExpression>(std::move(operand));
-    // }
+    if (m_lexer.TryConsumeToken(eTokenType::Operator, "*"))
+    {
+        ExpressionPtr operand = ParseCastExpression();
+
+        return std::make_unique<FDereferenceExpression>(std::move(operand));
+    }
+
     return ParseCastExpression();
 }
 
@@ -479,28 +499,32 @@ ExpressionPtr FExpressionParser::ParsePostfixExpression()
 {
     ExpressionPtr left = ParseAccessExpression();
 
-    // while (m_lexer.HasNextToken())
-    // {
-    //     if (m_lexer.PeekNextToken().type == eTokenType::Operator)
-    //     {
-    //         // Postfix increment or decrement
-    //         if (m_lexer.PeekNextToken().lexeme == "++" || m_lexer.PeekNextToken().lexeme == "--")
-    //         {
-    //             m_lexer.GetNextToken(); // Consume the operator token
-    //             left = std::make_unique<FPostfixIncrementDecrementExpression>(std::move(left), m_lexer.GetCurrentToken().lexeme);
-    //         }
-    //         else
-    //         {
-    //             // No more postfix expressions
-    //             break;
-    //         }
-    //     }
-    //     else
-    //     {
-    //         // No more postfix expressions
-    //         break;
-    //     }
-    // }
+    while (m_lexer.HasNextToken())
+    {
+        const auto& token = m_lexer.PeekNextToken();
+
+        if (token.IsSameType(eTokenType::Operator))
+        {
+            // Postfix increment or decrement
+            if (token.IsSameLexeme("++") || token.IsSameLexeme("--"))
+            {
+                const auto& op = token.GetLexeme();
+                m_lexer.GetNextToken(); // Consume the operator token
+
+                left = std::make_unique<FPostfixExpression>(std::move(left), op);
+            }
+            else
+            {
+                // No more postfix expressions
+                break;
+            }
+        }
+        else
+        {
+            // No more postfix expressions
+            break;
+        }
+    }
 
     return left;
 }
@@ -571,25 +595,25 @@ ExpressionPtr FExpressionParser::ParseAccessExpression()
 
 ExpressionPtr FExpressionParser::ParseSubscriptExpression()
 {
-    // Implementation for array operators
     ExpressionPtr left = ParseFunctionCallExpression();
 
-    // if (m_lexer.HasNextToken() && m_lexer.PeekNextToken().type == eTokenType::Delimiter && m_lexer.PeekNextToken().lexeme == "[")
-    // {
-    //     m_lexer.GetNextToken(); // Consume '['
-    //     ExpressionPtr index = ParseExpression();
-    //     if (!m_lexer.TryConsumeToken(eTokenType::Delimiter, "]"))
-    //     {
-    //         throw FSyntaxException("Expected ']' after subscript expression");
-    //     }
-    //     return std::make_unique<FSubscriptExpression>(std::move(left), std::move(index));
-    // }
+    if (m_lexer.TryConsumeToken(eTokenType::Delimiter, "["))
+    {
+        ExpressionPtr index = ParseExpression();
+
+        if (!m_lexer.TryConsumeToken(eTokenType::Delimiter, "]"))
+        {
+            throw FSyntaxException("Expected ']' after subscript expression");
+        }
+        return std::make_unique<FSubscriptExpression>(std::move(left), std::move(index));
+    }
+
     return left;
 }
 
 ExpressionPtr FExpressionParser::ParseFunctionCallExpression()
 {
-    ExpressionPtr left = ParseSuffixAndPostfixExpression();
+    ExpressionPtr left = ParsePrefixAndPostfixExpression();
 
     while (m_lexer.TryConsumeToken(eTokenType::Delimiter, "("))
     {
@@ -603,6 +627,7 @@ ExpressionPtr FExpressionParser::ParseFunctionCallExpression()
                 arguments.push_back(ParseAssignmentExpression());
             } while (m_lexer.TryConsumeToken(eTokenType::Delimiter, ","));
         }
+
         if (!m_lexer.TryConsumeToken(eTokenType::Delimiter, ")"))
         {
             throw FSyntaxException("Expected ')' after arguments in function call");
@@ -613,32 +638,41 @@ ExpressionPtr FExpressionParser::ParseFunctionCallExpression()
     return left;
 }
 
-ExpressionPtr FExpressionParser::ParseSuffixAndPostfixExpression()
+ExpressionPtr FExpressionParser::ParsePrefixAndPostfixExpression()
 {
-    // Implementation for suffix and postfix operators
-    ExpressionPtr expr = ParseScopeResolutionExpression();
-    // if (m_lexer.HasNextToken())
-    // {
-    //     if (m_lexer.PeekNextToken().type == eTokenType::Operator && (m_lexer.PeekNextToken().lexeme == "++" || m_lexer.PeekNextToken().lexeme == "--"))
-    //     {
-    //         std::string op = m_lexer.GetNextToken().lexeme; // Consume '++' or '--'
-    //         return std::make_unique<FSuffixPostfixExpression>(std::move(expr), op);
-    //     }
-    // }
-    return expr;
+    if (m_lexer.TryConsumeToken(eTokenType::Operator, "++"))
+    {
+        std::string op = "++";
+
+        ExpressionPtr left = ParseScopeResolutionExpression();
+        
+        return std::make_unique<FPrefixExpression>(std::move(left), op);
+    }
+
+    if (m_lexer.TryConsumeToken(eTokenType::Operator, "--"))
+    {
+        std::string op = "--";
+
+        ExpressionPtr left = ParseScopeResolutionExpression();
+        
+        return std::make_unique<FPrefixExpression>(std::move(left), op);
+    }
+
+    return ParseScopeResolutionExpression();
 }
 
 ExpressionPtr FExpressionParser::ParseScopeResolutionExpression()
 {
-    // Implementation for scope resolution
-    ExpressionPtr expr = ParsePrimaryExpression();
-    // if (m_lexer.HasNextToken() && m_lexer.PeekNextToken().type == eTokenType::Operator && m_lexer.PeekNextToken().lexeme == "::")
+    ExpressionPtr left = ParsePrimaryExpression();
+
+    // if (m_lexer.TryConsumeToken(eTokenType::Operator, "::"))
     // {
-    //     m_lexer.GetNextToken(); // Consume '::'
     //     ExpressionPtr right = ParseScopeResolutionExpression();
-    //     return std::make_unique<FScopeResolutionExpression>(std::move(expr), std::move(right));
+    // 
+    //     return std::make_unique<FScopeExpression>(std::move(left), std::move(right));
     // }
-    return expr;
+    
+    return left;
 }
 
 ExpressionPtr FExpressionParser::ParsePrimaryExpression()
@@ -676,7 +710,9 @@ ExpressionPtr FExpressionParser::ParsePrimaryExpression()
         }
         break;
     }
+    default:
+        throw FSyntaxException("Unexpected expression token: " + token.GetLexeme());
     }
 
-    throw FSyntaxException("Unexpected expression token: " + token.GetLexeme());
+    return nullptr;
 }

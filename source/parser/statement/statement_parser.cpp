@@ -33,19 +33,10 @@ StatementPtr FStatementParser::ParseStatement()
             }
         }
 
-        // Peek at the next token without consuming it
-        const auto& token = m_lexer.PeekNextToken();
-
         // If none of the above conditions are met, throw an error
-        // std::string message = std::format(
-        //     "Unexpected token: {} at line {}:{}",
-        //     token.lexeme,
-        //     std::to_string(token.line),
-        //     std::to_string(token.column)
-        // );
         std::string message = std::format(
-            "Unexpected statement token: {}",
-            token.GetLexeme()
+            "Unexpected statement token: '{}'",
+            token.ToString()
         );
         throw FSyntaxException(message);
     }

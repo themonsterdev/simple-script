@@ -1,5 +1,5 @@
 # Variable declaration
-var total = 0            // Variable to store the sum of even numbers
+var total       = 0      // Variable to store the sum of even numbers
 const max_value = 10     // Maximum value up to which we will calculate
 
 # Initial values display

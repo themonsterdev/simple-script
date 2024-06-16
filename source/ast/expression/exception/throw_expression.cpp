@@ -31,7 +31,7 @@ ValuePtr FThrowExpression::Evaluate(const FContext& context) const
     {
         const auto& result = std::dynamic_pointer_cast<FStringValue>(value);
 
-        throw std::exception(result->GetValue().c_str());
+        // throw std::exception(result->GetValue().c_str());
 
         // context.SetThrowFlag(true);
     }

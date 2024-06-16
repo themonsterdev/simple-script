@@ -1,5 +1,3 @@
-#pragma once
-
 #include "parser/statement/rule/enum/enum_declaration_statement_rule.hpp"
 #include "ast/statement/enum/enum_declaration_statement.hpp"
 #include "parser/expression/expression_parser.hpp"

@@ -24,5 +24,5 @@ public:
 	 * @param token Output parameter where the matched token will be stored.
 	 * @return True if the match is successful, false otherwise.
 	 */
-	virtual bool Match(const std::string& text, size_t& index, FToken& token) const override;
+	bool Match(const std::string& text, size_t& index, FToken& token) const override;
 };

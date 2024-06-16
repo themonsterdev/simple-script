@@ -14,7 +14,9 @@ FLexer::FLexer(const std::string& source)
 	, m_index(0)                            // Initialize index to start of source code
 	, m_line(1)                             // Initialize line number
 	, m_column(1)                           // Initialize column number
-	, m_begin(0)                            // Initialize begin index
+	, m_lastIndex(0)                        // Initialize begin index
+    , m_lastLine(1)
+    , m_lastColumn(1)
 {}
 
 bool FLexer::HasNextToken() const
@@ -23,61 +25,52 @@ bool FLexer::HasNextToken() const
     return m_index < m_source.length();
 }
 
-FToken FLexer::PeekNextToken(size_t n)
+FToken FLexer::PeekNextToken()
 {
     // Store the current index position
-    size_t currentOffset = m_index;
+    size_t lastIndex     = m_index;
+    uint32_t lastLine    = m_line;
+    uint32_t lastColumn  = m_column;
 
     // Get the next token using GetNextToken with the provided offset
-    const auto& nextToken = GetNextToken(n);
+    const auto& nextToken = GetNextToken();
 
     // Restore the index position
-    m_index = currentOffset;
+    m_index  = lastIndex;
+    m_line   = lastLine;
+    m_column = lastColumn;
 
     // Return the next token without advancing the lexer's position
     return nextToken;
 }
 
-FToken FLexer::GetNextToken(size_t n)
+FToken FLexer::GetNextToken()
 {
-    // Advance the index by n characters
-    size_t i = 0;
-    while (i < n && HasNextToken())
-    {
-        // Skip whitespace characters
-        SkipWhitespace();
-
-        m_index++;
-        i++;
-    }
-
     // Skip whitespace characters
     SkipWhitespace();
+
+    // Initialize token with current line and column numbers
+    FToken token = { eTokenType::End, "", m_line, m_column };
 
     // Return End token if no more tokens are found
     if (!HasNextToken())
     {
-        return { eTokenType::End, "", m_line, m_column };
+        return token;
     }
-
-    // Initialize token with current line and column numbers
-    FToken token;
-    token.SetLine(m_line);
-    token.SetColumn(m_column);
 
     // Try to match tokens with lexical rules
     for (const auto& rule : m_rules)
     {
         size_t tempIndex = m_index;
+
         if (rule->Match(m_source, tempIndex, token))
         {
             // Update lexer's position and return the matched token
             UpdatePosition(m_index, tempIndex);
-            m_index = tempIndex;
 
             if (token.IsSameType(eTokenType::Comment))
             {
-                return GetNextToken(n);
+                return GetNextToken();
             }
             return token;
         }
@@ -90,27 +83,22 @@ FToken FLexer::GetNextToken(size_t n)
 
 void FLexer::BeginNextToken()
 {
-    m_begin = m_index;
+    m_lastIndex   = m_index;
+    m_lastLine    = m_line;
+    m_lastColumn  = m_column;
 }
 
 void FLexer::EndNextToken()
 {
-    m_index = m_begin;
+    m_index   = m_lastIndex;
+    m_line    = m_lastLine;
+    m_column  = m_lastColumn;
 }
 
 bool FLexer::TryConsumeToken(eTokenType expectedType, const std::string& expectedLexeme)
 {
-    // Check if there is a next token available
-    if (!HasNextToken())
-    {
-        return false;
-    }
-
-    // Get the next token
-    const auto& token = PeekNextToken();
-
     // Checks if the type and lexeme of the token match those expected
-    if (token.IsSameTypeAndLexeme(expectedType, expectedLexeme))
+    if (MatchToken(expectedType, expectedLexeme))
     {
         // Consume the token if the match is successful
         GetNextToken();
@@ -143,31 +131,32 @@ void FLexer::SkipWhitespace()
     {
         // Update lexer's position
         UpdatePosition(m_index, m_index + 1);
-
-        // Move to the next character
-        m_index++;
     }
 }
 
 void FLexer::UpdatePosition(size_t start, size_t end)
 {
     // Iterate over the characters in the given range
-    for (size_t i = start; i < end; ++i)
+    for (size_t i = start; i < end; i++)
     {
-        // If the current character is a newline character, increment
-        // the line number and reset the column number
-        if (m_source[i] == '\n')
+        if (m_source[i] == '\t')
         {
-            // Increment the line number
+            // Assuming a tab width of 4 spaces
+            m_column += 4;
+        }
+        else if (m_source[i] == '\n')
+        {
+            // Increment the line number and reset the column number
             m_line++;
-
-            // Reset the column number to 1
             m_column = 1;
         }
         else
         {
-            // Increment the column number for non-newline characters
+            // Increment the column number for non-newline and non-tab characters
             m_column++;
         }
     }
+
+    // Update the lexer's index to the end position
+    m_index = end;
 }

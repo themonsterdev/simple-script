@@ -1,6 +1,6 @@
 #pragma once
 
-#include "interface/value.hpp"
+#include "value/interface/value.hpp"
 
 class AValue : public IValue
 {

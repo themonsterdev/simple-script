@@ -10,6 +10,8 @@
 #include "parser/statement/rule/declaration/const_declaration_statement_rule.hpp"
 #include "parser/statement/rule/declaration/var_declaration_statement_rule.hpp"
 
+#include "parser/statement/rule/variable/variable_declaration_statement_rule.hpp"
+
 #include "parser/statement/rule/enum/enum_declaration_statement_rule.hpp"
 
 #include "parser/statement/rule/expression/expression_statement_rule.hpp"
@@ -49,7 +51,8 @@ StatementRuleVector FStatementRuleFactory::CreateRules()
 
     // Declaration statement rule
     rules.push_back(std::make_unique<FConstDeclarationStatementRule>());
-    rules.push_back(std::make_unique<FVarDeclarationStatementRule>());
+    // rules.push_back(std::make_unique<FVarDeclarationStatementRule>());
+    rules.push_back(std::make_unique<FVariableDeclarationStatementRule>());
 
     // Loop statement rule
     rules.push_back(std::make_unique<FContinueStatementRule>());

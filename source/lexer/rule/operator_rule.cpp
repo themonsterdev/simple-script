@@ -26,6 +26,13 @@ static constexpr auto COMPARISONS =
     "<=>",
 };
 
+// Define the list of operators
+static constexpr auto OPS =
+{
+    "++",
+    "--",
+};
+
 bool FOperatorRule::Match(const std::string& text, size_t& index, FToken& token) const
 {
     // Define a string containing the operators
@@ -66,6 +73,23 @@ bool FOperatorRule::Match(const std::string& text, size_t& index, FToken& token)
             if (text.substr(index, size) == comparison)
             {
                 token.SetLexeme(comparison);
+                index += size - 1;
+                break;
+            }
+        }
+
+        for (const auto& op : OPS)
+        {
+            if (token.GetLexeme()[0] != op[0])
+            {
+                continue;
+            }
+
+            size_t size = strlen(op);
+
+            if (text.substr(index, size) == op)
+            {
+                token.SetLexeme(op);
                 index += size - 1;
                 break;
             }

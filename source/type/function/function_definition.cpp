@@ -1,5 +1,3 @@
-#pragma once
-
 #include "type/function/function_definition.hpp"
 #include "ast/statement/block/block_statement.hpp"
 #include "context/context.hpp"
