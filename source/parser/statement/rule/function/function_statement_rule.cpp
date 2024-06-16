@@ -84,7 +84,7 @@ StatementPtr FFunctionStatementRule::Parse(FLexer& lexer, FStatementParser& stat
 
     auto body = std::make_unique<FBlockStatement>(std::move(statements));
 
-    const auto& returnType = std::make_shared<FType>("void");
+    const auto& returnType = std::make_shared<FType>(eTypeKind::VOID);
 
     const auto& functionDefinition = std::make_shared<CFunctionDefinition>(
         functionName,

@@ -58,7 +58,7 @@ ValuePtr FBuiltinAssertFunction::Invoke(const FContext& context, const std::vect
 FunctionDefinitionPtr CreateAssertFunction()
 {
     std::string name = "assert";
-    TypePtr returnType = std::make_shared<FType>("void");
+    TypePtr returnType = std::make_shared<FType>(eTypeKind::VOID);
 
     FunctionParameters parameters = {
         { "condition", "boolean" },

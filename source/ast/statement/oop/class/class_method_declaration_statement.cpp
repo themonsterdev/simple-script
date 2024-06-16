@@ -15,10 +15,10 @@ void FClassMethodDeclarationStatement::Execute(const FContext& context) const
 {
     context.DeclareClassMethod(m_visibility, m_methodDefinition);
 
-    if (m_body)
-    {
-        m_body->Execute(context);
-    }
+    // if (m_body)
+    // {
+        // m_body->Execute(context);
+    // }
 }
 
 const Visibility& FClassMethodDeclarationStatement::GetVisibility() const

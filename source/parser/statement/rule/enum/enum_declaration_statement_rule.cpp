@@ -31,7 +31,7 @@ StatementPtr FEnumDeclarationStatementRule::Parse(FLexer& lexer, FStatementParse
 			const auto& name = token.GetLexeme();
 			lexer.GetNextToken();
 
-			values[name] = std::make_shared<FType>("number");
+			values[name] = std::make_shared<FType>(eTypeKind::NUMBER);
 		}
 		else
 		{

@@ -71,7 +71,7 @@ ValuePtr FBuiltinCloseFile::Invoke(const FContext& context, const std::vector<Va
 FunctionDefinitionPtr CreateOpenFileFunction()
 {
     std::string name = "open";
-    TypePtr returnType = std::make_shared<FType>("string");
+    TypePtr returnType = std::make_shared<FType>(eTypeKind::STRING);
 
     FunctionParameters parameters = {
         { "string", "string" },
@@ -88,7 +88,7 @@ FunctionDefinitionPtr CreateOpenFileFunction()
 FunctionDefinitionPtr CreateReadFileFunction()
 {
     std::string name = "read";
-    TypePtr returnType = std::make_shared<FType>("string");
+    TypePtr returnType = std::make_shared<FType>(eTypeKind::STRING);
 
     FunctionParameters parameters = {
         { "string", "string" }
@@ -104,7 +104,7 @@ FunctionDefinitionPtr CreateReadFileFunction()
 FunctionDefinitionPtr CreateWriteFileFunction()
 {
     std::string name = "write";
-    TypePtr returnType = std::make_shared<FType>("void");
+    TypePtr returnType = std::make_shared<FType>(eTypeKind::VOID);
 
     FunctionParameters parameters = {
         { "string", "string" },
@@ -121,7 +121,7 @@ FunctionDefinitionPtr CreateWriteFileFunction()
 FunctionDefinitionPtr CreateCloseFileFunction()
 {
     std::string name = "close";
-    TypePtr returnType = std::make_shared<FType>("void");
+    TypePtr returnType = std::make_shared<FType>(eTypeKind::VOID);
 
     FunctionParameters parameters = {
         { "string", "string" },

@@ -10,16 +10,27 @@
 
 #include "value/interface/value.hpp"
 
+enum class eTypeKind
+{
+    ANY,
+    VOID,
+    NUMBER,
+    STRING,
+    BOOLEAN,
+    FUNCTION,
+    CLASS,
+};
+
 class FType final
 {
-    std::string m_name;
+    eTypeKind m_kind;
     ValuePtr m_defaultValue;
 
 public:
 
-    FType(const std::string& name);
+    FType(eTypeKind name);
 
-    const std::string& GetName() const;
+    const eTypeKind& GetKind() const;
 
     void SetDefaultValue(ValuePtr defaultValue);
     const ValuePtr GetDefaultValue() const;

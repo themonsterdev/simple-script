@@ -711,7 +711,7 @@ ExpressionPtr FExpressionParser::ParsePrimaryExpression()
         break;
     }
     default:
-        throw FSyntaxException("Unexpected expression token: " + token.GetLexeme());
+        throw FSyntaxException("Unexpected expression token: " + token.ToString());
     }
 
     return nullptr;

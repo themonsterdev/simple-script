@@ -16,12 +16,6 @@ bool FInterfaceDeclarationRule::Match(FLexer& lexer) const
 
 StatementPtr FInterfaceDeclarationRule::Parse(FLexer& lexer, FStatementParser& statementParser, FExpressionParser& expressionParser) const
 {
-    // Consume the 'interface' keyword
-    if (!lexer.TryConsumeToken(eTokenType::Keyword, "interface"))
-    {
-        throw FSyntaxException("Expected keyword 'interface'.");
-    }
-
     // Expect the interface name
     const auto& interfaceNameToken = lexer.GetNextToken();
     if (!interfaceNameToken.IsSameType(eTokenType::Identifier))

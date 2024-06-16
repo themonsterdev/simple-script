@@ -24,7 +24,7 @@ ValuePtr FBuiltinInputFunction::Invoke(const FContext& context, const std::vecto
 FunctionDefinitionPtr CreateInputFunction()
 {
     std::string name   = "input";
-    TypePtr returnType = std::make_shared<FType>("string");
+    TypePtr returnType = std::make_shared<FType>(eTypeKind::STRING);
 
     FunctionParameters parameters = {
         { "question", "string" }

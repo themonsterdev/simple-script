@@ -21,7 +21,7 @@ ValuePtr FBuiltinPrintFunction::Invoke(const FContext& context, const std::vecto
 FunctionDefinitionPtr CreatePrintFunction()
 {
     std::string name   = "print";
-    TypePtr returnType = std::make_shared<FType>("void");
+    TypePtr returnType = std::make_shared<FType>(eTypeKind::VOID);
 
     FunctionParameters parameters = {
         { "expression", "any" }

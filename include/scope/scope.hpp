@@ -21,6 +21,7 @@ using VariableMap = std::unordered_map<std::string, ValuePtr>;
 using FunctionMap = std::unordered_map<std::string, FunctionDefinitionPtr>;
 using ClassMap    = std::unordered_map<std::string, ClassDefinitionPtr>;
 using EnumMap     = std::unordered_map<std::string, std::vector<std::string>>;
+using SymbolMap   = std::unordered_map<std::string, ValuePtr>;
 
 /**
  * @brief Represents a scope for storing variables and their values.
@@ -35,9 +36,15 @@ class FScope final
     ClassMap    m_classes;
     EnumMap     m_enums;
 
+    SymbolMap m_symbols;
+
     std::string m_lastClass;
 
 public:
+
+    void AddSymbol(const std::string& name, const ValuePtr& value);
+    bool IsSymbolDeclared(const std::string& name) const;
+    ValuePtr GetSymbol(const std::string& name) const;
 
     /**
      * @brief Declares a variable in the current scope.

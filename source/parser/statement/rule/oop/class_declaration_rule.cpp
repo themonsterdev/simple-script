@@ -34,7 +34,7 @@ static StatementPtr ParseProperty(Visibility visibility, FLexer& lexer, FStateme
         expression = expressionParser.ParseExpression();
     }
 
-    const auto& propertyType       = std::make_shared<FType>("any");
+    const auto& propertyType       = std::make_shared<FType>(eTypeKind::ANY);
     const auto& propertyDefinition = std::make_shared<FClassPropertyDefinition>(
         propertyName,
         propertyType
@@ -73,7 +73,7 @@ static StatementPtr ParseMethod(Visibility visibility, FLexer& lexer, FStatement
 
         if (token.IsSameType(eTokenType::Identifier))
         {
-            parameters.push_back({ token.GetLexeme(), "void"});
+            parameters.push_back({ token.GetLexeme(), "void" });
             lexer.GetNextToken();
             continue;
         }
@@ -125,7 +125,7 @@ static StatementPtr ParseMethod(Visibility visibility, FLexer& lexer, FStatement
         throw FSyntaxException("Expected keyword 'end' after method.");
     }
 
-    const auto& returnType       = std::make_shared<FType>("any");
+    const auto& returnType       = std::make_shared<FType>(eTypeKind::ANY);
     const auto& methodDefinition = std::make_shared<FClassMethodDefinition>(
         methodNameToken.GetLexeme(),
         returnType,

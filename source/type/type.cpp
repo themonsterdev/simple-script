@@ -5,14 +5,14 @@
 
 #include "type/type.hpp"
 
-FType::FType(const std::string& name)
-	: m_name(name)
+FType::FType(eTypeKind kind)
+	: m_kind(kind)
 	, m_defaultValue(nullptr)
 {}
 
-const std::string& FType::GetName() const
+const eTypeKind& FType::GetKind() const
 {
-	return m_name;
+	return m_kind;
 }
 
 void FType::SetDefaultValue(ValuePtr defaultValue)
