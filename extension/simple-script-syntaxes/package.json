@@ -1,0 +1,25 @@
+{
+  "name": "simple-script-syntaxes",
+  "displayName": "simple-script-syntaxes",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "simplescript",
+      "aliases": ["simple-script", "simplescript"],
+      "extensions": ["simplescript"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "simplescript",
+      "scopeName": "source.simple-script",
+      "path": "./syntaxes/simplescript.tmLanguage.json"
+    }]
+  }
+}

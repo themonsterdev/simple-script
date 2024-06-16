@@ -9,8 +9,6 @@
 #include <vector>
 #include <string>
 
-#include "ast/interface/ast_visitor.hpp"
-
 /**
  * @brief Represents a vector of keywords.
  */
@@ -19,7 +17,7 @@ using KeywordVector = std::vector<std::string>;
 /**
  * @brief Represents the interpreter class.
  */
-class FInterpreter final : public IASTVisitor
+class FInterpreter final
 {
 	int m_argc;					// The number of command line arguments.
 	const char** m_argv;		// The array of command line argument strings.

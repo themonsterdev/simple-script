@@ -1,0 +1,406 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "simple-script",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#visibility"
+		},
+		{
+			"include": "#classes"
+		},
+		{
+			"include": "#interfaces"
+		},
+		{
+			"include": "#traits"
+		},
+		{
+			"include": "#variables"
+		},
+		{
+			"include": "#constants"
+		},
+		{
+			"include": "#booleans"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#functions"
+		},
+		{
+			"include": "#loops"
+		},
+		{
+			"include": "#conditionals"
+		},
+		{
+			"include": "#switch"
+		},
+		{
+			"include": "#trycatch"
+		},
+		{
+			"include": "#assertions"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control.simplescript",
+					"match": "\\b(if|else|while|for|do|return|switch|case|default|break|continue|function|end|then|var|const|print|input|throw|try|catch|assert|class|extends|interface|implements|trait|abstract|new|use)\\b"
+				}
+			]
+		},
+		"visibility": {
+			"patterns": [
+				{
+					"name": "keyword.other.visibility.simplescript",
+					"match": "\\b(protected|private|public)\\b"
+				}
+			]
+		},
+		"classes": {
+			"patterns": [
+				{
+					"name": "entity.name.class.simplescript",
+					"begin": "\\bclass\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+					"beginCaptures": {
+						"1": { "name": "entity.name.class.simplescript" }
+					},
+					"end": "\\bend\\b",
+					"patterns": [
+						{
+							"include": "#visibility"
+						},
+						{
+							"include": "#keywords"
+						},
+						{
+							"include": "#variables"
+						},
+						{
+							"include": "#strings"
+						},
+						{
+							"include": "#constants"
+						},
+						{
+							"include": "#comments"
+						},
+						{
+							"include": "#booleans"
+						},
+						{
+							"include": "#functions"
+						}
+					]
+				}
+			]
+		},
+		"interfaces": {
+			"patterns": [
+				{
+					"name": "entity.name.interface.simplescript",
+					"begin": "\\binterface\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+					"beginCaptures": {
+						"1": { "name": "entity.name.interface.simplescript" }
+					},
+					"end": "\\bend\\b",
+					"patterns": [
+						{
+							"include": "#visibility"
+						},
+						{
+							"include": "#keywords"
+						},
+						{
+							"include": "#variables"
+						},
+						{
+							"include": "#strings"
+						},
+						{
+							"include": "#constants"
+						},
+						{
+							"include": "#comments"
+						},
+						{
+							"include": "#booleans"
+						},
+						{
+							"include": "#functions"
+						}
+					]
+				}
+			]
+		},
+		"traits": {
+			"patterns": [
+				{
+					"name": "entity.name.trait.simplescript",
+					"begin": "\\btrait\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+					"beginCaptures": {
+						"1": { "name": "entity.name.trait.simplescript" }
+					},
+					"end": "\\bend\\b",
+					"patterns": [
+						{
+							"include": "#visibility"
+						},
+						{
+							"include": "#keywords"
+						},
+						{
+							"include": "#variables"
+						},
+						{
+							"include": "#strings"
+						},
+						{
+							"include": "#constants"
+						},
+						{
+							"include": "#comments"
+						},
+						{
+							"include": "#booleans"
+						},
+						{
+							"include": "#functions"
+						}
+					]
+				}
+			]
+		},
+		"variables": {
+			"patterns": [
+				{
+					"name": "meta.parameter.type.variable.simplescript",
+					"match": "\\b(var|const)\\s+([a-zA-Z_][a-zA-Z0-9_]*)"
+				}
+			]
+		},
+		"strings": {
+			"patterns": [
+				{
+					"name": "string.quoted.double.simplescript",
+					"begin": "\"",
+					"end": "\"",
+					"patterns": [
+						{
+							"name": "constant.character.escape.simplescript",
+							"match": "\\\\."
+						}
+					]
+				},
+				{
+					"name": "string.quoted.single.simplescript",
+					"begin": "'",
+					"end": "'",
+					"patterns": [
+						{
+							"name": "constant.character.escape.simplescript",
+							"match": "\\\\."
+						}
+					]
+				},
+				{
+					"name": "string.quoted.other.simplescript",
+					"begin": "`",
+					"end": "`",
+					"patterns": [
+						{
+							"name": "constant.character.escape.simplescript",
+							"match": "\\\\."
+						},
+						{
+							"name": "variable.other.simplescript",
+							"match": "\\$\\{[a-zA-Z_][a-zA-Z0-9_]*\\}"
+						}
+					]
+				}
+			]
+		},
+		"constants": {
+			"patterns": [
+				{
+					"name": "constant.numeric.simplescript",
+					"match": "\\b\\d+\\b"
+				}
+			]
+		},
+		"booleans": {
+			"patterns": [
+				{
+					"name": "constant.language.boolean.simplescript",
+					"match": "\\b(true|false)\\b"
+				}
+			]
+		},
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.line.simplescript",
+					"match": "#.*$"
+				},
+				{
+					"name": "comment.line.double-slash.simplescript",
+					"match": "//.*$"
+				}
+			]
+		},
+		"functions": {
+			"patterns": [
+				{
+					"name": "entity.name.function.simplescript",
+					"begin": "\\bfunction\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\b",
+					"beginCaptures": {
+						"1": { "name": "entity.name.function.simplescript" }
+					},
+					"end": "\\bend\\b",
+					"patterns": [
+						{
+							"include": "#keywords"
+						},
+						{
+							"include": "#variables"
+						},
+						{
+							"include": "#strings"
+						},
+						{
+							"include": "#constants"
+						},
+						{
+							"include": "#comments"
+						},
+						{
+							"include": "#booleans"
+						}
+					]
+				},
+				{
+					"name": "meta.function-call.simplescript",
+					"match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\()",
+					"captures": {
+						"1": { "name": "entity.name.function.call.simplescript" }
+					}
+				}
+			]
+		},
+		"loops": {
+			"patterns": [
+				{
+					"name": "keyword.control.loop.simplescript",
+					"begin": "\\b(do|while|for)\\b",
+					"end": "\\bend\\b",
+					"patterns": [
+						{
+							"include": "#keywords"
+						},
+						{
+							"include": "#variables"
+						},
+						{
+							"include": "#strings"
+						},
+						{
+							"include": "#constants"
+						},
+						{
+							"include": "#comments"
+						},
+						{
+							"include": "#booleans"
+						}
+					]
+				}
+			]
+		},
+		"conditionals": {
+			"patterns": [
+				{
+					"name": "keyword.control.conditional.simplescript",
+					"begin": "\\b(if|else)\\b",
+					"end": "\\bend\\b",
+					"patterns": [
+						{
+							"include": "#keywords"
+						},
+						{
+							"include": "#variables"
+						},
+						{
+							"include": "#strings"
+						},
+						{
+							"include": "#constants"
+						},
+						{
+							"include": "#comments"
+						},
+						{
+							"include": "#booleans"
+						}
+					]
+				}
+			]
+		},
+		"switch": {
+			"patterns": [
+				{
+					"name": "keyword.control.switch.simplescript",
+					"begin": "\\bswitch\\b",
+					"end": "\\bend\\b",
+					"patterns": [
+						{
+							"name": "keyword.control.case.simplescript",
+							"begin": "\\bcase\\b",
+							"end": "(?=\\bcase\\b|\\bend\\b)"
+						},
+						{
+							"name": "keyword.control.default.simplescript",
+							"begin": "\\bdefault\\b",
+							"end": "(?=\\bend\\b)"
+						}
+					]
+				}
+			]
+		},
+		"trycatch": {
+			"patterns": [
+				{
+					"name": "keyword.control.trycatch.simplescript",
+					"begin": "\\btry\\b",
+					"end": "\\bend\\b",
+					"patterns": [
+						{
+							"name": "keyword.control.catch.simplescript",
+							"begin": "\\bcatch\\b",
+							"end": "(?=\\bend\\b)"
+						}
+					]
+				}
+			]
+		},
+		"assertions": {
+			"patterns": [
+				{
+					"name": "keyword.control.assert.simplescript",
+					"match": "\\bassert\\b"
+				}
+			]
+		}
+	},
+	"scopeName": "source.simple-script"
+}

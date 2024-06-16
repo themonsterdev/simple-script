@@ -1,0 +1,21 @@
+{
+  "name": "simple-script-monokai",
+  "displayName": "simple-script-monokai",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "label": "simple-script-monokai",
+        "uiTheme": "vs-dark",
+        "path": "./themes/simple-script-monokai-color-theme.json"
+      }
+    ]
+  }
+}
