@@ -224,42 +224,28 @@ the resulting code.
 
 ## Usage
 
-```bash
-cmake --preset mac-os-debug
-cmake --build --preset mac-os-debug
-```
-
 To run a script with `Simple Script`, follow these steps :
 
-1. Create a script file, for example, script.txt, with the following content :
-
-```ts
-print("Hello, world")
-```
-
-2. Compile the program :
+1. Compile the program :
 
 Choose your preferred method :
 
 - If using Visual Studio :
     - Open the solution in Visual Studio.
     - Build the solution using the appropriate build configuration.
-- If using CMake :
+- If using CMake Command Line :
 
 ```bash
-mkdir build
-cd build
-cmake ..
-make
+cmake --preset mac-os-debug
+cmake --build --preset mac-os-debug
 ```
 
-3. Run the program :
+2. Run the program :
 
 ```bash
-cd out\build\x64-Debug\main\interpreter
-or
-cd build\main\interpreter\Debug
-.\interpreter.exe -f ../../../../../examples/test.txt
+build/macos/source/interpreter/interpreter -h
+build/macos/source/interpreter/interpreter -f example/test.simplescript
+build/macos/source/interpreter/interpreter -t "print(1 + 2 * 3)"
 ```
 
 The program will read the script.txt file, parse the code, build the syntax tree,
@@ -267,11 +253,12 @@ and interpret the instructions.
 
 ## Resources
 
-1. [Extended Backus–Naur form](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form)
+1. [Extended Backus–Naur form](https://en.wikipedia.org/wiki/Extended_Backus–Naur_form)
 2. [Lexical analysis](https://en.wikipedia.org/wiki/Lexical_analysis)
 3. [Syntax analysis](https://en.wikipedia.org/wiki/Parsing)
 4. [Abstract syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree)
 5. [Interpreter pattern](https://en.wikipedia.org/wiki/Interpreter_pattern)
+6. [Compiler](https://en.wikipedia.org/wiki/Compiler)
 
 ## Contribution
 
