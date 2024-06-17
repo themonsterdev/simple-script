@@ -78,7 +78,7 @@ FToken FLexer::GetNextToken()
 
     // If no match is found, throw an exception
     std::string lexeme(1, m_source[m_index]);
-    throw FLexicalException("Unknown token: " + lexeme);
+    throw FLexicalException("Unknown token : " + lexeme);
 }
 
 void FLexer::BeginNextToken()

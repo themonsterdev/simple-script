@@ -24,3 +24,8 @@ ValuePtr FCommaExpression::Evaluate(const FContext& context) const
 
     return result;
 }
+
+const ExpressionList& FCommaExpression::GetExpressions() const
+{
+    return m_expressions;
+}

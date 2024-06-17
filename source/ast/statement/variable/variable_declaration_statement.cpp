@@ -5,11 +5,12 @@
 
 // Include the declaration of the variable declaration statement class
 #include "ast/statement/variable/variable_declaration_statement.hpp"
+#include "ast/expression/operator/comma_expression.hpp"
 
 // Include declarations for context objects
 #include "context/context.hpp"
 
-#include "value/number_value.hpp"
+#include "value/array_value.hpp"
 
 // For std::invalid_argument
 #include <stdexcept>
@@ -56,6 +57,10 @@ void FVariableDeclarationStatement::Execute(const FContext& context) const
 			else if (m_type == "Object" && !value->IsObject())
 			{
 				throw std::runtime_error("Type mismatch: expected 'Object' but got another type.");
+			}
+			else if (m_type == "Array" && !value->IsArray())
+			{
+				throw std::runtime_error("Type mismatch: expected 'Array' but got another type.");
 			}
 		}
 

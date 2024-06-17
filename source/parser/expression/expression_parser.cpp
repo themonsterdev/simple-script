@@ -12,6 +12,7 @@
 #include "ast/expression/access/access_method_expression.hpp"
 
 #include "ast/expression/addressof/address_of_expression.hpp"
+#include "ast/expression/array/array_expression.hpp"
 
 #include "ast/expression/assignment/assignment_expression.hpp"
 #include "ast/expression/assignment/compound_assignment_expression.hpp"
@@ -93,10 +94,13 @@ ExpressionPtr FExpressionParser::ParseCommaExpression()
         ExpressionList expressions;
         expressions.push_back(std::move(left));
 
+        ExpressionPtr right = ParseAssignmentExpression();
+        expressions.push_back(std::move(right));
+
         while (m_lexer.TryConsumeToken(eTokenType::Delimiter, ","))
         {
-            ExpressionPtr left = ParseAssignmentExpression();
-            expressions.push_back(std::move(left));
+            right = ParseAssignmentExpression();
+            expressions.push_back(std::move(right));
         }
 
         return std::make_unique<FCommaExpression>(std::move(expressions));
@@ -122,7 +126,7 @@ ExpressionPtr FExpressionParser::ParseAssignmentExpression()
             lexeme == "&="  || lexeme == "^="  || lexeme == "|=")
         {
             m_lexer.GetNextToken();
-            ExpressionPtr right = ParseAssignmentExpression();
+            ExpressionPtr right = ParseExpression();
 
             if (lexeme == "=")
             {
@@ -707,6 +711,25 @@ ExpressionPtr FExpressionParser::ParsePrimaryExpression()
                 throw FSyntaxException("Expected ')' after expression");
             }
             return expr;
+        }
+        else if (token.IsSameLexeme("["))
+        {
+            ExpressionList elements;
+
+            if (!m_lexer.MatchToken(eTokenType::Delimiter, "]"))
+            {
+                do
+                {
+                    elements.push_back(ParsePrimaryExpression());
+                } while (m_lexer.TryConsumeToken(eTokenType::Delimiter, ","));
+            }
+
+            if (!m_lexer.TryConsumeToken(eTokenType::Delimiter, "]"))
+            {
+                throw FSyntaxException("Expected ']' after array elements");
+            }
+
+            return std::make_unique<FArrayExpression>(std::move(elements));
         }
         break;
     }

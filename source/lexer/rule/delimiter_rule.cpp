@@ -9,7 +9,7 @@
 bool FDelimiterRule::Match(const std::string& text, size_t& index, FToken& token) const
 {
     // Define a string containing the delimiters
-    const std::string delimiters = "(),:";
+    const std::string delimiters = "[](),:";
 
     // Check if the current character is one of the delimiters
     if (delimiters.find(text[index]) != std::string::npos)

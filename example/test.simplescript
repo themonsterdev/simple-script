@@ -1,6 +1,9 @@
-function greet(name) then
-    print(name)
-end
+var elements = [
+    3,
+    2,
+    1
+]
+print(elements)
 
-var toto = greet
-toto("toto")
+var element = elements[0]
+print(element)
