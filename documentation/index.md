@@ -34,7 +34,7 @@
 
 7. **Standard Library**
    - [Input/Output](standard_library/io.md)
-   - [String Manipulation](standard_library/strings.md) (Not yet implemented)
+   - [String Manipulation](standard_library/strings.md)
    - [File Handling](standard_library/files.md) (Not yet implemented)
    - [Collections](standard_library/collections.md) (Not yet implemented)
 
