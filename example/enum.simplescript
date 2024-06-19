@@ -1,8 +1,0 @@
-enum Color
-	Red
-	Green
-	Blue
-end
-
-// var selectedColor = Color.Green
-// print(selectedColor)
