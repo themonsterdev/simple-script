@@ -7,20 +7,18 @@
 #include <iostream>
 
 FBuiltinAssertFunction::FBuiltinAssertFunction(
-    const std::string& name,
-    TypePtr returnType,
-    FunctionParameters parameters)
-    : CFunctionDefinition(name, returnType, parameters, nullptr)
+    FunctionDefinitionPtr functionDefinition)
+    : CFunctionValue(functionDefinition)
 {}
 
-ValuePtr FBuiltinAssertFunction::Invoke(const FContext& context, const std::vector<ValuePtr>& arguments) const
+ValuePtr FBuiltinAssertFunction::CallMethod(const FContext& context, const std::string& methodName, std::vector<ValuePtr> args) const
 {
-    if (arguments.size() < 1)
+    if (args.size() < 1)
     {
         throw std::runtime_error("assert function expects one argument");
     }
 
-    ValuePtr value = arguments[0];
+    ValuePtr value = args[0];
     bool condition = false;
 
     if (value->IsBoolean())
@@ -41,9 +39,9 @@ ValuePtr FBuiltinAssertFunction::Invoke(const FContext& context, const std::vect
     }
 
     std::string error = "";
-    if (arguments.size() == 2)
+    if (args.size() == 2)
     {
-        // error = std::get<std::string>(arguments[1]);
+        // error = std::get<std::string>(args[1]);
     }
 
     if (!condition)
@@ -55,19 +53,18 @@ ValuePtr FBuiltinAssertFunction::Invoke(const FContext& context, const std::vect
     return {};
 }
 
-FunctionDefinitionPtr CreateAssertFunction()
+FunctionValuePtr CreateAssertFunction()
 {
-    std::string name = "assert";
-    TypePtr returnType = std::make_shared<FType>(eTypeKind::VOID);
+    std::string functionName = "assert";
+    FunctionParameters parameters = { "boolean", "string" };
+    std::string returnType = "void";
 
-    FunctionParameters parameters = {
-        { "condition", "boolean" },
-        { "error", "string" },
-    };
-
-    return std::make_shared<FBuiltinAssertFunction>(
-        name,
+    const auto& definition = std::make_shared<CFunctionDefinition>(
+        functionName,
+        parameters,
         returnType,
-        parameters
+        nullptr
     );
+
+    return std::make_shared<FBuiltinAssertFunction>(definition);
 }

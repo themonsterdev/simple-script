@@ -1,0 +1,10 @@
+var phrase = "Hello, world!"
+    
+var length = phrase.length()
+var subPhrase1 = phrase.substr(0, 5)
+var subPhrase2 = phrase.substr(7, 5)
+    
+print(`Original length: ${length}`)
+print(`Original phrase: ${phrase}`)
+print(`Substring 1: ${subPhrase1}`)
+print(`Substring 2: ${subPhrase2}`)

@@ -1,12 +1,9 @@
 #include "parser/statement/rule/oop/class_declaration_rule.hpp"
 
 #include "ast/statement/oop/class/class_declaration_statement.hpp"
-#include "ast/statement/oop/class/class_method_declaration_statement.hpp"
-#include "ast/statement/oop/property_declaration_statement.hpp"
+#include "ast/statement/oop/member_declaration_statement.hpp"
 
 #include "type/oop/class_definition.hpp"
-#include "type/oop/class_property_definition.hpp"
-#include "type/oop/class_method_definition.hpp"
 
 #include "ast/statement/block/block_statement.hpp"
 
@@ -16,138 +13,11 @@
 
 #include "lexer/lexer.hpp"
 
-static StatementPtr ParseProperty(Visibility visibility, FLexer& lexer, FStatementParser& statementParser, FExpressionParser& expressionParser)
-{
-    lexer.GetNextToken(); // Consume 'var' or 'const' keyword
-
-    const auto& propertyNameToken = lexer.GetNextToken();
-    if (!propertyNameToken.IsSameType(eTokenType::Identifier))
-    {
-        throw FSyntaxException("Expected property name after 'var' keyword.");
-    }
-
-    const auto& propertyName = propertyNameToken.GetLexeme();
-    ExpressionPtr expression = nullptr;
-
-    if (lexer.TryConsumeToken(eTokenType::Operator, "="))
-    {
-        expression = expressionParser.ParseExpression();
-    }
-
-    const auto& propertyType       = std::make_shared<FType>(eTypeKind::ANY);
-    const auto& propertyDefinition = std::make_shared<FClassPropertyDefinition>(
-        propertyName,
-        propertyType
-    );
-
-    return std::make_unique<FPropertyDeclarationStatement>(
-        visibility,
-        propertyDefinition,
-        std::move(expression)
-    );
-}
-
-static StatementPtr ParseMethod(Visibility visibility, FLexer& lexer, FStatementParser& statementParser, FExpressionParser& expressionParser)
-{
-    // Consume 'function' keyword
-    lexer.GetNextToken();
-
-    // Consume 'identifier'
-    const auto& methodNameToken = lexer.GetNextToken();
-    if (!methodNameToken.IsSameType(eTokenType::Identifier))
-    {
-        throw FSyntaxException("Expected method name after 'function' keyword.");
-    }
-
-    // Consume '(' delimiter
-    if (!lexer.TryConsumeToken(eTokenType::Delimiter, "("))
-    {
-        throw FSyntaxException("Expected '(' after method name.");
-    }
-
-    // Consume 'identifiers'
-    FunctionParameters parameters;
-    while (lexer.HasNextToken())
-    {
-        const auto& token = lexer.PeekNextToken();
-
-        if (token.IsSameType(eTokenType::Identifier))
-        {
-            parameters.push_back({ token.GetLexeme(), "void" });
-            lexer.GetNextToken();
-            continue;
-        }
-        else if (token.IsSameLexeme(","))
-        {
-            lexer.GetNextToken();
-            continue;
-        }
-        else if (token.IsSameLexeme(")"))
-        {
-            break;
-        }
-        else
-        {
-            throw FSyntaxException("Invalid token in method parameters.");
-        }
-    }
-
-    // Consume ')' delimiter
-    if (!lexer.TryConsumeToken(eTokenType::Delimiter, ")"))
-    {
-        throw FSyntaxException("Expected ')' keyword after method name parameters.");
-    }
-
-    // Consume 'then' keyword
-    if (!lexer.TryConsumeToken(eTokenType::Keyword, "then"))
-    {
-        throw FSyntaxException("Expected 'then' keyword after method parameters.");
-    }
-
-    // Consume 'statements'
-    StatementList statements;
-    while (lexer.HasNextToken() && !lexer.MatchToken(eTokenType::Keyword, "end"))
-    {
-        StatementPtr statement = statementParser.ParseStatement();
-
-        if (statement)
-        {
-            statements.push_back(std::move(statement));
-        }
-        else
-        {
-            break;
-        }
-    }
-
-    if (!lexer.TryConsumeToken(eTokenType::Keyword, "end"))
-    {
-        throw FSyntaxException("Expected keyword 'end' after method.");
-    }
-
-    const auto& returnType       = std::make_shared<FType>(eTypeKind::ANY);
-    const auto& methodDefinition = std::make_shared<FClassMethodDefinition>(
-        methodNameToken.GetLexeme(),
-        returnType,
-        parameters
-    );
-
-    auto methodBody = std::make_unique<FBlockStatement>(std::move(statements));
-    
-    auto statement = std::make_unique<FClassMethodDeclarationStatement>(
-        visibility,
-        methodDefinition,
-        std::move(methodBody)
-    );
-
-    return statement;
-}
-
 static BlockStatementPtr ParseClassBody(FLexer& lexer, FStatementParser& statementParser, FExpressionParser& expressionParser)
 {
     StatementList statements;
 
-    while (lexer.HasNextToken())
+    while (!lexer.MatchToken(eTokenType::Keyword, "end"))
     {
         // Default visibility
         Visibility visibility = Visibility::Private;
@@ -166,55 +36,16 @@ static BlockStatementPtr ParseClassBody(FLexer& lexer, FStatementParser& stateme
             visibility = Visibility::Public;
         }
 
-        const auto& token = lexer.PeekNextToken();
+        auto statement = statementParser.ParseStatement();
 
-        if (token.IsSameType(eTokenType::Keyword))
+        if (statement)
         {
-            if (token.IsSameLexeme("var") || token.IsSameLexeme("const"))
-            {
-                auto propertyStatement = ParseProperty(
-                    visibility,
-                    lexer,
-                    statementParser,
-                    expressionParser
-                );
-                if (propertyStatement)
-                {
-                    statements.push_back(std::move(propertyStatement));
-                    continue;
-                }
-            }
-            else if (token.IsSameLexeme("function"))
-            {
-                auto methodStatement = ParseMethod(
-                    visibility,
-                    lexer,
-                    statementParser,
-                    expressionParser
-                );
-                if (methodStatement)
-                {
-                    statements.push_back(std::move(methodStatement));
-                    continue;
-                }
-            }
-            else if (token.IsSameLexeme("class"))
-            {
-                auto classStatement = statementParser.ParseStatement();
-                if (classStatement)
-                {
-                    statements.push_back(std::move(classStatement));
-                    continue;
-                }
-                else
-                {
-                    break;
-                }
-            }
-            else
-            {
-                break;
-            }
+            auto member = std::make_unique<FMemberDeclarationStatement>(
+                visibility,
+                std::move(statement)
+            );
+
+            statements.push_back(std::move(member));
         }
         else
         {

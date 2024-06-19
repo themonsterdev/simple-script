@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ast/statement/interface/statement.hpp"
-#include "type/function/function_parameter.hpp"
+#include "value/function_value.hpp"
 
 class FInterfaceMethodDeclarationStatement final : public IStatement
 {

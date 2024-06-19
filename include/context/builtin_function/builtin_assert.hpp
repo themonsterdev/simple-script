@@ -1,18 +1,14 @@
 #pragma once
 
-#include "type/function/function_definition.hpp"
+#include "value/function_value.hpp"
 
-class FBuiltinAssertFunction final : public CFunctionDefinition
+class FBuiltinAssertFunction final : public CFunctionValue
 {
 public:
 
-    FBuiltinAssertFunction(
-        const std::string& name,
-        TypePtr returnType,
-        FunctionParameters parameters
-    );
+    FBuiltinAssertFunction(FunctionDefinitionPtr functionDefinition);
 
-    ValuePtr Invoke(const FContext& context, const std::vector<ValuePtr>& arguments) const override;
+    ValuePtr CallMethod(const FContext& context, const std::string& methodName, std::vector<ValuePtr> args) const override;
 };
 
-FunctionDefinitionPtr CreateAssertFunction();
+FunctionValuePtr CreateAssertFunction();

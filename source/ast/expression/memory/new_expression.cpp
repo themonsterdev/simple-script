@@ -8,6 +8,9 @@
 
 // Include declarations for context objects
 #include "context/context.hpp"
+
+#include "value/class_value.hpp"
+
 #include <stdexcept>
 
 FNewExpression::FNewExpression(ExpressionPtr expression)

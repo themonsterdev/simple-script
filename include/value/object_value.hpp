@@ -44,6 +44,7 @@ public:
 
     bool IsObject() const override;
     const std::string ToString() const override;
+    ValuePtr CallMethod(const FContext& context, const std::string& methodName, std::vector<ValuePtr> args) const override;
 
     const std::string& GetName() const;
 

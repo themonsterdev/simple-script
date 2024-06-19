@@ -5,13 +5,10 @@
 
 #pragma once
 
-#include <unordered_map>
 #include <vector>
+#include <unordered_map>
 
-#include "type/oop/class_property_definition.hpp"
-#include "type/oop/class_method_definition.hpp"
-
-class FContext;
+#include "value/interface/value.hpp"
 
 enum class Visibility
 {
@@ -20,9 +17,8 @@ enum class Visibility
     Public
 };
 
-using InterfaceVector        = std::vector<std::string>;
-using PropertyUnorderedMap   = std::unordered_map<std::string, ClassPropertyDefinitionPtr>;
-using MethodUnorderedMap     = std::unordered_map<std::string, ClassMethodDefinitionPtr>;
+using InterfaceVector = std::vector<std::string>;
+using ClassMemberMap  = std::unordered_map<std::string, ValuePtr>;
 using VisibilityUnorderedMap = std::unordered_map<std::string, Visibility>;
 
 class FClassDefinition final
@@ -30,8 +26,7 @@ class FClassDefinition final
     std::string            m_name;
     std::string            m_parent;
     InterfaceVector        m_interfaces;
-    PropertyUnorderedMap   m_properties;
-    MethodUnorderedMap     m_methods;
+    ClassMemberMap         m_members;
     VisibilityUnorderedMap m_visibility;
 
 public:
@@ -46,17 +41,9 @@ public:
     void AddInterface(const std::string& interface);
     const InterfaceVector& GetInterfaces() const;
 
-    void AddProperty(Visibility visibility, ClassPropertyDefinitionPtr property);
-    bool HasProperty(const std::string& name) const;
-    ClassPropertyDefinitionPtr GetProperty(const std::string& name) const;
-    PropertyUnorderedMap GetProperties() const;
-
-    void AddMethod(Visibility visibility, ClassMethodDefinitionPtr method);
-    bool HasMethod(const std::string& name) const;
-    ClassMethodDefinitionPtr GetMethod(const std::string& name) const;
-    MethodUnorderedMap GetMethods() const;
-
-    ValuePtr NewInstance(const FContext& context, const std::vector<ValuePtr>& arguments) const;
+    void AddMember(const std::string& name, ValuePtr value);
+    ValuePtr GetMember(const std::string& name) const;
+    bool HasMember(const std::string& name) const;
 };
 
 using ClassDefinitionPtr = std::shared_ptr<FClassDefinition>;

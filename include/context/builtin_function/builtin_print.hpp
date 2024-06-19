@@ -1,20 +1,14 @@
 #pragma once
 
-#include "type/function/function_definition.hpp"
+#include "value/function_value.hpp"
 
-class FBuiltinPrintFunction final : public CFunctionDefinition
+class FBuiltinPrintFunction final : public CFunctionValue
 {
 public:
 
-    FBuiltinPrintFunction(
-        const std::string& name,
-        TypePtr returnType,
-        FunctionParameters parameters
-    );
-
     FBuiltinPrintFunction(FunctionDefinitionPtr functionDefinition);
 
-    ValuePtr Invoke(const FContext& context, const std::vector<ValuePtr>& arguments) const override;
+    ValuePtr CallMethod(const FContext& context, const std::string& methodName, std::vector<ValuePtr> args) const override;
 };
 
-FunctionDefinitionPtr CreatePrintFunction();
+FunctionValuePtr CreatePrintFunction();

@@ -1,7 +1,9 @@
 #include "ast/expression/access/access_expression.hpp"
 
 #include "context/context.hpp"
+
 #include "value/object_value.hpp"
+#include "value/class_value.hpp"
 
 #include <stdexcept>
 
@@ -17,37 +19,37 @@ FAccessExpression::FAccessExpression(
 
 ValuePtr FAccessExpression::Evaluate(const FContext& context) const
 {
-    // Evaluate the expression to get the object
-    ValuePtr objectValue = m_expression->Evaluate(context);
-
-    // Check if the value is an object that supports member access
-    if (!objectValue->IsObject())
-    {
-        throw std::runtime_error("Expression does not evaluate to an object");
-    }
-
-    auto object = std::dynamic_pointer_cast<FObjectValue>(objectValue);
-
     // Handle member access based on the operator
     if (m_op == ".")
     {
-        return EvaluateDotOperator(object, context);
-    }
-    else
-    {
-        throw std::runtime_error("Unsupported access operator: " + m_op);
-    }
+        // Evaluate the expression to get the value
+        ValuePtr value = m_expression->Evaluate(context);
 
-    return {};
-}
+        if (value->IsClass())
+        {
+            const auto& object = std::dynamic_pointer_cast<FClassValue>(value);
 
-ValuePtr FAccessExpression::EvaluateDotOperator(const ObjectValuePtr& object, const FContext& context) const
-{
-    // Accessing a property in the current object
-    if (context.IsVariableDeclared(m_memberName))
-    {
-        return context.GetVariable(m_memberName);
+            if (object->HasMember(m_memberName))
+            {
+                return object->GetMember(m_memberName);
+            }
+
+            const auto& parentName = object->GetParent();
+
+            if (!parentName.empty())
+            {
+                const auto& parentSymbol = context.GetSymbol(parentName);
+                const auto& parentValue = std::dynamic_pointer_cast<FClassValue>(parentSymbol);
+                
+                if (parentValue->HasMember(m_memberName))
+                {
+                    return parentValue->GetMember(m_memberName);
+                }
+            }
+        }
+
+        throw std::runtime_error("Member '" + m_memberName + "' not found in class");
     }
-
-    throw std::runtime_error("Property '" + m_memberName + "' not found in object");
+    
+    throw std::runtime_error("Unsupported access operator: " + m_op);
 }

@@ -28,11 +28,13 @@ while j <= max_value then
 end
 
 # Definition and usage of a greet function
+print("Definition and usage of a greet function")
 function greet(name) then
     print(`Hello, ${name}`)    // Display a greeting message
     return true                // Return true
 end
 
+print("Call the greet function with the name 'toto'")
 var condition = greet("toto")          // Call the greet function with the name "toto"
 var success = condition ? "true" : "false"  // Use the ternary operator to define the success variable
 print(`success: ${success}`)          // Display whether the greet function succeeded

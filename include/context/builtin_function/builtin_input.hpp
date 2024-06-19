@@ -1,18 +1,14 @@
 #pragma once
 
-#include "type/function/function_definition.hpp"
+#include "value/function_value.hpp"
 
-class FBuiltinInputFunction final : public CFunctionDefinition
+class FBuiltinInputFunction final : public CFunctionValue
 {
 public:
 
-    FBuiltinInputFunction(
-        const std::string& name,
-        TypePtr returnType,
-        FunctionParameters parameters
-    );
+    FBuiltinInputFunction(FunctionDefinitionPtr functionDefinition);
 
-    ValuePtr Invoke(const FContext& context, const std::vector<ValuePtr>& arguments) const override;
+    ValuePtr CallMethod(const FContext& context, const std::string& methodName, std::vector<ValuePtr> args) const override;
 };
 
-FunctionDefinitionPtr CreateInputFunction();
+FunctionValuePtr CreateInputFunction();

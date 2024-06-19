@@ -4,7 +4,8 @@
 
 #include <stdexcept>
 
-CFunctionValue::CFunctionValue(FunctionDefinitionPtr functionDefinition)
+CFunctionValue::CFunctionValue(
+    FunctionDefinitionPtr functionDefinition)
     : m_functionDefinition(functionDefinition)
 {}
 
@@ -15,10 +16,13 @@ bool CFunctionValue::IsFunction() const
 
 const std::string CFunctionValue::ToString() const
 {
-    return m_functionDefinition->GetName();
+    std::string str("Function(");
+    str += m_functionDefinition->GetFunctionName();
+    str += ")";
+    return str;
 }
 
-ValuePtr CFunctionValue::Invoke(const std::vector<ValuePtr>& arguments, const FContext& context) const
+ValuePtr CFunctionValue::CallMethod(const FContext& context, const std::string& methodName, std::vector<ValuePtr> args) const
 {
     context.EnterScope();
     context.ResetReturnValue();
@@ -28,14 +32,14 @@ ValuePtr CFunctionValue::Invoke(const std::vector<ValuePtr>& arguments, const FC
     const auto& parameters = m_functionDefinition->GetParameters();
 
     // Vérifiez que le nombre d'arguments correspond au nombre de paramètres
-    if (arguments.size() != parameters.size())
+    if (args.size() != parameters.size())
     {
         throw std::runtime_error("Incorrect number of arguments provided for function call");
     }
 
     for (size_t i = 0; i < parameters.size(); ++i)
     {
-        context.SetVariable(parameters[i].name, arguments[i]);
+        context.AddSymbol(parameters[i], args[i]);
     }
 
     // Exécutez le corps de la fonction dans le nouveau contexte
@@ -84,4 +88,9 @@ ValuePtr CFunctionValue::Invoke(const std::vector<ValuePtr>& arguments, const FC
     }
 
     return {}; // void ?
+}
+
+const FunctionDefinitionPtr& CFunctionValue::GetFunctionDefinition() const
+{
+    return m_functionDefinition;
 }

@@ -44,7 +44,7 @@ void FConstDeclarationStatement::Execute(const FContext& context) const
 		auto value = m_expression->Evaluate(context);
 
 		// Evaluate the expression and assign its value to the const in the context
-		context.SetVariable(m_identifier, value);
+		context.AddSymbol(m_identifier, value);
 	}
 	else // If no expression is provided, throw an error
 	{

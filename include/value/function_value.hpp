@@ -1,12 +1,7 @@
 #pragma once
 
 #include "value/abstract/value.hpp"
-#include "ast/statement/interface/statement.hpp"
 #include "type/function/function_definition.hpp"
-
-#include <vector>
-
-class FContext;
 
 class CFunctionValue : public AValue
 {
@@ -18,8 +13,9 @@ public:
 
     bool IsFunction() const override;
     const std::string ToString() const override;
+    ValuePtr CallMethod(const FContext& context, const std::string& methodName, std::vector<ValuePtr> args) const override;
 
-    ValuePtr Invoke(const std::vector<ValuePtr>& arguments, const FContext& context) const;
+    const FunctionDefinitionPtr& GetFunctionDefinition() const;
 };
 
 using FunctionValuePtr = std::shared_ptr<CFunctionValue>;

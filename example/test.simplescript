@@ -1,9 +1,35 @@
-var elements = [
-    3,
-    2,
-    1
-]
-print(elements)
+abstract class ACar
 
-var element = elements[0]
-print(element)
+    var test = "ACar Car Name"
+
+end
+
+class Car extends ACar
+
+    var name = "Car Name"
+
+    function pretty() then
+        print("pretty (Car)")
+
+        // var name = self.name
+        print(`name : ${name}`)
+        print(`test : ${test}`)
+
+        var test = self.test
+        print(`test : ${test}`)
+    end
+
+end
+
+print(Car)
+
+var instance = new Car()
+print(instance)
+
+var aaa = instance.name
+print(`name : ${aaa}`)
+
+// var pretty = instance.pretty
+// print(`pretty : ${pretty}`)
+
+instance.pretty()

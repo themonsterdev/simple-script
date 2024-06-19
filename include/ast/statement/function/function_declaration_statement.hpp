@@ -8,7 +8,6 @@
 
 // Include the interface for language statements
 #include "ast/statement/interface/statement.hpp"
-
 #include "type/function/function_definition.hpp"
 
 /**
@@ -26,6 +25,6 @@ public:
     FFunctionDeclarationStatement(FunctionDefinitionPtr functionDefinition);
 
     void Execute(const FContext& context) const override;
-
+    
     const FunctionDefinitionPtr& GetFunctionDefinition() const;
 };

@@ -29,6 +29,6 @@ ValuePtr FAssignmentExpression::Evaluate(const FContext& context) const
 
     const auto& identifierName = identifier->GetName();
     const auto& value = m_right->Evaluate(context);
-    context.AssignVariable(identifierName, value);
+    context.AssignSymbol(identifierName, value);
     return value;
 }

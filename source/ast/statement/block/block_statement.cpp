@@ -12,6 +12,8 @@
 // Include declarations for context objects
 #include "context/context.hpp"
 
+#include "value/class_value.hpp"
+
 FBlockStatement::FBlockStatement(StatementList statements)
     // Initialize m_statements with the given list of statements
     : m_statements(std::move(statements))

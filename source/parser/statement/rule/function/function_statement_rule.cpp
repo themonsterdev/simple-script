@@ -1,5 +1,6 @@
 #include "parser/statement/rule/function/function_statement_rule.hpp"
 #include "ast/statement/function/function_declaration_statement.hpp"
+#include "type/function/function_definition.hpp"
 
 #include "ast/statement/block/block_statement.hpp"
 
@@ -30,7 +31,7 @@ StatementPtr FFunctionStatementRule::Parse(FLexer& lexer, FStatementParser& stat
     }
 
     // Parse function parameters (if any)
-    FunctionParameters parameters;
+    std::vector<std::string> parameters;
     while (lexer.HasNextToken())
     {
         const auto& nextToken = lexer.PeekNextToken();
@@ -39,7 +40,7 @@ StatementPtr FFunctionStatementRule::Parse(FLexer& lexer, FStatementParser& stat
         {
             lexer.GetNextToken();
 
-            parameters.push_back({ nextToken.GetLexeme(), "void" });
+            parameters.push_back(nextToken.GetLexeme());
         }
         else if (nextToken.IsSameLexeme(","))
         {
@@ -82,14 +83,14 @@ StatementPtr FFunctionStatementRule::Parse(FLexer& lexer, FStatementParser& stat
         }
     }
 
-    auto body = std::make_unique<FBlockStatement>(std::move(statements));
+    std::string returnType = "void";
 
-    const auto& returnType = std::make_shared<FType>(eTypeKind::VOID);
+    auto body = std::make_unique<FBlockStatement>(std::move(statements));
 
     const auto& functionDefinition = std::make_shared<CFunctionDefinition>(
         functionName,
-        returnType,
         parameters,
+        returnType,
         std::move(body)
     );
 

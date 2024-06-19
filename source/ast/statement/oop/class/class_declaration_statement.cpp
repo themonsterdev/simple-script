@@ -10,6 +10,8 @@
 // Include declarations for context objects
 #include "context/context.hpp"
 
+#include "value/class_value.hpp"
+
 #include <stdexcept>
 
 // Constructor definition
@@ -23,18 +25,18 @@ FClassDeclarationStatement::FClassDeclarationStatement(
 // Execute method definition
 void FClassDeclarationStatement::Execute(const FContext& context) const
 {
-    context.DeclareClass(Visibility::Public, m_classDefinition);
+    const auto& value = std::make_shared<FClassValue>(m_classDefinition);
+    context.AddSymbol(value->GetName(), value);
 
-    const auto& classBody = dynamic_cast<FBlockStatement*>(m_classBody.get());
+    const auto& currentClass = context.GetCurrentClass();
+    context.SetCurrentClass(value);
 
-    if (classBody)
+    if (m_classBody)
     {
-        // Execute each statement in the block sequentially
-        for (const auto& statement : classBody->GetStatements())
-        {
-            statement->Execute(context);
-        }
+        m_classBody->Execute(context);
     }
+
+    context.SetCurrentClass(currentClass);
 }
 
 ClassDefinitionPtr FClassDeclarationStatement::GetClassDefinition() const

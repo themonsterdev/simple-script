@@ -3,15 +3,13 @@
 #include <iostream>
 
 FBuiltinInputFunction::FBuiltinInputFunction(
-    const std::string& name,
-    TypePtr returnType,
-    FunctionParameters parameters)
-    : CFunctionDefinition(name, returnType, parameters, nullptr)
+    FunctionDefinitionPtr functionDefinition)
+    : CFunctionValue(functionDefinition)
 {}
 
-ValuePtr FBuiltinInputFunction::Invoke(const FContext& context, const std::vector<ValuePtr>& arguments) const
+ValuePtr FBuiltinInputFunction::CallMethod(const FContext& context, const std::string& methodName, std::vector<ValuePtr> args) const
 {
-    for (const auto& arg : arguments)
+    for (const auto& arg : args)
     {
         std::cout << arg->ToString();
     }
@@ -21,18 +19,18 @@ ValuePtr FBuiltinInputFunction::Invoke(const FContext& context, const std::vecto
     return std::make_shared<FStringValue>(input);
 }
 
-FunctionDefinitionPtr CreateInputFunction()
+FunctionValuePtr CreateInputFunction()
 {
-    std::string name   = "input";
-    TypePtr returnType = std::make_shared<FType>(eTypeKind::STRING);
+    std::string functionName = "input";
+    FunctionParameters parameters = { "string" };
+    std::string returnType = "string";
 
-    FunctionParameters parameters = {
-        { "question", "string" }
-    };
-
-    return std::make_shared<FBuiltinInputFunction>(
-        name,
+    const auto& definition = std::make_shared<CFunctionDefinition>(
+        functionName,
+        parameters,
         returnType,
-        parameters
+        nullptr
     );
+
+    return std::make_shared<FBuiltinInputFunction>(definition);
 }

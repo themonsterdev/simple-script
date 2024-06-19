@@ -30,6 +30,11 @@ const std::string FArrayValue::ToString() const
     return expression;
 }
 
+ValuePtr FArrayValue::CallMethod(const FContext& context, const std::string& methodName, std::vector<ValuePtr> args) const
+{
+    return nullptr;
+}
+
 const ArrayElementVector& FArrayValue::GetElements() const
 {
     return m_elements;

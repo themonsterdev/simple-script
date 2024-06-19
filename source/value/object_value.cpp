@@ -25,6 +25,20 @@ const std::string FObjectValue::ToString() const
     return m_name;
 }
 
+ValuePtr FObjectValue::CallMethod(const FContext& context, const std::string& methodName, std::vector<ValuePtr> args) const
+{
+    if (HasMethod(methodName))
+    {
+        // if (!context.IsVariableDeclared("self"))
+        //     context.DeclareVariable("self");
+        // context.AssignVariable("self", object);
+
+        return CallMethod(methodName, args, context);
+    }
+
+    throw std::runtime_error("Method '" + methodName + "' not found in object");
+}
+
 const std::string& FObjectValue::GetName() const
 {
     return m_name;
@@ -123,7 +137,7 @@ ValuePtr FObjectValue::GetProperty(const std::string& name, const FContext& cont
 ValuePtr FObjectValue::CallMethod(const std::string& name, const std::vector<ValuePtr>& arguments, const FContext& context) const
 {
     const auto& method = GetMethod(name, context);
-    return method->Invoke(arguments, context);
+    return method->CallMethod(context, name, arguments);
 }
 
 bool FObjectValue::IsAccessible(AccessSpecifier access, const FContext& context) const

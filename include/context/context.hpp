@@ -18,12 +18,14 @@
  */
 class FContext final
 {
-    // Deque of scopes
     mutable ScopeDeque m_scopes;
     mutable ValuePtr m_returnValue;
     mutable bool m_hasReturnValue;
     mutable bool m_continueFlag;
     mutable bool m_throwFlag;
+
+    mutable ValuePtr m_currentClass;
+    mutable bool m_hasCurrentClass;
 
 public:
 
@@ -52,56 +54,13 @@ public:
      */
     ScopePtr GetCurrentScope() const;
 
-    /**
-     * @brief Declares a variable in the current scope.
-     * @param name The name of the variable to declare.
-     */
-    void DeclareVariable(const std::string& name) const;
-
-    /**
-     * @brief Sets the value of a variable in the current scope.
-     * @param name The name of the variable to set.
-     * @param value The value to set for the variable.
-     */
-    void SetVariable(const std::string& name, const ValuePtr& value) const;
-
-    void DeclareFunction(FunctionDefinitionPtr function) const;
-    bool IsFunctionDeclared(const std::string& name) const;
-    FunctionDefinitionPtr GetFunction(const std::string& name) const;
-
-    void DeclareClass(Visibility visibility, ClassDefinitionPtr classDefinition) const;
-    void DeclareClassProperty(Visibility visibility, ClassPropertyDefinitionPtr propertyDefinition) const;
-    void DeclareClassMethod(Visibility visibility, ClassMethodDefinitionPtr methodDefinition) const;
-    ClassDefinitionPtr GetClassDefinition(const std::string& name) const;
-
+    void AddSymbol(const std::string& name, const ValuePtr& value) const;
+    bool IsSymbolDeclared(const std::string& name) const;
+    ValuePtr GetSymbol(const std::string& name) const;
+    void DeclareSymbol(const std::string& name) const;
+    void AssignSymbol(const std::string& name, const ValuePtr& value) const;
+    
     ValuePtr Call(const std::string& name, const std::vector<ValuePtr>& arguments) const;
-
-    //////////////////////////////////////////////////////
-    // Current to top scope //////////////////////////////
-    //////////////////////////////////////////////////////
-
-    /**
-     * @brief Assigns a value to a variable in the current scope.
-     * @param name The name of the variable to assign.
-     * @param value The value to assign to the variable.
-     */
-    void AssignVariable(const std::string& name, const ValuePtr& value) const;
-
-    /**
-     * @brief Checks if a variable is declared in any of the scopes.
-     * @param name The name of the variable to check.
-     * @return True if the variable is declared, false otherwise.
-     */
-    bool IsVariableDeclared(const std::string& name) const;
-
-    /**
-     * @brief Gets the value of a variable from the current scope.
-     * @param name The name of the variable to retrieve.
-     * @return The value of the variable.
-     */
-    ValuePtr GetVariable(const std::string& name) const;
-
-    bool IsClassDeclared(const std::string& name) const;
 
     // New methods for handling return values
     void SetReturnValue(const ValuePtr& returnValue) const;
@@ -114,4 +73,9 @@ public:
 
     void SetThrowFlag(bool flag) const;
     bool GetThrowFlag() const;
+
+    void SetCurrentClass(const ValuePtr& returnValue) const;
+    ValuePtr GetCurrentClass() const;
+    bool HasCurrentClass() const;
+    void ResetCurrentClass() const;
 };

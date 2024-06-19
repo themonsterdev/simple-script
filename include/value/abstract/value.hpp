@@ -12,6 +12,7 @@ public:
     virtual bool IsString() const override { return false; }
     virtual bool IsArray() const override { return false; }
     virtual bool IsObject() const override { return false; }
+    virtual bool IsClass() const override { return false; }
     virtual bool IsFunction() const override { return false; }
     // Add more type checks as needed
 };

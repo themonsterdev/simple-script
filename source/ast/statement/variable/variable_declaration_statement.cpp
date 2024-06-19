@@ -65,11 +65,11 @@ void FVariableDeclarationStatement::Execute(const FContext& context) const
 		}
 
 		// Evaluate the expression and assign its value to the variable in the context
-		context.SetVariable(m_identifier, value);
+		context.AddSymbol(m_identifier, value);
 	}
 	else // If no expression is provided, declare the variable in the context
 	{
-		context.DeclareVariable(m_identifier);
+		context.DeclareSymbol(m_identifier);
 	}
 }
 

@@ -49,26 +49,8 @@ ValuePtr FStringFormatExpression::Evaluate(const FContext& context) const
         else
         {
             // Retrieve the variable value from the context and append it to the result
-            ValuePtr value = context.GetVariable(segment.value);
-            if (value->IsString())
-            {
-                const auto& result = std::dynamic_pointer_cast<FStringValue>(value);
-
-                oss << result->GetValue();
-            }
-            else if (value->IsNumber())
-            {
-                const auto& result = std::dynamic_pointer_cast<FNumberValue>(value);
-
-                oss << result->GetValue();
-            }
-            else if (value->IsBoolean())
-            {
-                const auto& result = std::dynamic_pointer_cast<FBooleanValue>(value);
-
-                oss << result->GetValue();
-            }
-            // Add more type checks if needed
+            ValuePtr value = context.GetSymbol(segment.value);
+            oss << value->ToString();
         }
     }
     return std::make_shared<FStringValue>(oss.str());

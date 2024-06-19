@@ -51,8 +51,7 @@ StatementPtr FInterfaceDeclarationRule::Parse(FLexer& lexer, FStatementParser& s
             if (token.IsSameType(eTokenType::Identifier))
             {
                 const auto& parameterName = token.GetLexeme();
-                FFunctionParameter parameter(parameterName, "any");
-                parameters.push_back(parameter);
+                parameters.push_back(parameterName);
             }
             else if (token.IsSameLexeme(","))
             {

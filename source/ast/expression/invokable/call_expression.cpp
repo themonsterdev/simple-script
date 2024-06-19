@@ -21,7 +21,6 @@ ValuePtr FCallExpression::Evaluate(const FContext& context) const
     for (const auto& argument : m_arguments)
     {
         const auto& value = argument->Evaluate(context);
-
         arguments.push_back(value);
     }
 

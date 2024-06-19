@@ -11,42 +11,42 @@ void RegisterBuiltinFunctions(const FContext& context)
     // Register the print function
     {
         auto printFunction = CreatePrintFunction();
-        context.DeclareFunction(printFunction);
+        context.AddSymbol(printFunction->GetFunctionDefinition()->GetFunctionName(), printFunction);
     }
 
     // Register the input function
     {
         auto inputFunction = CreateInputFunction();
-        context.DeclareFunction(inputFunction);
+        context.AddSymbol(inputFunction->GetFunctionDefinition()->GetFunctionName(), inputFunction);
     }
 
     // Register the open function
     {
         auto openFile = CreateOpenFileFunction();
-        context.DeclareFunction(openFile);
+        context.AddSymbol(openFile->GetFunctionDefinition()->GetFunctionName(), openFile);
     }
     
     // Register the read function
     {
         auto readFile = CreateReadFileFunction();
-        context.DeclareFunction(readFile);
+        context.AddSymbol(readFile->GetFunctionDefinition()->GetFunctionName(), readFile);
     }
 
     // Register the write function
     {
         auto writeFile = CreateWriteFileFunction();
-        context.DeclareFunction(writeFile);
+        context.AddSymbol(writeFile->GetFunctionDefinition()->GetFunctionName(), writeFile);
     }
     
     // Register the close function
     {
         auto closeFile = CreateCloseFileFunction();
-        context.DeclareFunction(closeFile);
+        context.AddSymbol(closeFile->GetFunctionDefinition()->GetFunctionName(), closeFile);
     }
 
     // Register the assert function
     {
         auto assertFunction = CreateAssertFunction();
-        context.DeclareFunction(assertFunction);
+        context.AddSymbol(assertFunction->GetFunctionDefinition()->GetFunctionName(), assertFunction);
     }
 }

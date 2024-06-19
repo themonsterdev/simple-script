@@ -18,6 +18,4 @@ public:
     );
 
     ValuePtr Evaluate(const FContext& context) const override;
-
-    ValuePtr EvaluateDotOperator(const ObjectValuePtr& object, const FContext& context) const;
 };

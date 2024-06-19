@@ -14,7 +14,7 @@ FInterfaceMethodDeclarationStatement::FInterfaceMethodDeclarationStatement(
 
 void FInterfaceMethodDeclarationStatement::Execute(const FContext& context) const
 {
-    // context.RegisterInterfaceMethod(m_visibility, m_name, m_returnValue, m_parameters);
+    
 }
 
 const std::string& FInterfaceMethodDeclarationStatement::GetVisibility() const

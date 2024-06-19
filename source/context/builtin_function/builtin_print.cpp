@@ -2,15 +2,13 @@
 #include <iostream>
 
 FBuiltinPrintFunction::FBuiltinPrintFunction(
-    const std::string& name,
-    TypePtr returnType,
-    FunctionParameters parameters)
-    : CFunctionDefinition(name, returnType, parameters, nullptr)
+    FunctionDefinitionPtr functionDefinition)
+    : CFunctionValue(functionDefinition)
 {}
 
-ValuePtr FBuiltinPrintFunction::Invoke(const FContext& context, const std::vector<ValuePtr>& arguments) const
+ValuePtr FBuiltinPrintFunction::CallMethod(const FContext& context, const std::string& methodName, std::vector<ValuePtr> args) const
 {
-    for (const auto& arg : arguments)
+    for (const auto& arg : args)
     {
         std::cout << arg->ToString();
     }
@@ -18,18 +16,18 @@ ValuePtr FBuiltinPrintFunction::Invoke(const FContext& context, const std::vecto
     return {};
 }
 
-FunctionDefinitionPtr CreatePrintFunction()
+FunctionValuePtr CreatePrintFunction()
 {
-    std::string name   = "print";
-    TypePtr returnType = std::make_shared<FType>(eTypeKind::VOID);
+    std::string functionName = "print";
+    FunctionParameters parameters = { "any" };
+    std::string returnType = "void";
 
-    FunctionParameters parameters = {
-        { "expression", "any" }
-    };
-
-    return std::make_shared<FBuiltinPrintFunction>(
-        name,
+    const auto& definition = std::make_shared<CFunctionDefinition>(
+        functionName,
+        parameters,
         returnType,
-        parameters
+        nullptr
     );
+
+    return std::make_shared<FBuiltinPrintFunction>(definition);
 }

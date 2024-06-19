@@ -567,16 +567,17 @@ ExpressionPtr FExpressionParser::ParseAccessExpression()
         {
             // Parse function arguments
             ExpressionList arguments;
-            if (!m_lexer.TryConsumeToken(eTokenType::Delimiter, ")"))
+            if (!m_lexer.MatchToken(eTokenType::Delimiter, ")"))
             {
                 do
                 {
-                    arguments.push_back(ParseExpression());
+                    arguments.push_back(ParseAssignmentExpression());
                 } while (m_lexer.TryConsumeToken(eTokenType::Delimiter, ","));
-                if (!m_lexer.TryConsumeToken(eTokenType::Delimiter, ")"))
-                {
-                    throw FSyntaxException("Expected ')' after function arguments");
-                }
+            }
+
+            if (!m_lexer.TryConsumeToken(eTokenType::Delimiter, ")"))
+            {
+                throw FSyntaxException("Expected ')' after function arguments");
             }
 
             // Create access method expression

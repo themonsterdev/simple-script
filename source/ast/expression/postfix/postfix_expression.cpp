@@ -32,7 +32,7 @@ ValuePtr FPostfixExpression::Evaluate(const FContext& context) const
         throw std::runtime_error("m_expression is not an identifier");
     }
 
-    const auto& defaultValue = context.GetVariable(identifier->GetName());
+    const auto& defaultValue = context.GetSymbol(identifier->GetName());
 
     if (!defaultValue)
     {

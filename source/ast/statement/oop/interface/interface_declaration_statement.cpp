@@ -15,12 +15,7 @@ FInterfaceDeclarationStatement::FInterfaceDeclarationStatement(
 
 void FInterfaceDeclarationStatement::Execute(const FContext& context) const
 {
-    // context.RegisterInterface(m_interfaceName);
-
-    for (const auto& interfaceMethod : m_interfaceMethods)
-    {
-        interfaceMethod->Execute(context);
-    }
+    
 }
 
 std::string FInterfaceDeclarationStatement::GetInterfaceName() const

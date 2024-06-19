@@ -3,6 +3,8 @@
 
 #include "context/context.hpp"
 #include "value/object_value.hpp"
+#include "value/string_value.hpp"
+#include "value/class_value.hpp"
 
 #include <stdexcept>
 
@@ -18,49 +20,37 @@ FAccessMethodExpression::FAccessMethodExpression(
 
 ValuePtr FAccessMethodExpression::Evaluate(const FContext& context) const
 {
-    // Evaluate the expression to get the object
-    ValuePtr objectValue = m_expression->Evaluate(context);
-
-    // Check if the value is an object that supports member access
-    if (objectValue->IsObject())
+    std::vector<ValuePtr> arguments;
+    for (const auto& argument : m_arguments)
     {
-        auto object = std::dynamic_pointer_cast<FObjectValue>(objectValue);
-
-        // Handle member access based on the operator
-        if (m_op == ".")
-        {
-            // Accessing a method
-            if (object->HasMethod(m_memberName))
-            {
-                if (!context.IsVariableDeclared("self"))
-                    context.DeclareVariable("self");
-                context.AssignVariable("self", object);
-
-                std::vector<ValuePtr> arguments;
-                for (const auto& argument : m_arguments)
-                {
-                    arguments.push_back(argument->Evaluate(context));
-                }
-
-                ValuePtr value = object->CallMethod(m_memberName, arguments, context);
-
-                return value;
-            }
-
-            throw std::runtime_error("Method '" + m_memberName + "' not found in object");
-        }
-        else
-        {
-            throw std::runtime_error("Unsupported access operator: " + m_op);
-        }
-    }
-    else
-    {
-        throw std::runtime_error("Expression does not evaluate to an object");
+        arguments.push_back(argument->Evaluate(context));
     }
 
-    // This line should never be reached
-    return {};
+    // Evaluate the expression to get the value
+    ValuePtr value = m_expression->Evaluate(context);
+
+    if (value->IsClass())
+    {
+        const auto& currentClass = context.GetCurrentClass();
+        context.SetCurrentClass(value);
+
+        if (!context.IsSymbolDeclared("self"))
+            context.DeclareSymbol("self");
+        context.AssignSymbol("self", value);
+
+        const auto& object = std::dynamic_pointer_cast<FClassValue>(value);
+
+        if (object->HasMember(m_memberName))
+        {
+            const auto& method = object->GetMember(m_memberName);
+            const auto& returnValue = method->CallMethod(context, m_memberName, arguments);
+
+            context.SetCurrentClass(currentClass);
+            return returnValue;
+        }
+    }
+
+    return value->CallMethod(context, m_memberName, arguments);
 }
 
 void FAccessMethodExpression::SetArguments(ExpressionList arguments)

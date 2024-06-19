@@ -1,15 +1,13 @@
 #include "context/builtin_function/builtin_file_functions.hpp"
 
 FBuiltinOpenFile::FBuiltinOpenFile(
-    const std::string& name,
-    TypePtr returnType,
-    FunctionParameters parameters)
-    : CFunctionDefinition(name, returnType, parameters, nullptr)
+    FunctionDefinitionPtr functionDefinition)
+    : CFunctionValue(functionDefinition)
 {}
 
-ValuePtr FBuiltinOpenFile::Invoke(const FContext& context, const std::vector<ValuePtr>& arguments) const
+ValuePtr FBuiltinOpenFile::CallMethod(const FContext& context, const std::string& methodName, std::vector<ValuePtr> args) const
 {
-    if (arguments.size() != 2)
+    if (args.size() != 2)
     {
         throw std::runtime_error("open function requires exactly 2 arguments");
     }
@@ -18,15 +16,13 @@ ValuePtr FBuiltinOpenFile::Invoke(const FContext& context, const std::vector<Val
 }
 
 FBuiltinReadFile::FBuiltinReadFile(
-    const std::string& name,
-    TypePtr returnType,
-    FunctionParameters parameters)
-    : CFunctionDefinition(name, returnType, parameters, nullptr)
+    FunctionDefinitionPtr functionDefinition)
+    : CFunctionValue(functionDefinition)
 {}
 
-ValuePtr FBuiltinReadFile::Invoke(const FContext& context, const std::vector<ValuePtr>& arguments) const
+ValuePtr FBuiltinReadFile::CallMethod(const FContext& context, const std::string& methodName, std::vector<ValuePtr> args) const
 {
-    if (arguments.size() != 1)
+    if (args.size() != 1)
     {
         throw std::runtime_error("read function requires exactly 1 argument");
     }
@@ -35,15 +31,13 @@ ValuePtr FBuiltinReadFile::Invoke(const FContext& context, const std::vector<Val
 }
 
 FBuiltinWriteFile::FBuiltinWriteFile(
-    const std::string& name,
-    TypePtr returnType,
-    FunctionParameters parameters)
-    : CFunctionDefinition(name, returnType, parameters, nullptr)
+    FunctionDefinitionPtr functionDefinition)
+    : CFunctionValue(functionDefinition)
 {}
 
-ValuePtr FBuiltinWriteFile::Invoke(const FContext& context, const std::vector<ValuePtr>& arguments) const
+ValuePtr FBuiltinWriteFile::CallMethod(const FContext& context, const std::string& methodName, std::vector<ValuePtr> args) const
 {
-    if (arguments.size() != 2)
+    if (args.size() != 2)
     {
         throw std::runtime_error("write function expects two arguments");
     }
@@ -52,15 +46,13 @@ ValuePtr FBuiltinWriteFile::Invoke(const FContext& context, const std::vector<Va
 }
 
 FBuiltinCloseFile::FBuiltinCloseFile(
-    const std::string& name,
-    TypePtr returnType,
-    FunctionParameters parameters)
-    : CFunctionDefinition(name, returnType, parameters, nullptr)
+    FunctionDefinitionPtr functionDefinition)
+    : CFunctionValue(functionDefinition)
 {}
 
-ValuePtr FBuiltinCloseFile::Invoke(const FContext& context, const std::vector<ValuePtr>& arguments) const
+ValuePtr FBuiltinCloseFile::CallMethod(const FContext& context, const std::string& methodName, std::vector<ValuePtr> args) const
 {
-    if (arguments.size() != 1)
+    if (args.size() != 1)
     {
         throw std::runtime_error("close function requires exactly 1 argument");
     }
@@ -68,68 +60,66 @@ ValuePtr FBuiltinCloseFile::Invoke(const FContext& context, const std::vector<Va
     return {};
 }
 
-FunctionDefinitionPtr CreateOpenFileFunction()
+FunctionValuePtr CreateOpenFileFunction()
 {
-    std::string name = "open";
-    TypePtr returnType = std::make_shared<FType>(eTypeKind::STRING);
+    std::string functionName = "open";
+    FunctionParameters parameters = {  "string", "string" };
+    std::string returnType = "string";
 
-    FunctionParameters parameters = {
-        { "string", "string" },
-        { "string", "string" }
-    };
-
-    return std::make_shared<FBuiltinOpenFile>(
-        name,
+    const auto& definition = std::make_shared<CFunctionDefinition>(
+        functionName,
+        parameters,
         returnType,
-        parameters
+        nullptr
     );
+
+    return std::make_shared<FBuiltinOpenFile>(definition);
 }
 
-FunctionDefinitionPtr CreateReadFileFunction()
+FunctionValuePtr CreateReadFileFunction()
 {
-    std::string name = "read";
-    TypePtr returnType = std::make_shared<FType>(eTypeKind::STRING);
+    std::string functionName = "read";
+    FunctionParameters parameters = { "string" };
+    std::string returnType = "string";
 
-    FunctionParameters parameters = {
-        { "string", "string" }
-    };
-
-    return std::make_shared<FBuiltinReadFile>(
-        name,
+    const auto& definition = std::make_shared<CFunctionDefinition>(
+        functionName,
+        parameters,
         returnType,
-        parameters
+        nullptr
     );
+
+    return std::make_shared<FBuiltinReadFile>(definition);
 }
 
-FunctionDefinitionPtr CreateWriteFileFunction()
+FunctionValuePtr CreateWriteFileFunction()
 {
-    std::string name = "write";
-    TypePtr returnType = std::make_shared<FType>(eTypeKind::VOID);
+    std::string functionName = "write";
+    FunctionParameters parameters = { "string", "string" };
+    std::string returnType = "void";
 
-    FunctionParameters parameters = {
-        { "string", "string" },
-        { "string", "string" }
-    };
-
-    return std::make_shared<FBuiltinWriteFile>(
-        name,
+    const auto& definition = std::make_shared<CFunctionDefinition>(
+        functionName,
+        parameters,
         returnType,
-        parameters
+        nullptr
     );
+
+    return std::make_shared<FBuiltinWriteFile>(definition);
 }
 
-FunctionDefinitionPtr CreateCloseFileFunction()
+FunctionValuePtr CreateCloseFileFunction()
 {
-    std::string name = "close";
-    TypePtr returnType = std::make_shared<FType>(eTypeKind::VOID);
+    std::string functionName = "close";
+    FunctionParameters parameters = { "string" };
+    std::string returnType = "void";
 
-    FunctionParameters parameters = {
-        { "string", "string" },
-    };
-
-    return std::make_shared<FBuiltinCloseFile>(
-        name,
+    const auto& definition = std::make_shared<CFunctionDefinition>(
+        functionName,
+        parameters,
         returnType,
-        parameters
+        nullptr
     );
+
+    return std::make_shared<FBuiltinCloseFile>(definition);
 }

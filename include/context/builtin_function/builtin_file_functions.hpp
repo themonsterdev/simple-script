@@ -1,61 +1,45 @@
 #pragma once
 
-#include "type/function/function_definition.hpp"
+#include "value/function_value.hpp"
 #include <fstream>
 
-class FBuiltinOpenFile final : public CFunctionDefinition
+class FBuiltinOpenFile final : public CFunctionValue
 {
 public:
 
-    FBuiltinOpenFile(
-        const std::string& name,
-        TypePtr returnType,
-        FunctionParameters parameters
-    );
+    FBuiltinOpenFile(FunctionDefinitionPtr functionDefinition);
 
-    ValuePtr Invoke(const FContext& context, const std::vector<ValuePtr>& arguments) const;
+    ValuePtr CallMethod(const FContext& context, const std::string& methodName, std::vector<ValuePtr> args) const override;
 };
 
-class FBuiltinReadFile final : public CFunctionDefinition
+class FBuiltinReadFile final : public CFunctionValue
 {
 public:
 
-    FBuiltinReadFile(
-        const std::string& name,
-        TypePtr returnType,
-        FunctionParameters parameters
-    );
+    FBuiltinReadFile(FunctionDefinitionPtr functionDefinition);
 
-    ValuePtr Invoke(const FContext& context, const std::vector<ValuePtr>& arguments) const;
+    ValuePtr CallMethod(const FContext& context, const std::string& methodName, std::vector<ValuePtr> args) const override;
 };
 
-class FBuiltinWriteFile final : public CFunctionDefinition
+class FBuiltinWriteFile final : public CFunctionValue
 {
 public:
 
-    FBuiltinWriteFile(
-        const std::string& name,
-        TypePtr returnType,
-        FunctionParameters parameters
-    );
+    FBuiltinWriteFile(FunctionDefinitionPtr functionDefinition);
 
-    ValuePtr Invoke(const FContext& context, const std::vector<ValuePtr>& arguments) const;
+    ValuePtr CallMethod(const FContext& context, const std::string& methodName, std::vector<ValuePtr> args) const override;
 };
 
-class FBuiltinCloseFile final : public CFunctionDefinition
+class FBuiltinCloseFile final : public CFunctionValue
 {
 public:
 
-    FBuiltinCloseFile(
-        const std::string& name,
-        TypePtr returnType,
-        FunctionParameters parameters
-    );
+    FBuiltinCloseFile(FunctionDefinitionPtr functionDefinition);
 
-    ValuePtr Invoke(const FContext& context, const std::vector<ValuePtr>& arguments) const override;
+    ValuePtr CallMethod(const FContext& context, const std::string& methodName, std::vector<ValuePtr> args) const override;
 };
 
-FunctionDefinitionPtr CreateOpenFileFunction();
-FunctionDefinitionPtr CreateReadFileFunction();
-FunctionDefinitionPtr CreateWriteFileFunction();
-FunctionDefinitionPtr CreateCloseFileFunction();
+FunctionValuePtr CreateOpenFileFunction();
+FunctionValuePtr CreateReadFileFunction();
+FunctionValuePtr CreateWriteFileFunction();
+FunctionValuePtr CreateCloseFileFunction();
