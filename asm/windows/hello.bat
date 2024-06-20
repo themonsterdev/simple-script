@@ -21,20 +21,20 @@ IF NOT DEFINED VCToolsInstallDir (
 )
 
 REM Assemble the ASM file
-nasm -f win64 var_print.asm -o var_print.obj
+nasm -f win64 hello.asm -o hello.o
 IF %ERRORLEVEL% NEQ 0 (
     echo NASM assembly failed.
     exit /b 1
 )
 
 REM Link the object file to create the executable
-link /entry:start /subsystem:console var_print.obj kernel32.lib
+link /entry:start /subsystem:console hello.o kernel32.lib
 IF %ERRORLEVEL% NEQ 0 (
     echo Linking failed.
     exit /b 1
 )
 
-echo Build successful! The executable is var_print.exe
+echo Build successful! The executable is hello.exe
 
 REM Keep the command window open
 exit /b 0

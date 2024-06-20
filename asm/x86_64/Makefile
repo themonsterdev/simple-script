@@ -1,9 +1,9 @@
 # Variables for compilation tools
-AS = as
-ASFLAGS = -o
+NASM = nasm
+NASMFLAGS = -f macho64
 
 LD = ld
-LDFLAGS = -o
+LDFLAGS = -static
 
 # Source and object file names
 SRC = hello.s
@@ -19,12 +19,12 @@ all: $(OUT)
 # Target for the executable
 $(OUT): $(OBJ)
 	@echo "Linking $@..."
-	$(LD) $(LDFLAGS) $@ $^
+	$(LD) $(LDFLAGS) -o $@ $^
 
 # Target for the object file
 $(OBJ): $(SRC)
 	@echo "Assembling $@..."
-	$(AS) $(ASFLAGS) $@ $<
+	$(NASM) $(NASMFLAGS) -o $@ $<
 
 # Target for cleaning up generated files
 clean:
