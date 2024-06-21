@@ -26,3 +26,13 @@ ValuePtr FCallExpression::Evaluate(const FContext& context) const
 
     return context.Call(identifier->GetName(), arguments);
 }
+
+const ExpressionPtr& FCallExpression::GetIdentifier() const
+{
+    return m_identifier;
+}
+
+const std::vector<ExpressionPtr>& FCallExpression::GetArguments() const
+{
+    return m_arguments;
+}

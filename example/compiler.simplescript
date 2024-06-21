@@ -1,0 +1,5 @@
+var identifier = 12345
+print(identifier)
+
+var helloWorld = "Hello, world!"
+print(helloWorld)

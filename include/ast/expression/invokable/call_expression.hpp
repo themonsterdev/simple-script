@@ -30,4 +30,7 @@ public:
      * @return The result of the function call.
      */
     ValuePtr Evaluate(const FContext& context) const override;
+
+    const ExpressionPtr& GetIdentifier() const;
+    const std::vector<ExpressionPtr>& GetArguments() const;
 };
